@@ -1,0 +1,29 @@
+{
+	"user": "Shiska",
+	"repo": "rotations",
+	"entry": "test.pwn",
+    "output": "test.amx",
+    "dependencies": [
+        "Misiur/YSI-Includes"
+    ],
+    "builds": [
+        {
+            "name": "amx"
+        },
+        {
+            "name": "lst",
+            "args": [
+                "-l"
+            ]
+        },
+        {
+            "name": "asm",
+            "args": [
+                "-a"
+            ]
+        }
+    ],
+    "runtime": {
+        "mode": "y_testing"
+    }
+}
