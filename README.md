@@ -51,54 +51,67 @@ in this section. If your library is passive and has no API, simply omit this
 section.
 -->
 
+RotMatrix...AroundRelPoint
 ```
-// AroundRelPoint
 RotMatrixMatrixAroundRelPoint(Float: matrix1[4][4], Float: oX, Float: oY, Float: oZ, Float: matrix2[4][4])
 RotMatrixQuatAroundRelPoint(Float: matrix[4][4], Float: oX, Float: oY, Float: oZ, Float: w, Float: x, Float: y, Float: z)
 RotMatrixEulerAroundRelPoint(Float: matrix[4][4], Float: oX, Float: oY, Float: oZ, Float: rX, Float: rY, Float: rZ, eulermode: mode = euler_samp)
 RotMatrixAxisAroundRelPoint(Float: matrix1[4][4], Float: oX, Float: oY, Float: oZ, Float: angle, Float: aX, Float: aY, Float: aZ)
-// AroundPoint
+```
+RotMatrix...AroundPoint
+```
 RotMatrixMatrixAroundPoint(Float: matrix1[4][4], Float: x, Float: y, Float: z, Float: matrix2[4][4])
 RotMatrixQuatAroundPoint(Float: matrix[4][4], Float: x, Float: y, Float: z, Float: w, Float: qX, Float: qY, Float: qZ)
 RotMatrixEulerAroundPoint(Float: matrix[4][4], Float: x, Float: y, Float: z, Float: rX, Float: rY, Float: rZ, eulermode: mode = euler_samp)
 RotMatrixAxisAroundPoint(Float: matrix1[4][4], Float: x, Float: y, Float: z, Float: angle, Float: aX, Float: aY, Float: aZ)
-// TranslateMatrix
+```
+TranslateMatrix
+```
 TranslateMatrix(Float: matrix[4][4], Float: x, Float: y, Float: z)
-// RotateMatrix
+```
+RotateMatrix...
+```
 RotateMatrixWithMatrix(Float: matrix1[4][4], Float: matrix2[4][4])
 RotateMatrixWithQuat(Float: matrix[4][4], Float: w, Float: x, Float: y, Float: z)
 RotateMatrixWithEuler(Float: matrix[4][4], Float: rX, Float: rY, Float: rZ, eulermode: mode = euler_samp)
 RotateMatrixWithAxisAngle(Float: matrix[4][4], Float: angle, Float: aX, Float: aY, Float: aZ)
-// GetTranslationMatrix
+```
+GetTranslationMatrix
+```
 GetTranslationMatrix(Float: matrix[4][4], Float: x, Float: y, Float: z)
-// GetRotationMatrix
+```
+GetRotationMatrix...
+```
 GetRotationMatrixFromQuat(Float: matrix[4][4], Float: w, Float: x, Float: y, Float: z)
 GetRotationMatrixFromEuler(Float: matrix[4][4], Float: rX, Float: rY, Float: rZ, eulermode: mode = euler_samp)
 GetRotationMatrixFromAxisAngle(Float: matrix[4][4], Float: angle, Float: aX, Float: aY, Float: aZ)
-// GetQuat
+```
+GetQuat...
+```
 GetQuatFromMatrix(Float: matrix[][], & Float: w, & Float: x, & Float: y, & Float: z)
 GetQuatFromEuler(Float: rX, Float: rY, Float: rZ, & Float: w, & Float: x, & Float: y, & Float: z, eulermode: mode = euler_samp)
 GetQuatFromAxisAngle(Float: angle, Float: aX, Float: aY, Float: aZ, & Float: w, & Float: x, & Float: y, & Float: z)
-// GetEuler
+```
+GetEuler...
+```
 GetEulerFromMatrix(Float: matrix[][], & Float: rX, & Float: rY, & Float: rZ, eulermode: mode = euler_samp)
 GetEulerFromQuat(Float: w, Float: x, Float: y, Float: z, & Float: rX, & Float: rY, & Float: rZ, eulermode: mode = euler_samp)
 GetEulerFromEuler(Float: oX, Float: oY, Float: oZ, eulermode: omode, & Float: rX, & Float: rY, & Float: rZ, eulermode: mode = euler_samp)
 GetEulerFromAxisAngle(Float: angle, Float: aX, Float: aY, Float: aZ, & Float: rX, & Float: rY, & Float: rZ, eulermode: mode = euler_samp)
-// GetAxisAngle
+```
+GetAxisAngle...
+```
 GetAxisAngleFromMatrix(Float: matrix[][], & Float: angle, & Float: aX, & Float: aY, & Float: aZ)
 GetAxisAngleFromQuat(Float: w, Float: x, Float: y, Float: z, & Float: angle, & Float: aX, & Float: aY, & Float: aZ)
 GetAxisAngleFromEuler(Float: rX, Float: rY, Float: rZ, & Float: angle, & Float: aX, & Float: aY, & Float: aZ, eulermode: mode = euler_samp)
-// Rotate function to get a relative position
-// oX, oY, oZ = offsets, oT = Translation (usually only 0.0 or 1.0)
-// X, Y, Z = preset these with the center of rotation
+```
+...Rotate
+ ```
 MatrixRotate(Float: matrix[4][4], Float: oX, Float: oY, Float: oZ, Float: oT, & Float: X, & Float: Y, & Float: Z)
 QuatRotate(Float: w, Float: x, Float: y, Float: z, Float: oX, Float: oY, Float: oZ, & Float: X, & Float: Y, & Float: Z)
 EulerRotate(Float: rX, Float: rY, Float: rZ, Float: oX, Float: oY, Float: oZ, & Float: X, & Float: Y, & Float: Z, eulermode: mode = euler_samp)
 AxisAngleRotate(Float: angle, Float: aX, Float: aY, Float: aZ, Float: oX, Float: oY, Float: oZ, & Float: X, & Float: Y, & Float: Z)
-// Functions for attaching / detaching objects from vehicle
-GetVehicleObjectPositionWorld(vehicleid, Float: att_X, Float: att_Y, Float: att_Z, Float: att_rotX, Float: att_rotY, Float: att_rotZ, &Float: X, &Float: Y, &Float: Z, &Float: rotX, &Float: rotY, &Float: rotZ)
-GetVehicleObjectPositionOffset(vehicleid, Float: X, Float: Y, Float: Z, Float: rotX, Float: rotY, Float: rotZ, &Float: att_X, &Float: att_Y, &Float: att_Z, &Float: att_rotX, &Float: att_rotY, &Float: att_rotZ)  
-´´´
+```
 
 ## Testing
 
