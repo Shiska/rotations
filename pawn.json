@@ -1,7 +1,7 @@
 {
-	"user": "Shiska",
-	"repo": "rotations",
-	"entry": "test.pwn",
+    "user": "Shiska",
+    "repo": "rotations",
+    "entry": "test.pwn",
     "output": "test.amx",
     "dependencies": [
         "Misiur/YSI-Includes"

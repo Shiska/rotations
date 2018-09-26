@@ -194,130 +194,130 @@ stock GetFlightFromRot(Float: rX, Float: rY, Float: rZ, & Float: pitch, & Float:
 // (w^2*c - c*x^2 - c*y^2 + c*z^2 + 2*((b*x*w + b*z*y + a*x*z) - a*y*w))k
 
 stock QuatMul(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2, & Float: w, & Float: x, & Float: y, & Float: z) {
-	// v1v2 = (v1 x v2) - (v1 . v2) | (w1, v1)(w2, v2) = (w1 * w2 - v1 . v2), (w1 * v2) + (w2 * v1) + (v1 x v2)
-	w = (w1*w2 - x1*x2 - y1*y2 - z1*z2);
-	x = (w1*x2 + w2*x1 + y1*z2 - z1*y2);
-	y = (w1*y2 + w2*y1 + z1*x2 - x1*z2);
-	z = (w1*z2 + w2*z1 + x1*y2 - y1*x2);
+    // v1v2 = (v1 x v2) - (v1 . v2) | (w1, v1)(w2, v2) = (w1 * w2 - v1 . v2), (w1 * v2) + (w2 * v1) + (v1 x v2)
+    w = (w1*w2 - x1*x2 - y1*y2 - z1*z2);
+    x = (w1*x2 + w2*x1 + y1*z2 - z1*y2);
+    y = (w1*y2 + w2*y1 + z1*x2 - x1*z2);
+    z = (w1*z2 + w2*z1 + x1*y2 - y1*x2);
 }
 
 stock CrossProduct(Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2, & Float: x, & Float: y, & Float: z) {
-	x = y1 * z2 - z1 * y2;
-	y = z1 * x2 - x1 * z2;
-	z = x1 * y2 - y1 * x2;
+    x = y1 * z2 - z1 * y2;
+    y = z1 * x2 - x1 * z2;
+    z = x1 * y2 - y1 * x2;
 }
 
 stock QuatRotateVector(Float: w, Float: i, Float: j, Float: k, Float: X, Float: Y, Float: Z, & Float: x, & Float: y, & Float: z) {
-	// q * v * q^-1
-	// x = (w*w*X + X*i*i - X*j*j - X*k*k + 2.0*((Z*j*w + Z*i*k + Y*j*i) - Y*k*w));
-	// y = (w*w*Y - Y*i*i + Y*j*j - Y*k*k + 2.0*((X*k*w + X*j*i + Z*k*j) - Z*i*w));
-	// z = (w*w*Z - Z*i*i - Z*j*j + Z*k*k + 2.0*((Y*i*w + Y*k*j + X*i*k) - X*j*w));
-	// after a lot of computing you get to the formula "v1 + 2*(w*(v1 x v2) + v1x(v1 x v2));" but only valid with versors (unit quaternion)
-	// x = (X + 2.0*(w*(j*Z - k*Y) + j*(i*Y - j*X) - k*(k*X - i*Z)));
-	// y = (Y + 2.0*(w*(k*X - i*Z) + k*(j*Z - k*Y) - i*(i*Y - j*X)));
-	// z = (Z + 2.0*(w*(i*Y - j*X) + i*(k*X - i*Z) - j*(j*Z - k*Y)));
+    // q * v * q^-1
+    // x = (w*w*X + X*i*i - X*j*j - X*k*k + 2.0*((Z*j*w + Z*i*k + Y*j*i) - Y*k*w));
+    // y = (w*w*Y - Y*i*i + Y*j*j - Y*k*k + 2.0*((X*k*w + X*j*i + Z*k*j) - Z*i*w));
+    // z = (w*w*Z - Z*i*i - Z*j*j + Z*k*k + 2.0*((Y*i*w + Y*k*j + X*i*k) - X*j*w));
+    // after a lot of computing you get to the formula "v1 + 2*(w*(v1 x v2) + v1x(v1 x v2));" but only valid with versors (unit quaternion)
+    // x = (X + 2.0*(w*(j*Z - k*Y) + j*(i*Y - j*X) - k*(k*X - i*Z)));
+    // y = (Y + 2.0*(w*(k*X - i*Z) + k*(j*Z - k*Y) - i*(i*Y - j*X)));
+    // z = (Z + 2.0*(w*(i*Y - j*X) + i*(k*X - i*Z) - j*(j*Z - k*Y)));
 
-	// x = (X + 2.0*(w*(j*Z - k*Y) + i*(j*Y + k*Z) - X*(j*j + k*k)));
-	// y = (Y + 2.0*(w*(k*X - i*Z) + k*(j*Z - k*Y) - i*(i*Y - j*X)));
-	// z = (Z + 2.0*(w*(i*Y - j*X) + i*(k*X - i*Z) - j*(j*Z - k*Y)));
+    // x = (X + 2.0*(w*(j*Z - k*Y) + i*(j*Y + k*Z) - X*(j*j + k*k)));
+    // y = (Y + 2.0*(w*(k*X - i*Z) + k*(j*Z - k*Y) - i*(i*Y - j*X)));
+    // z = (Z + 2.0*(w*(i*Y - j*X) + i*(k*X - i*Z) - j*(j*Z - k*Y)));
 
-	// 18 muls, 12 adds
-	// CrossProduct(i, j, k, X, Y, Z, x, y, z);
-	// CrossProduct(i, j, k, x, y, z, i, j, k);
-	// x = (X + 2.0 * (w * x + i));
-	// y = (Y + 2.0 * (w * y + j));
-	// z = (Z + 2.0 * (w * z + k));
+    // 18 muls, 12 adds
+    // CrossProduct(i, j, k, X, Y, Z, x, y, z);
+    // CrossProduct(i, j, k, x, y, z, i, j, k);
+    // x = (X + 2.0 * (w * x + i));
+    // y = (Y + 2.0 * (w * y + j));
+    // z = (Z + 2.0 * (w * z + k));
 
-	// 15 muls, 15 adds
-	CrossProduct(i, j, k, X, Y, Z, x, y, z);
-	CrossProduct(
-		i + i,
-		j + j,
-		k + k,
-		x + w * X,
-		y + w * Y,
-		z + w * Z,
-		x, y, z
-	);
-	x += X;
-	y += Y;
-	z += Z;
+    // 15 muls, 15 adds
+    CrossProduct(i, j, k, X, Y, Z, x, y, z);
+    CrossProduct(
+        i + i,
+        j + j,
+        k + k,
+        x + w * X,
+        y + w * Y,
+        z + w * Z,
+        x, y, z
+    );
+    x += X;
+    y += Y;
+    z += Z;
 }
 
 stock GetVehicleRelativePos(vehicleid, & Float: x, & Float: y, & Float: z, Float: oX = 0.0, Float: oY = 0.0, Float: oZ = 0.0) {
-	if(GetVehiclePos(vehicleid, x, y, z) && ((_: oX != 0) || (_: oY != 0) || (_: oZ != 0))) {
-		new
-			Float: qW,
-			Float: qX,
-			Float: qY,
-			Float: qZ
-		;
-		GetVehicleRotationQuat(vehicleid, qW, qX, qY, qZ);
-		QuatRotateVector(qW, -qX, -qY, -qZ, oX, oY, oZ, qX, qY, qZ);
+    if(GetVehiclePos(vehicleid, x, y, z) && ((_: oX != 0) || (_: oY != 0) || (_: oZ != 0))) {
+        new
+            Float: qW,
+            Float: qX,
+            Float: qY,
+            Float: qZ
+        ;
+        GetVehicleRotationQuat(vehicleid, qW, qX, qY, qZ);
+        QuatRotateVector(qW, -qX, -qY, -qZ, oX, oY, oZ, qX, qY, qZ);
 
-		x += qX;
-		y += qY;
-		z += qZ;
-		return true;
-	}
-	return false;
+        x += qX;
+        y += qY;
+        z += qZ;
+        return true;
+    }
+    return false;
 }
 
 stock QuatForwardVector(Float: w, Float: i, Float: j, Float: k, & Float: x, & Float: y, & Float: z) {
-	x = 2.0 * (j * i - k * w);
-	y = 1.0 - 2.0 * (k * k + i * i);
-	z = 2.0 * (i * w + j * k);
+    x = 2.0 * (j * i - k * w);
+    y = 1.0 - 2.0 * (k * k + i * i);
+    z = 2.0 * (i * w + j * k);
 }
 
 stock GetVehicleForwardVector(vehicleid, & Float: x, & Float: y, & Float: z) {
-	if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
-		QuatForwardVector(Float: vehicleid, -x, -y, -z, x, y, z);
-		return true;
-	}
-	return false;
+    if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
+        QuatForwardVector(Float: vehicleid, -x, -y, -z, x, y, z);
+        return true;
+    }
+    return false;
 }
 
 stock QuatRightVector(Float: w, Float: i, Float: j, Float: k, & Float: x, & Float: y, & Float: z) {
-	x = 1.0 - 2.0 * (j * j + k * k);
-	y = 2.0 * (k * w + i * j);
-	z = 2.0 * (i * k - j * w);
+    x = 1.0 - 2.0 * (j * j + k * k);
+    y = 2.0 * (k * w + i * j);
+    z = 2.0 * (i * k - j * w);
 }
 
 stock GetVehicleRightVector(vehicleid, & Float: x, & Float: y, & Float: z) {
-	if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
-		QuatRightVector(Float: vehicleid, -x, -y, -z, x, y, z);
-		return true;
-	}
-	return false;
+    if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
+        QuatRightVector(Float: vehicleid, -x, -y, -z, x, y, z);
+        return true;
+    }
+    return false;
 }
 
 stock QuatUpVector(Float: w, Float: i, Float: j, Float: k, & Float: x, & Float: y, & Float: z) {
-	x = 2.0 * (j * w + k * i);
-	y = 2.0 * (k * j - i * w);
-	z = 1.0 - 2.0 * (i * i + j * j);
+    x = 2.0 * (j * w + k * i);
+    y = 2.0 * (k * j - i * w);
+    z = 1.0 - 2.0 * (i * i + j * j);
 }
 
 stock GetVehicleUpVector(vehicleid, & Float: x, & Float: y, & Float: z) {
-	if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
-		QuatUpVector(Float: vehicleid, -x, -y, -z, x, y, z);
-		return true;
-	}
-	return false;
+    if(GetVehicleRotationQuat(vehicleid, Float: vehicleid, x, y, z)) {
+        QuatUpVector(Float: vehicleid, -x, -y, -z, x, y, z);
+        return true;
+    }
+    return false;
 }
 
 stock EulerVectorToQuat(Float: X, Float: Y, Float: Z, Float: angle, & Float: w, & Float: i, & Float: j, & Float: k, anglemode: mode = degrees) {
-	if((w = VectorSize(X, Y, Z)) != 1.0) {
-		X /= w;
-		Y /= w;
-		Z /= w;
-	}
-	angle /= 2.0;
+    if((w = VectorSize(X, Y, Z)) != 1.0) {
+        X /= w;
+        Y /= w;
+        Z /= w;
+    }
+    angle /= 2.0;
 
-	w = floatsin(angle, mode);
-	i = X * w;
-	j = Y * w;
-	k = Z * w;
-	w = floatcos(angle, mode);
+    w = floatsin(angle, mode);
+    i = X * w;
+    j = Y * w;
+    k = Z * w;
+    w = floatcos(angle, mode);
 }
 
 // stock GetEulerFromEuler(Float: oX, Float: oY, Float: oZ, eulermode: omode, & Float: rX, & Float: rY, & Float: rZ, eulermode: mode = euler_samp) {

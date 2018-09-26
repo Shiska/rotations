@@ -1,29 +1,8 @@
 /*
- * Rotations.inc by Nero_3D (C) 2016
- * 
- * Contact:
- *     E-Mail: shiska@gmx.de
- *     SA-MP forum: http://forum.sa-mp.com/member.php?u=9765
- *
- * Licence: MPL 2.0
- *     This Source Code Form is subject to the terms of the Mozilla Public
- *     License, v. 2.0. If a copy of the MPL was not distributed with this
- *     file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * Version:
- *   1.0 (14.08.2016)
- *     - Release
- *   1.1 (07.01.2017)
- *     - Translation function added for Rotation Matrix
- *     - euler_default renamed to euler_samp
- *     - additional translate parameter 'oT' in MatrixRotate
- *   1.2 (11.08.2017)
- *     - GetVehicleObjectPositionWorld, GetVehicleObjectPositionWorld added
- */
- 
- // Right to left - absoulte Rotation (active)
- // Left to right - relative Rotation (passive)
- 
+* rotation by Nero_3D (C) 2016
+* 
+*/
+
 #if !defined _inc_a_samp
     #error Cant be compiled without a_samp
 #endif
@@ -34,6 +13,9 @@
 // https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation
 // http://www.euclideanspace.com/maths/geometry/rotations/index.htm
 // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
+
+// Right to left - absolute Rotation (active)
+// Left to right - relative Rotation (passive)
 
 enum eulermode {
     // Proper / Classic Euler angles
