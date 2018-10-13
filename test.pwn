@@ -9,7 +9,7 @@
 
 // Most cases should be tested but no guarantee for completeness
 
-#define EPSILON 0.0001
+#define EPSILON 0.0002
 
 bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2) {
     new
