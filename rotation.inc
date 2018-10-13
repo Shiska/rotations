@@ -1,11 +1,18 @@
+#if defined _inc_rotation
+	#undef _inc_rotation
+#endif
+
+#if defined _rotation_included
+	#endinput
+#endif
+#define _rotation_included
+
 /*
 * rotation by Nero_3D (C) 2016
 * 
 */
 
-#if !defined _inc_a_samp
-    #error Cant be compiled without a_samp
-#endif
+#include <a_samp>
 
 // Reference
 // https://en.wikipedia.org/wiki/Euler_Angles#Rotation_matrix
