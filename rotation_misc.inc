@@ -1,3 +1,14 @@
+#if defined _inc_rotation_misc
+	#undef _inc_rotation_misc
+#endif
+
+#if defined _rotation_misc_included
+	#endinput
+#endif
+#define _rotation_misc_included
+
+#include "rotation.inc"
+
 // unfinished or random functions
 
 // misc - Get real / offset position of attached vehicle objects
