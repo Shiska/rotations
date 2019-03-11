@@ -24,6 +24,12 @@
             "args": [
                 "-a"
             ]
+        },
+        {
+            "name": "report",
+            "args": [
+                "-r"
+            ]
         }
     ],
     "runtime": {
