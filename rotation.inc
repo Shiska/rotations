@@ -264,7 +264,7 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
         default: { // Euler
             #emit const.pri SetRotationFromEuler
         }
-    }
+    } {}
     #emit add.c 4
     #emit sctrl 6
 }
@@ -1374,7 +1374,7 @@ stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
                     }
                 }
             }
-        }
+        } {}
         // move src to data section
         #emit load.s.pri src
         #emit add.c E_ROTATION_DATA_OFFSET
@@ -1391,6 +1391,106 @@ stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
         #emit add.c 4
         #emit sctrl 6
     }
+}
+
+static stock CombineQuat(left[E_QUAT], right[E_QUAT], dest[E_QUAT]) {
+    /// <summary>Combines two quaternion</summary>
+    /// <param name="left">Left quaternion [<ref name="E_QUAT"/>]</param>
+    /// <param name="right">Right quaternion [<ref name="E_QUAT"/>]</param>
+    /// <param name="dest">Dest quaternion [<ref name="E_QUAT"/>]</param>
+
+    static // unroll variables for speed
+        Float: w1, Float: x1, Float: y1, Float: z1,
+        Float: w2, Float: x2, Float: y2, Float: z2
+    ; // fill variables, but reverse the order because this code works with conjugated quaternion due to GetVehicleRotationQuat
+    #emit load.s.pri right
+    #emit const.alt w1
+    #emit movs 16
+    #emit load.s.pri left
+    #emit const.alt w2
+    #emit movs 16
+    // quat multiplication, left * right = dest for but we use conjugated quaternion, so (dest)^-1 = (left * right)^-1 = (right)^-1 * (left)^-1
+    dest[E_QUAT_W] = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2;
+    dest[E_QUAT_X] = w1 * x2 + w2 * x1 + y1 * z2 - z1 * y2;
+    dest[E_QUAT_Y] = w1 * y2 + w2 * y1 + z1 * x2 - x1 * z2;
+    dest[E_QUAT_Z] = w1 * z2 + w2 * z1 + x1 * y2 - y1 * x2;
+}
+
+static stock CombineMatrix(left[E_RMATRIX], right[E_RMATRIX], dest[E_RMATRIX]) {
+    /// <summary>Combines two rotation matrices</summary>
+    /// <param name="left">Left rotation matrix [<ref name="E_RMATRIX"/>]</param>
+    /// <param name="right">Right rotation matrix [<ref name="E_RMATRIX"/>]</param>
+    /// <param name="dest">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
+
+    static // unroll variables for speed
+        Float: m100, Float: m101, Float: m102,
+        Float: m110, Float: m111, Float: m112,
+        Float: m120, Float: m121, Float: m122,
+        Float: m200, Float: m201, Float: m202,
+        Float: m210, Float: m211, Float: m212,
+        Float: m220, Float: m221, Float: m222
+    ; // fill variables
+    #emit load.s.pri left
+    #emit const.alt m100
+    #emit movs 36
+    #emit load.s.pri right
+    #emit const.alt m200
+    #emit movs 36
+    // row 0, left * right = dest
+    dest[E_RMATRIX_00] = m100 * m200 + m101 * m210 + m102 * m220;
+    dest[E_RMATRIX_01] = m100 * m201 + m101 * m211 + m102 * m221;
+    dest[E_RMATRIX_02] = m100 * m202 + m101 * m212 + m102 * m222;
+    // row 1
+    dest[E_RMATRIX_10] = m110 * m200 + m111 * m210 + m112 * m220;
+    dest[E_RMATRIX_11] = m110 * m201 + m111 * m211 + m112 * m221;
+    dest[E_RMATRIX_12] = m110 * m202 + m111 * m212 + m112 * m222;
+    // row 2
+    dest[E_RMATRIX_20] = m120 * m200 + m121 * m210 + m122 * m220;
+    dest[E_RMATRIX_21] = m120 * m201 + m121 * m211 + m122 * m221;
+    dest[E_RMATRIX_22] = m120 * m202 + m121 * m212 + m122 * m222;
+}
+
+// native CombineRotation(left[E_ROTATION], right[E_ROTATION], dest[E_ROTATION]);
+stock CombineRotation(left[E_ROTATION], right[E_ROTATION], dest[E_ROTATION]) {
+    /// <summary>Combines two rotations, left * right = dest</summary>
+    /// <export/>
+    /// <param name="left">Left rotation [<ref name="E_AANGLE"/>]</param>
+    /// <param name="right">Right rotation [<ref name="E_AANGLE"/>]</param>
+    /// <param name="dest">Dest rotation [<ref name="E_AANGLE"/>]</param>
+    /// <remarks>If <paramref name="left"/> or <paramref name="right"/> is a rotation matrix than <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be converted to rotation matrices, in all other cases <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be quaternion</remarks>
+    /// <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks>
+    /// <remarks>[first Rotation] * [second Rotation] = local frame-of-reference - coordinate system / axis rotates with first rotation</remarks>
+
+    if(left[E_ROTATION_TYPE] == rtype_rotation_matrix) {
+        if(right[E_ROTATION_TYPE] != rtype_rotation_matrix) {
+            ConvertRotation(right, rtype_rotation_matrix, right);
+        } {}
+        #emit const.alt CombineMatrix
+    } else if(right[E_ROTATION_TYPE] == rtype_rotation_matrix) {
+        ConvertRotation(left, rtype_rotation_matrix, left);
+
+        #emit const.alt CombineMatrix
+    } else {
+        ConvertRotation(left, rtype_quaternion, left);
+        ConvertRotation(right, rtype_quaternion, right);
+        // you can't combine axis angle or euler angles
+        #emit const.alt CombineQuat
+    } {}
+    #emit load.s.pri left
+    #emit add.c E_ROTATION_DATA_OFFSET
+    #emit stor.s.pri left
+
+    #emit load.s.pri right
+    #emit add.c E_ROTATION_DATA_OFFSET
+    #emit stor.s.pri right
+
+    #emit load.s.pri dest
+    #emit add.c E_ROTATION_DATA_OFFSET
+    #emit stor.s.pri dest
+
+    #emit move.pri
+    #emit add.c 4
+    #emit sctrl 6
 }
 
 static stock GetAxisAngleFromRotation(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
@@ -1502,14 +1602,17 @@ stock GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
         default: { // Euler
             #emit const.pri GetEulerFromRotation
         }
-    }
+    } {}
     #emit add.c 4
     #emit sctrl 6
 }
 
-static stock RotateAxisAngle(aangle[E_AANGLE], Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+static stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using axis angle</summary>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
+    /// <param name="cX">Rotation origin x</param>
+    /// <param name="cY">Rotation origin y</param>
+    /// <param name="cZ">Rotation origin z</param>
     /// <param name="pX">Point x</param>
     /// <param name="pY">Point y</param>
     /// <param name="pZ">Point z</param>
@@ -1518,6 +1621,8 @@ static stock RotateAxisAngle(aangle[E_AANGLE], Float: pX, Float: pY, Float: pZ, 
     /// <param name="oZ">Output position z</param>
     /// <remarks>Used internally</remarks>
     /// <remarks>Uses Rodrigues' rotation formula</remarks>
+
+    #pragma unused cX, cY, cZ
 
     debug("RotateAxisAngle(%f, %f, %f)", pX, pY, pZ);
 
@@ -1537,9 +1642,12 @@ static stock RotateAxisAngle(aangle[E_AANGLE], Float: pX, Float: pY, Float: pZ, 
     oZ += cos * pZ + sin * (aX * pY - aY * pX) + ts * aZ;
 }
 
-static stock RotateQuat(quat[E_QUAT], Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+static stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using quaternion</summary>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
+    /// <param name="cX">Rotation origin x</param>
+    /// <param name="cY">Rotation origin y</param>
+    /// <param name="cZ">Rotation origin z</param>
     /// <param name="pX">Point x</param>
     /// <param name="pY">Point y</param>
     /// <param name="pZ">Point z</param>
@@ -1547,6 +1655,8 @@ static stock RotateQuat(quat[E_QUAT], Float: pX, Float: pY, Float: pZ, & Float: 
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
     /// <remarks>Used internally</remarks>
+
+    #pragma unused cX, cY, cZ
 
     debug("RotateQuat(%f, %f, %f)", pX, pY, pZ);
 
@@ -1581,9 +1691,12 @@ static stock RotateQuat(quat[E_QUAT], Float: pX, Float: pY, Float: pZ, & Float: 
     oZ += 2.0 * (dot * z + abs * pZ + w * (y * pX - x * pY));
 }
 
-static stock RotateMatrix(rmatrix[E_RMATRIX], Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+static stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using a rotation matrix</summary>
     /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
+    /// <param name="cX">Rotation origin x</param>
+    /// <param name="cY">Rotation origin y</param>
+    /// <param name="cZ">Rotation origin z</param>
     /// <param name="pX">Point x</param>
     /// <param name="pY">Point y</param>
     /// <param name="pZ">Point z</param>
@@ -1591,6 +1704,8 @@ static stock RotateMatrix(rmatrix[E_RMATRIX], Float: pX, Float: pY, Float: pZ, &
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
     /// <remarks>Used internally</remarks>
+
+    #pragma unused cX, cY, cZ
 
     debug("RotateMatrix(%f, %f, %f)", pX, pY, pZ);
 
@@ -1601,22 +1716,26 @@ static stock RotateMatrix(rmatrix[E_RMATRIX], Float: pX, Float: pY, Float: pZ, &
     oZ += pX * rmatrix[E_RMATRIX_20] + pY * rmatrix[E_RMATRIX_21] + pZ * rmatrix[E_RMATRIX_22];
 }
 
-// native RotatePoint(rotation[E_ROTATION], Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ);
-stock RotatePoint(rotation[E_ROTATION], Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
-    /// <summary>Rotates the given point (pX, pY, pZ) around origin (0.0, 0.0, 0.0) and add it to the output position (oX, oY, oZ)</summary>
+// native RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ);
+stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+    /// <summary>Rotates the given point (pX, pY, pZ) around origin (cX, cY, cZ) and stores the output position (oX, oY, oZ)</summary>
     /// <export />
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
+    /// <param name="cX">Rotation origin x</param>
+    /// <param name="cY">Rotation origin y</param>
+    /// <param name="cZ">Rotation origin z</param>
     /// <param name="pX">Point x</param>
     /// <param name="pY">Point y</param>
     /// <param name="pZ">Point z</param>
     /// <param name="oX">Output position x</param>
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
-    /// <remarks>Rotated point gets <em>added to</em> (not overwrites) the output position, so it is a prerequisite to preload the output position with values</remarks>
 
     debug("RotatePoint(%f, %f, %f)", pX, pY, pZ);
 
-    #pragma unused pX, pY, pZ
+    pX -= (oX = cX);
+    pY -= (oY = cY);
+    pZ -= (oZ = cZ);
 
     switch(rotation[E_ROTATION_TYPE]) {
         case rtype_axis_angle: {
@@ -1634,7 +1753,7 @@ stock RotatePoint(rotation[E_ROTATION], Float: pX, Float: pY, Float: pZ, & Float
             // usually they are converted to rotation matrixes or quaternion and than rotated
             #emit const.alt RotateQuat
         }
-    }
+    } {}
     #emit load.s.pri rotation
     #emit add.c E_ROTATION_DATA_OFFSET
     #emit stor.s.pri rotation
@@ -1642,62 +1761,6 @@ stock RotatePoint(rotation[E_ROTATION], Float: pX, Float: pY, Float: pZ, & Float
     #emit move.pri
     #emit add.c 4
     #emit sctrl 6
-}
-
-// native RotatePointWithOrigin(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ);
-stock RotatePointWithOrigin(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
-    /// <summary>Rotates the given point (pX, pY, pZ) around origin (cX, cY, cZ) and stores the output position (oX, oY, oZ)</summary>
-    /// <export />
-    /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <param name="cX">Rotation origin x</param>
-    /// <param name="cY">Rotation origin y</param>
-    /// <param name="cZ">Rotation origin z</param>
-    /// <param name="pX">Point x</param>
-    /// <param name="pY">Point y</param>
-    /// <param name="pZ">Point z</param>
-    /// <param name="oX">Output position x</param>
-    /// <param name="oY">Output position y</param>
-    /// <param name="oZ">Output position z</param>
-
-    debug("RotatePointWithOrigin(%f, %f, %f, %f, %f, %f)", cX, cY, cZ, pX, pY, pZ);
-
-    oX = cX;
-    oY = cY;
-    oZ = cZ;
-    // o = c + rot(p - c)
-    RotatePoint(rotation, pX - cX, pY - cY, pZ - cZ, oX, oY, oZ);
-}
-
-// native RotatePointAroundPoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: rX, Float: rY, Float: rZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ);
-stock RotatePointAroundPoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: rX, Float: rY, Float: rZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
-    /// <summary>Rotates the given point (pX, pY, pZ) around point (rX, rY, rZ) relative to origin (cX, cY, cZ) and stores the output position (oX, oY, oZ)</summary>
-    /// <export />
-    /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <param name="cX">Rotation origin x</param>
-    /// <param name="cY">Rotation origin y</param>
-    /// <param name="cZ">Rotation origin z</param>
-    /// <param name="rX">Rotation point x</param>
-    /// <param name="rY">Rotation point y</param>
-    /// <param name="rZ">Rotation point z</param>
-    /// <param name="pX">Point x</param>
-    /// <param name="pY">Point y</param>
-    /// <param name="pZ">Point z</param>
-    /// <param name="oX">Output position x</param>
-    /// <param name="oY">Output position y</param>
-    /// <param name="oZ">Output position z</param>
-
-    debug("RotatePointAroundPoint(%f, %f, %f, %f, %f, %f, %f, %f, %f)", cX, cY, cZ, rX, rY, rZ, pX, pY, pZ);
-
-    rX -= cX;
-    rY -= cZ;
-    rZ -= cZ;
-
-    oX = cX + rX;
-    oY = cY + rY;
-    oZ = cZ + rZ;
-    // o = c + (r - c) - rot(r - c) + rot(p - c)
-    RotatePoint(rotation, -rX, -rY, -rZ, oX, oY, oZ); // transition
-    RotatePoint(rotation, pX - cX, pY - cY, pZ - cZ, oX, oY, oZ);
 }
 
 #undef E_ROTATION_DATA_OFFSET
