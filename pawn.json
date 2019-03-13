@@ -11,7 +11,13 @@
     ],
     "builds": [
         {
-            "name": "amx"
+            "name": "amx",
+            "args": [
+                "-;+", "-(+", "-d3"
+            ]
+        },
+        {
+            "name": "compat"
         },
         {
             "name": "lst",
