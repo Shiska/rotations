@@ -1,3 +1,9 @@
+#if defined _inc_rotation_misc_matrix_
+	#endinput
+#else
+    #define _inc_rotation_misc_matrix_
+#endif
+
 stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n = sizeof A[], n2 = sizeof B, o = sizeof B[], m2 = sizeof C, o2 = sizeof C[]) {
     /// <summary>Matrix multiplication, A * B = C</summary>
     /// <param name="A">Matrix multiplicand (m x n)</param>

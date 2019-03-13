@@ -92,10 +92,10 @@ enum rotationtype {
 
 static stock __rotationtype[rotationtype]; // necessary for report file, it doesn't detect "tag only" usage
 
-#include "rotation_axis_angle"
-#include "rotation_euler"
-#include "rotation_quaternion"
-#include "rotation_rotation_matrix"
+#include "rotation\rotation_axis_angle"
+#include "rotation\rotation_euler"
+#include "rotation\rotation_matrix"
+#include "rotation\rotation_quaternion"
 
 // get largest rotation type, obviously it will be E_RMATRIX
 const __largestType = _: E_AANGLE;

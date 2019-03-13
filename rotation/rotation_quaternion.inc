@@ -17,7 +17,7 @@ enum E_QUAT {
 #elseif !defined E_EULER
     #include "rotation_euler"
 #elseif !defined E_RMATRIX
-    #include "rotation_rotation_matrix"
+    #include "rotation_matrix"
 #endif
 
 stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {

@@ -16,7 +16,7 @@ enum E_EULER {
 #elseif !defined E_QUAT
     #include "rotation_quaternion"
 #elseif !defined E_RMATRIX
-    #include "rotation_rotation_matrix"
+    #include "rotation_matrix"
 #endif
 
 stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {

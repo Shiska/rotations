@@ -1,3 +1,8 @@
+#if defined _inc_rotation_misc_quaternion_
+#else
+    #define _inc_rotation_misc_quaternion_
+#endif
+
 stock QuatNormalise(& Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Normalizes quaternion</summary>
     /// <param name="w">Quaternion scalar part</param>

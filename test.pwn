@@ -1,7 +1,5 @@
-#include "rotation.inc"
-#include "rotation_quat"
-#include "rotation_matrix"
-#include "rotation_vehicle"
+#include "rotation"
+#include "rotation_misc"
 
 #define RUN_TESTS
 

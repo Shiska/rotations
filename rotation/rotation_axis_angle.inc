@@ -17,7 +17,7 @@ enum E_AANGLE {
 #elseif !defined E_QUAT
     #include "rotation_quaternion"
 #elseif !defined E_RMATRIX
-    #include "rotation_rotation_matrix"
+    #include "rotation_matrix"
 #endif
 
 stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
