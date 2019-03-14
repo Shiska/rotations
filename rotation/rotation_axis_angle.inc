@@ -20,6 +20,19 @@ enum E_AANGLE {
     #include "rotation_matrix"
 #endif
 
+stock NormalizeAxisAngle(aangle[E_AANGLE]) {
+    /// <summary>Normalizes axis angle</summary>
+    /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
+
+    new Float: size = VectorSize(aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
+    // normalize vector, angle doesn't matter
+    aangle[E_AANGLE_X] /= size;
+    aangle[E_AANGLE_Y] /= size;
+    aangle[E_AANGLE_Z] /= size;
+
+    debug("NormalizeAxisAngle(...)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
+}
+
 stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
     /// <summary>Set the rotation array from axis angle</summary>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
@@ -28,7 +41,6 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: an
     /// <param name="x">Source axis angle unit vector x</param>
     /// <param name="y">Source axis angle unit vector y</param>
     /// <param name="z">Source axis angle unit vector z</param>
-    /// <remarks>Used internally</remarks>
 
     debug("SetRotationFromAxisAngle(%f, %f, %f, %f)", angle, x, y, z);
 
@@ -38,6 +50,8 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: an
     aangle[E_AANGLE_X] = x;
     aangle[E_AANGLE_Y] = y;
     aangle[E_AANGLE_Z] = z;
+
+    NormalizeAxisAngle(aangle);
 }
 
 stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AANGLE]) {
@@ -45,7 +59,6 @@ stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AA
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
-    /// <remarks>Used internally</remarks>
     /// <remarks>Not optimized, uses <ref name="ConvertEulerToQuat"/> and <ref name="ConvertQuatToAxisAngle"/> for the conversion</remarks>
 
     new quat[E_QUAT];
@@ -63,7 +76,6 @@ stock ConvertQuatToAxisAngle(quat[E_QUAT], rotationtype: type[2], aangle[E_AANGL
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused type
 
@@ -88,7 +100,6 @@ stock ConvertMatrixToAxisAngle(rmatrix[E_RMATRIX], rotationtype: type[2], aangle
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused type
 
@@ -136,7 +147,6 @@ stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: 
     /// <param name="oX">Output position x</param>
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
-    /// <remarks>Used internally</remarks>
     /// <remarks>Uses Rodrigues' rotation formula</remarks>
 
     #pragma unused cX, cY, cZ
@@ -157,4 +167,16 @@ stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: 
     oX += cos * pX + sin * (aY * pZ - aZ * pY) + ts * aX;
     oY += cos * pY + sin * (aZ * pX - aX * pZ) + ts * aY;
     oZ += cos * pZ + sin * (aX * pY - aY * pX) + ts * aZ;
+}
+
+stock ReverseAxisAngle(src[E_AANGLE], dest[E_AANGLE]) {
+    /// <summary>Stores the reverse axis angle in dest</summary>
+    /// <export />
+    /// <param name="src">Source axis angle [<ref name="E_AANGLE"/>]</param>
+    /// <param name="dest">Dest axis angle [<ref name="E_AANGLE"/>]</param>
+
+    debug("ReverseAxisAngle(...)");
+
+    dest = src; // just negate rotation angle
+    dest[E_AANGLE_ANGLE] *= -1.0; // you could also negate the unit vector instead
 }

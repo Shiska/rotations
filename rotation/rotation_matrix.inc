@@ -28,12 +28,53 @@ static // unroll variables for speed
     Float: m220, Float: m221, Float: m222
 ;
 
+stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
+    /// <summary>Normalizes rotation matrix with Givens-Rotations</summary>
+    /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
+
+    debug("NormalizeMatrix(...)");
+
+    new Float: div;
+    new sum[E_RMATRIX];
+    new mul[E_RMATRIX];
+
+    if(rmatrix[E_RMATRIX_21] != 0.0) {
+        div = VectorSize(rmatrix[E_RMATRIX_11], rmatrix[E_RMATRIX_21], 0.0);
+
+        sum[E_RMATRIX_00] = 1.0;
+        sum[E_RMATRIX_11] = sum[E_RMATRIX_22] = rmatrix[E_RMATRIX_11] / div;
+        sum[E_RMATRIX_12] = -(sum[E_RMATRIX_21] = rmatrix[E_RMATRIX_21] / div);
+    } else {
+        sum[E_RMATRIX_00] = sum[E_RMATRIX_11] = sum[E_RMATRIX_22] = 1.0;
+    }
+    if(rmatrix[E_RMATRIX_10] != 0.0) {
+        div = VectorSize(rmatrix[E_RMATRIX_00], rmatrix[E_RMATRIX_10], 0.0);
+
+        mul[E_RMATRIX_22] = 1.0;
+        mul[E_RMATRIX_00] = mul[E_RMATRIX_11] = rmatrix[E_RMATRIX_00] / div;
+        mul[E_RMATRIX_01] = -(mul[E_RMATRIX_10] = rmatrix[E_RMATRIX_10] / div);
+
+        CombineMatrix(mul, sum, sum);
+
+        mul[E_RMATRIX_01] = mul[E_RMATRIX_10] = 0.0; // restore zeros
+    }
+    if(rmatrix[E_RMATRIX_20] != 0.0) {
+        div = VectorSize(rmatrix[E_RMATRIX_00], rmatrix[E_RMATRIX_20], 0.0);
+
+        mul[E_RMATRIX_11] = 1.0;
+        mul[E_RMATRIX_00] = mul[E_RMATRIX_22] = rmatrix[E_RMATRIX_00] / div;
+        mul[E_RMATRIX_02] = -(mul[E_RMATRIX_20] = rmatrix[E_RMATRIX_20] / div);
+
+        CombineMatrix(mul, sum, sum);
+    }
+    rmatrix = sum;
+}
+
 stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matrix[][]) {
     /// <summary>Set the rotation array from rotation matrix</summary>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Source rotation type, unused</param>
-    /// <param name="matrix">Source matrix</param>
-    /// <remarks>Used internally</remarks>
+    /// <param name="matrix">Source matrix[row][coloum]</param>
  
     debug("SetRotationFromMatrix(...)");
 
@@ -50,6 +91,8 @@ stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matri
     rmatrix[E_RMATRIX_20] = matrix[2][0];
     rmatrix[E_RMATRIX_21] = matrix[2][1];
     rmatrix[E_RMATRIX_22] = matrix[2][2];
+
+    NormalizeMatrix(rmatrix);
 }
 
 stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[E_RMATRIX]) {
@@ -57,7 +100,6 @@ stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     debug("ConvertAxisAngleToMatrix(...)");
 
@@ -97,7 +139,6 @@ stock ConvertEulerToMatrix(euler[E_EULER], rotationtype: type[2], rmatrix[E_RMAT
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     debug("ConvertEulerToMatrix(...)");
 
@@ -308,7 +349,6 @@ stock ConvertQuatToMatrix(quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     debug("ConvertQuatToMatrix(...)");
 
@@ -406,7 +446,6 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
     /// <param name="oX">Output position x</param>
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused cX, cY, cZ
 
@@ -420,4 +459,27 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
     oX += pX * m100 + pY * m101 + pZ * m102;
     oY += pX * m110 + pY * m111 + pZ * m112;
     oZ += pX * m120 + pY * m121 + pZ * m122;
+}
+
+stock ReverseMatrix(src[E_RMATRIX], dest[E_RMATRIX]) {
+    /// <summary>Stores the inverse rotation matrix in dest</summary>
+    /// <export />
+    /// <param name="src">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
+    /// <param name="dest">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
+
+    debug("ReverseMatrix(...)");
+    // fill variables
+    #emit load.s.pri src
+    #emit const.alt m100
+    #emit movs 36
+    // the inverse is just the transpose matrix
+    dest[E_RMATRIX_00] = m100;
+    dest[E_RMATRIX_01] = m110;
+    dest[E_RMATRIX_02] = m120;
+    dest[E_RMATRIX_10] = m101;
+    dest[E_RMATRIX_11] = m111;
+    dest[E_RMATRIX_12] = m121;
+    dest[E_RMATRIX_20] = m102;
+    dest[E_RMATRIX_21] = m112;
+    dest[E_RMATRIX_22] = m122;
 }

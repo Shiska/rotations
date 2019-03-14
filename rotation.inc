@@ -395,5 +395,66 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
     #emit sctrl 6
 }
 
+// native ReverseRotation(src[E_ROTATION], dest[E_ROTATION]);
+stock ReverseRotation(src[E_ROTATION], dest[E_ROTATION]) {
+    /// <summary>Stores the reverse rotation in dest</summary>
+    /// <export />
+    /// <param name="src">Source rotation [<ref name="E_ROTATION"/>]</param>
+    /// <param name="dest">Dest rotation [<ref name="E_ROTATION"/>]</param>
+
+    debug("ReverseRotation(...)");
+
+    switch(src[E_ROTATION_TYPE]) {
+        case rtype_axis_angle: {
+            dest[E_ROTATION_TYPE] = rtype_axis_angle;
+
+            #emit const.alt ReverseAxisAngle
+        }
+        case rtype_quaternion: {
+            dest[E_ROTATION_TYPE] = rtype_quaternion;
+
+            #emit const.alt ReverseQuat
+        }
+        case rtype_rotation_matrix: {
+            dest[E_ROTATION_TYPE] = rtype_rotation_matrix;
+
+            #emit const.alt ReverseMatrix
+        }
+        default: { // Euler
+            switch(src[E_ROTATION_TYPE]) { // basically order of rotation
+                case rtype_euler_xzx: dest[E_ROTATION_TYPE] = rtype_euler_xzx;
+                case rtype_euler_xyx: dest[E_ROTATION_TYPE] = rtype_euler_xyx;
+                case rtype_euler_yxy: dest[E_ROTATION_TYPE] = rtype_euler_yxy;
+                case rtype_euler_yzy: dest[E_ROTATION_TYPE] = rtype_euler_yzy;
+                case rtype_euler_zyz: dest[E_ROTATION_TYPE] = rtype_euler_zyz;
+                case rtype_euler_zxz: dest[E_ROTATION_TYPE] = rtype_euler_zxz;
+                case rtype_euler_xzy: dest[E_ROTATION_TYPE] = rtype_euler_yzx;
+                case rtype_euler_xyz: dest[E_ROTATION_TYPE] = rtype_euler_zyx;
+                case rtype_euler_yxz: dest[E_ROTATION_TYPE] = rtype_euler_zxy;
+                case rtype_euler_yzx: dest[E_ROTATION_TYPE] = rtype_euler_xzy;
+                case rtype_euler_zyx: dest[E_ROTATION_TYPE] = rtype_euler_xyz;
+                case rtype_euler_zxy: dest[E_ROTATION_TYPE] = rtype_euler_yxz;
+                case rtype_euler_re_xzy: dest[E_ROTATION_TYPE] = rtype_euler_re_yzx;
+                case rtype_euler_re_yxz: dest[E_ROTATION_TYPE] = rtype_euler_re_zxy;
+                case rtype_euler_re_yzx: dest[E_ROTATION_TYPE] = rtype_euler_re_xzy;
+                case rtype_euler_re_zyx: dest[E_ROTATION_TYPE] = rtype_euler_re_xyz;
+                case rtype_euler_re_zxy: dest[E_ROTATION_TYPE] = rtype_euler_re_yxz;
+            } {} // and reverse angles
+            #emit const.alt ReverseEuler
+        }
+    } {}
+    #emit load.s.pri src
+    #emit add.c E_ROTATION_DATA_OFFSET
+    #emit stor.s.pri src
+
+    #emit load.s.pri dest
+    #emit add.c E_ROTATION_DATA_OFFSET
+    #emit stor.s.pri dest
+
+    #emit move.pri
+    #emit add.c 4
+    #emit sctrl 6
+}
+
 #undef E_ROTATION_DATA_OFFSET
 #undef debug

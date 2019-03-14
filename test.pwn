@@ -26,12 +26,14 @@ Test:Compile() { // all functions which should call all subfunctions
 
     GetRotation(rotation, rtype_axis_angle, w, x, y, z);        // GetAxisAngleFromRotation
     RotatePoint(rotation, x, y, z, x, y, z, x, y, z);           // RotateAxisAngle
+    ReverseRotation(rotation, rotation);                        // ReverseAxisAngle
 
     ConvertRotation(rotation, rtype_rotation_matrix, rotation); // ConvertAxisAngleToMatrix
     ConvertRotation(rotation, rtype_quaternion, rotation);      // ConvertMatrixToQuat
     ConvertRotation(rotation, rtype_euler_samp, rotation);      // ConvertQuatToEuler
 
     GetRotation(rotation, rtype_euler_samp, x, y, z);           // GetEulerFromRotation
+    ReverseRotation(rotation, rotation);                        // ReverseEuler
 
     ConvertRotation(rotation, rtype_axis_angle, rotation);      // ConvertEulerToAxisAngle
     ConvertRotation(rotation, rtype_quaternion, rotation);      // ConvertAxisAngleToQuat
@@ -39,6 +41,7 @@ Test:Compile() { // all functions which should call all subfunctions
     GetRotation(rotation, rtype_quaternion, w, x, y, z);        // GetQuatFromRotation
     RotatePoint(rotation, x, y, z, x, y, z, x, y, z);           // RotateQuat
     CombineRotation(rotation, rotation, rotation);              // CombineQuat
+    ReverseRotation(rotation, rotation);                        // ReverseQuat
 
     ConvertRotation(rotation, rtype_rotation_matrix, rotation); // ConvertQuatToMatrix
     ConvertRotation(rotation, rtype_axis_angle, rotation);      // ConvertMatrixToAxisAngle
@@ -49,6 +52,7 @@ Test:Compile() { // all functions which should call all subfunctions
     GetRotation(rotation, rtype_rotation_matrix, matrix);       // GetMatrixFromRotation
     RotatePoint(rotation, x, y, z, x, y, z, x, y, z);           // RotateMatrix
     CombineRotation(rotation, rotation, rotation);              // CombineMatrix
+    ReverseRotation(rotation, rotation);                        // ReverseMatrix
     // rotation_quat.inc
     QuatNormalise(w, x, y, z);
     QuatScale(w, x, y, z, 5.0);
@@ -207,9 +211,16 @@ Test:RotatePoint() {
     RotatePoint(rotation, -1.0, -1.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
 
     ASSERT(CheckOrPrintEuler("rtype_rotation_matrix", dest_oX, dest_oY, dest_oZ, -3.0, -2.0, 0.0));
+}
 
+
+Test:CombineRotation() {
+    new Float: dest_oX;
+    new Float: dest_oY;
+    new Float: dest_oZ;
     new rot1[E_ROTATION];
     new rot2[E_ROTATION];
+    new rotation[E_ROTATION];
 
     SetRotation(rot1, rtype_euler_zxz, 0.0, 0.0, 90.0);
     SetRotation(rot2, rtype_euler_zxz, 0.0, 90.0, 0.0);
@@ -224,6 +235,41 @@ Test:RotatePoint() {
     RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
 
     ASSERT(CheckOrPrintEuler("CombineRotation local", dest_oX, dest_oY, dest_oZ, 0.0, 1.0, 0.0));
+}
+
+Test:ReverseRotation() {
+    new rotation[E_ROTATION];
+    new Float: dest_oX = (random(5000) - 2500) / 100.0; 
+    new Float: dest_oY = (random(5000) - 2500) / 100.0;
+    new Float: dest_oZ = (random(5000) - 2500) / 100.0;
+
+    SetRotation(rotation, rtype_euler_yxz, dest_oX, dest_oY, dest_oZ);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
+    ReverseRotation(rotation, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
+    // checks only one euler variant, others should be identical
+    ASSERT(CheckOrPrintEuler("ReverseEuler", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+
+    ConvertRotation(rotation, rtype_axis_angle, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
+    ReverseRotation(rotation, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
+
+    ASSERT(CheckOrPrintEuler("ReverseAxisAngle", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+
+    ConvertRotation(rotation, rtype_quaternion, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
+    ReverseRotation(rotation, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
+
+    ASSERT(CheckOrPrintEuler("ReverseQuat", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+
+    ConvertRotation(rotation, rtype_rotation_matrix, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
+    ReverseRotation(rotation, rotation);
+    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
+
+    ASSERT(CheckOrPrintEuler("ReverseMatrix", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
 }
 
 #define EPSILON 0.0002

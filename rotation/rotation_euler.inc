@@ -26,7 +26,6 @@ stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, &
     /// <param name="alpha">First source euler angle</param>
     /// <param name="beta">Second source euler angle</param>
     /// <param name="gamma">Third source euler angle</param>
-    /// <remarks>Used internally</remarks>
 
     debug("SetRotationFromEuler(%f, %f, %f)", alpha, beta, gamma);
 
@@ -45,7 +44,6 @@ stock ConvertAxisAngleToEuler(aangle[E_AANGLE], rotationtype: type[2], euler[E_E
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
-    /// <remarks>Used internally</remarks>
     /// <remarks>Not optimized, uses <ref name="ConvertAxisAngleToQuat"/> and <ref name="ConvertQuatToEuler"/> for the conversion</remarks>
 
     new quat[E_QUAT]; // leaving that unoptimised, see no use for it
@@ -63,7 +61,6 @@ stock ConvertEulerToEuler(src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="dest">Dest euler angle [<ref name="E_EULER"/>]</param>
-    /// <remarks>Used internally</remarks>
     /// <remarks>Not optimized, uses <ref name="ConvertEulerToQuat"/> and <ref name="ConvertQuatToEuler"/> for the conversion</remarks>
     /// <remarks>Doesn't check for same rotation type, that case should be caught in <ref name="ConvertRotation"/></remarks>
 
@@ -84,7 +81,6 @@ stock ConvertQuatToEuler(quat[E_QUAT], rotationtype: type[2], euler[E_EULER]) {
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
-    /// <remarks>Used internally</remarks>
     /// <remarks>Based on <ref name="ConvertQuatToMatrix"/> and <ref name="ConvertMatrixToEuler"/> but without calculating all matrix items</remarks>
 
     // Funny thing, for the Tait-Bryan angles, I didn't use alpha beta gamma before, also first second third rotation
@@ -428,7 +424,6 @@ stock ConvertMatrixToEuler(rmatrix[E_RMATRIX], rotationtype: type[2], euler[E_EU
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     switch(type[1]) {
         case rtype_euler_xzx: {
@@ -742,4 +737,17 @@ stock GetEulerFromRotation(euler[E_EULER], rotationtype: type, & Float: alpha, &
     gamma = euler[E_EULER_GAMMA];
 
     debug("GetEulerFromRotation(%f, %f, %f)", alpha, beta, gamma);
+}
+
+stock ReverseEuler(src[E_EULER], dest[E_EULER]) {
+    /// <summary>Stores the reverse euler angle in dest</summary>
+    /// <export />
+    /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
+    /// <param name="dest">Dest euler angle [<ref name="E_EULER"/>]</param>
+
+    debug("ReverseEuler(...)");
+
+    dest[E_EULER_ALPHA] = -src[E_EULER_ALPHA];
+    dest[E_EULER_BETA]  = -src[E_EULER_BETA];
+    dest[E_EULER_GAMMA] = -src[E_EULER_GAMMA];
 }

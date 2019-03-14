@@ -20,6 +20,20 @@ enum E_QUAT {
     #include "rotation_matrix"
 #endif
 
+stock NormalizeQuat(quat[E_QUAT]) {
+    /// <summary>Normalizes quaternion</summary>
+    /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
+
+    new Float: size = VectorSize(quat[E_QUAT_W], VectorSize(quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]), 0.0);
+
+    quat[E_QUAT_W] /= size;
+    quat[E_QUAT_X] /= size;
+    quat[E_QUAT_Y] /= size;
+    quat[E_QUAT_Z] /= size;
+
+    debug("NormalizeQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
+}
+
 stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Set the rotation array from quaternion</summary>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
@@ -28,7 +42,6 @@ stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float:
     /// <param name="x">Source quaternion imaginary part x</param>
     /// <param name="y">Source quaternion imaginary part y</param>
     /// <param name="z">Source quaternion imaginary part z</param>
-    /// <remarks>Used internally</remarks>
 
     debug("SetRotationFromQuat(%f, %f, %f, %f)", w, x, y, z);
 
@@ -38,6 +51,8 @@ stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float:
     quat[E_QUAT_X] = x;
     quat[E_QUAT_Y] = y;
     quat[E_QUAT_Z] = z;
+
+    NormalizeQuat(quat);
 }
 
 stock ConvertAxisAngleToQuat(aangle[E_AANGLE], rotationtype: type[2], quat[E_QUAT]) {
@@ -45,7 +60,6 @@ stock ConvertAxisAngleToQuat(aangle[E_AANGLE], rotationtype: type[2], quat[E_QUA
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="quat">Dest quaternion [<ref name="E_QUAT"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused type
 
@@ -74,7 +88,6 @@ stock ConvertEulerToQuat(euler[E_EULER], rotationtype: type[2], quat[E_QUAT]) {
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="quat">Dest quaternion [<ref name="E_QUAT"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     // could be done with matrix multiplication but would be slower
     new Float: a = euler[E_EULER_ALPHA] * 0.5;
@@ -200,7 +213,6 @@ stock ConvertMatrixToQuat(rmatrix[E_RMATRIX], rotationtype: type[2], quat[E_QUAT
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="quat">Dest quaternion [<ref name="E_QUAT"/>]</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused type
 
@@ -299,7 +311,6 @@ stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float
     /// <param name="oX">Output position x</param>
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
-    /// <remarks>Used internally</remarks>
 
     #pragma unused cX, cY, cZ
 
@@ -334,4 +345,17 @@ stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float
     oX += 2.0 * (dot * x + abs * pX + w * (z * pY - y * pZ));
     oY += 2.0 * (dot * y + abs * pY + w * (x * pZ - z * pX));
     oZ += 2.0 * (dot * z + abs * pZ + w * (y * pX - x * pY));
+}
+
+stock ReverseQuat(src[E_QUAT], dest[E_QUAT]) {
+    /// <summary>Stores the conjugated quaternion in dest</summary>
+    /// <export />
+    /// <param name="src">Source quaternion [<ref name="E_QUAT"/>]</param>
+    /// <param name="dest">Dest quaternion [<ref name="E_QUAT"/>]</param>
+
+    debug("ReverseQuat(...)");
+
+    dest = src; // similar to axis angle either negate w or x, y, and z
+    dest[E_QUAT_W] *= -1.0; // though only in 3d, if I am not mistaken in higher dimension it q = -q isn't valid anymore
+    // but conj(q) is always valid, also negate the imaginary part
 }
