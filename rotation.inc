@@ -51,13 +51,6 @@
   *   <li><a target="_blank" href="http://www.euclideanspace.com/maths/geometry/rotations/index.htm"/></li>
   *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles"/></li>
   * </ul>
-  *
-  * <section>Subfile</section>
-  *
-  * <ul>
-  *   <li><a target="_blank" href="rotation_misc.xml">rotation_misc.inc</a></li>
-  *   <li><a target="_blank" href="rotation_extra.xml">rotation_extra.inc</a></li>
-  * </ul>
   *//** */
 
 #if defined _inc_rotation_
