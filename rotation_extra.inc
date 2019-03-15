@@ -11,4 +11,6 @@
   * </summary>
   *//** */
 #include "extra\rotation_extra_object"
+#include "extra\rotation_extra_player"
 #include "extra\rotation_extra_vehicle"
+#include "extra\rotation_extra_dynamic"

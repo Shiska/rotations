@@ -2,7 +2,7 @@
 
 [![sampctl](https://shields.southcla.ws/badge/sampctl-rotations-2f2f2f.svg?style=for-the-badge)](https://github.com/Shiska/rotations)
 
-This include gives you the possibility to convert rotations
+<!-- This include gives you the possibility to convert rotations -->
 
 # Installation
 
@@ -19,6 +19,8 @@ sampctl package install Shiska/rotations
 # Testing
 
 ```bash
+sampctl package ensure
+sampctl package build
 sampctl package run
 ```
 

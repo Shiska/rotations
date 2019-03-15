@@ -26,6 +26,23 @@ stock bool: GetVehicleRotation(vehicleid, rotation[E_ROTATION]) {
     return false; 
 }
 
+stock bool: SetVehicleRotation(vehicleid, rotation[E_ROTATION]) {
+    /// <summary>Set the vehicle rotation</summary>
+    /// <export>vehicle</export>
+    /// <param name="vehicleid">Vehicleid to set rotation</param>
+    /// <param name="rotation">Source rotation array [<ref name="E_ROTATION"/>]</param>
+    /// <remarks>Only sets the z angle</remarks>
+    /// <returns>true for success otherwise false</returns>
+
+    new Float: rX;
+    new Float: rY;
+    new Float: rZ;
+
+    GetRotation(rotation, rtype_euler_samp, rX, rY, rZ);
+
+    return bool: SetVehicleZAngle(vehicleid, rZ);
+}
+
 stock bool: GetVehicleAttachedPos(vehicleid, Float: attachX, Float: attachY, Float: attachZ, Float: attachRotX, Float: attachRotY, Float: attachRotZ, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the position for the given attach offset</summary>
     /// <export>vehicle</export>
@@ -82,7 +99,6 @@ stock bool: GetVehicleAttachedOffset(vehicleid, Float: X, Float: Y, Float: Z, Fl
 
         GetVehicleRotation(vehicleid, parentRotation);
         SetRotation(attachRotation, rtype_euler_samp, RotX, RotY, RotZ);
-
         GetAttachedOffset(attachX, attachY, attachZ, parentRotation, X, Y, Z, attachRotation, attachX, attachY, attachZ, attachRotation);
         GetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
 
@@ -91,11 +107,11 @@ stock bool: GetVehicleAttachedOffset(vehicleid, Float: X, Float: Y, Float: Z, Fl
     return false;
 }
 
-stock bool: AttachObjectToVehicleEx(vehicleid, objectid) {
-    /// <summary>Attaches the objectid to vehicleid without changing position</summary>
+stock bool: AttachObjectToVehicleEx(objectid, vehicleid) {
+    /// <summary>Attaches the objectid to vehicleid without changing position or rotation</summary>
     /// <export>vehicle</export>
-    /// <param name="vehicleid">Target vehicleid</param>
     /// <param name="objectid">Objectid to attach</param>
+    /// <param name="vehicleid">Target vehicleid</param>
     /// <returns>true for success otherwise false</returns>
 
     new Float: X;

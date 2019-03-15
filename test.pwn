@@ -1,10 +1,11 @@
+#define RUN_TESTS
+
+#include <streamer>
+#include <YSI\y_testing>
+
 #include "rotation"
 #include "rotation_misc"
 #include "rotation_extra"
-
-#define RUN_TESTS
-
-#include <YSI\y_testing>
 
 forward bool: CheckOrPrintAxisAngle(comment[], Float: a1, Float: x1, Float: y1, Float: z1, Float: a2, Float: x2, Float: y2, Float: z2);
 forward bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2);
@@ -73,14 +74,38 @@ Test:Compile() { // all functions which should call all subfunctions
     GetAttachedPos(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
     GetAttachedOffset(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
 
+    GetObjectRotation(0, rotation);
+    SetObjectRotation(0, rotation);
+    GetObjectAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    GetObjectAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    GetPlayerRotation(0, rotation);
+    SetPlayerRotation(0, rotation);
+    GetPlayerAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    GetPlayerAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetVehicleRotation(0, rotation);
+    SetVehicleRotation(0, rotation);
     GetVehicleAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetVehicleAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
+
+    AttachObjectToObjectEx(0, 0);
+    AttachObjectToPlayerEx(0, 0);
     AttachObjectToVehicleEx(0, 0);
+
     GetVehicleRelativePos(0, x, y, z, x, y, z);
     GetVehicleForwardVector(0, x, y, z);
     GetVehicleRightVector(0, x, y, z);
     GetVehicleUpVector(0, x, y, z);
+
+    GetDynamicObjectRotation(0, rotation);
+    SetDynamicObjectRotation(0, rotation);
+    GetDynamicObjectAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    GetDynamicObjectAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
+
+    DetachDynamicObject(0);
+
+    AttachDynamicObjectToObjectEx(0, 0);
+    AttachDynamicObjectToPlayerEx(0, 0);
+    AttachDynamicObjectToVehicleEx(0, 0);
 }
 
 Test:ConvertRotation() { // check all conversion functions, although occasionally some test fail due to floating point inaccuracy 
