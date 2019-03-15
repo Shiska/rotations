@@ -26,6 +26,6 @@ sampctl package run
 
 # Reference
 
-* [rotation.inc](https://shiska.github.io/rotations/report/rotation.xml#index)
-* [rotation_misc.inc](https://shiska.github.io/rotations/report/rotation_misc.xml#index)
-* [rotation_extra.inc](https://shiska.github.io/rotations/report/rotation_extra.xml#index)
+* [rotation.inc](report/rotation.xml#index)
+* [rotation_misc.inc](report/rotation_misc.xml#index)
+* [rotation_extra.inc](report/rotation_extra.xml#index)
