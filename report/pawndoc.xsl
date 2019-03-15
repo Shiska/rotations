@@ -10,17 +10,17 @@
     <style type="text/css">
         #body {
             display: flex;
-            border-top: 1px solid black;
         }
         #index {
             min-height: 100vh;
         }
         .info, #index {
+            width: 100%;
             padding: 0 1em 0 1em;
+            border-top: 1px solid;
         }
         .info {
             border-left: 1px solid;
-            width: 100%;
         }
         .hidden {
             display: none;
