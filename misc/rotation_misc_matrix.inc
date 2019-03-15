@@ -6,6 +6,7 @@
 
 stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n = sizeof A[], n2 = sizeof B, o = sizeof B[], m2 = sizeof C, o2 = sizeof C[]) {
     /// <summary>Matrix multiplication, A * B = C</summary>
+    /// <export>matrix</export>
     /// <param name="A">Matrix multiplicand (m x n)</param>
     /// <param name="B">Matrix multiplier (n x o)</param>
     /// <param name="C">Matrix product (m x o)</param>
@@ -15,7 +16,7 @@ stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n 
     /// <param name="o">Coloums of Matrix B</param>
     /// <param name="m2">Rows of matrix C</param>
     /// <param name="o2">Coloums of Matrix C</param>
-    /// <returns>true if (n == n2 && m == m2 && p == p2) otherwise false</returns>
+    /// <returns>true if (n == n2 AND m == m2 AND p == p2) otherwise false</returns>
 
     if(m == m2 && n == n2 && o == o2) {
         for(m = 0; m < m2; ++m) { // loop through rows of C
@@ -32,6 +33,7 @@ stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n 
 
 stock bool: MatrixAdd(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
     /// <summary>Matrix addition, A + B = C</summary>
+    /// <export>matrix</export>
     /// <param name="A">Summand (m x n)</param>
     /// <param name="B">Summand (m x n)</param>
     /// <param name="C">Sum (m x n)</param>
@@ -41,7 +43,7 @@ stock bool: MatrixAdd(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, n
     /// <param name="nB">Coloums of Matrix B</param>
     /// <param name="mC">Rows of matrix C</param>
     /// <param name="nC">Coloums of Matrix C</param>
-    /// <returns>true if (mA == mB == mC && nA == nB == nC) otherwise false</returns>
+    /// <returns>true if (mA == mB == mC AND nA == nB == nC) otherwise false</returns>
 
     if(mA == mB && mB == mC && nA == nB && nB == nC) {
         for(mA = 0; mA < mB; ++mA) {
@@ -56,6 +58,7 @@ stock bool: MatrixAdd(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, n
 
 stock bool: MatrixSub(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
     /// <summary>Matrix subtraction, A - B = C</summary>
+    /// <export>matrix</export>
     /// <param name="A">Subtrahend (m x n)</param>
     /// <param name="B">Minuend (m x n)</param>
     /// <param name="C">Difference (m x n)</param>
@@ -65,7 +68,7 @@ stock bool: MatrixSub(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, n
     /// <param name="nB">Coloums of Matrix B</param>
     /// <param name="mC">Rows of matrix C</param>
     /// <param name="nC">Coloums of Matrix C</param>
-    /// <returns>true if (mA == mB == mC && nA == nB == nC) otherwise false</returns>
+    /// <returns>true if (mA == mB == mC AND nA == nB == nC) otherwise false</returns>
 
     if(mA == mB && mB == mC && nA == nB && nB == nC) {
         for(mA = 0; mA < mB; ++mA) {
@@ -80,6 +83,7 @@ stock bool: MatrixSub(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, n
 
 stock RotationMatrixX(Float: matrix[4][4], Float: angle) {
     /// <summary>Rotation matrix around X axis matrix</summary>
+    /// <export>matrix</export>
     /// <param name="matrix">Dest matrix</param>
     /// <param name="angle">Rotation around axis</param>
     /// <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks>
@@ -106,6 +110,7 @@ stock RotationMatrixX(Float: matrix[4][4], Float: angle) {
 
 stock RotationMatrixY(Float: matrix[4][4], Float: angle) {
     /// <summary>Rotation matrix around Y axis matrix</summary>
+    /// <export>matrix</export>
     /// <param name="matrix">Dest matrix</param>
     /// <param name="angle">Rotation around axis</param>
     /// <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks>
@@ -132,6 +137,7 @@ stock RotationMatrixY(Float: matrix[4][4], Float: angle) {
 
 stock RotationMatrixZ(Float: matrix[][], Float: angle) {
     /// <summary>Rotation matrix around Z axis matrix</summary>
+    /// <export>matrix</export>
     /// <param name="matrix">Dest matrix</param>
     /// <param name="angle">Rotation around axis</param>
     /// <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks>
@@ -158,6 +164,7 @@ stock RotationMatrixZ(Float: matrix[][], Float: angle) {
 
 stock TranslationMatrix(Float: matrix[4][4], Float: x, Float: y, Float: z) {
     /// <summary>Translation matrix, translates matrix (T * M - left multiplication) or rotates matrix (M * T - right multiplication)</summary>
+    /// <export>matrix</export>
     /// <param name="matrix">Dest matrix</param>
     /// <param name="m00">First scale</param>
     /// <param name="m11">Second scale</param>
@@ -190,6 +197,7 @@ stock TranslationMatrix(Float: matrix[4][4], Float: x, Float: y, Float: z) {
 
 stock ScalerMatrix(Float: matrix[4][4], Float: m00, Float: m11, Float: m22, Float: m33) {
     /// <summary>Scalar matrix</summary>
+    /// <export>matrix</export>
     /// <param name="matrix">Dest matrix</param>
     /// <param name="m00">First scale</param>
     /// <param name="m11">Second scale</param>

@@ -10,6 +10,7 @@ enum E_EULER {
     Float: E_EULER_GAMMA
 }
 /// <summary>Euler angle enum (alpha, beta, gamma)</summary>
+/// <export>euler</export>
 
 #if !defined E_AANGLE
     #include "rotation_axis_angle"
@@ -21,6 +22,7 @@ enum E_EULER {
 
 stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
     /// <summary>Set the rotation array from euler angle</summary>
+    /// <export>euler</export>
     /// <param name="euler">Euler angle array [<ref name="E_EULER"/>]</param>
     /// <param name="type">Source rotation type, unused</param>
     /// <param name="alpha">First source euler angle</param>
@@ -41,6 +43,7 @@ stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, &
 
 stock ConvertAxisAngleToEuler(aangle[E_AANGLE], rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given axis angle into euler angle</summary>
+    /// <export>euler</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
@@ -58,6 +61,7 @@ stock ConvertAxisAngleToEuler(aangle[E_AANGLE], rotationtype: type[2], euler[E_E
 
 stock ConvertEulerToEuler(src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
     /// <summary>Convert the given euler angle into euler angle</summary>
+    /// <export>euler</export>
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="dest">Dest euler angle [<ref name="E_EULER"/>]</param>
@@ -78,6 +82,7 @@ stock ConvertEulerToEuler(src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
 
 stock ConvertQuatToEuler(quat[E_QUAT], rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given quaternion into euler angle</summary>
+    /// <export>euler</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
@@ -421,6 +426,7 @@ stock ConvertQuatToEuler(quat[E_QUAT], rotationtype: type[2], euler[E_EULER]) {
 
 stock ConvertMatrixToEuler(rmatrix[E_RMATRIX], rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given rotation matrix into euler angle</summary>
+    /// <export>euler</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="euler">Dest euler angle [<ref name="E_EULER"/>]</param>
@@ -724,6 +730,7 @@ stock ConvertMatrixToEuler(rmatrix[E_RMATRIX], rotationtype: type[2], euler[E_EU
 
 stock GetEulerFromRotation(euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
     /// <summary>Gets the euler angle from the rotation array</summary>
+    /// <export>euler</export>
     /// <param name="euler">Euler angle array [<ref name="E_EULER"/>]</param>
     /// <param name="type">Dest rotation type, unused</param>
     /// <param name="alpha">First dest euler angle</param>
@@ -741,7 +748,7 @@ stock GetEulerFromRotation(euler[E_EULER], rotationtype: type, & Float: alpha, &
 
 stock ReverseEuler(src[E_EULER], dest[E_EULER]) {
     /// <summary>Stores the reverse euler angle in dest</summary>
-    /// <export />
+    /// <export>euler</export>
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="dest">Dest euler angle [<ref name="E_EULER"/>]</param>
 

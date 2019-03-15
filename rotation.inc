@@ -1,6 +1,6 @@
 /**
   * <summary>
-  *   Allows conversion between different rotations.
+  *   Allows conversion between different rotations
   * </summary>
   *
   * <section>Contributer</section>
@@ -33,9 +33,11 @@
   *     </ul>
   *   </li>
   *   <li>
-  *     <subsection>2.0 (xx.xx.2019)</subsection>
+  *     <subsection>2.0 (xx.xx.2019) - incompatible with version 1.x</subsection>
   *     <ul>
-  *       <li>Functions rewritten with rotation array, incompatible with version 1.x</li>
+  *       <li>All functions rewritten with arrays instead of multiple variables</li>
+  *       <li>Set, get, reverse, normalize function added</li>
+  *       <li>Documentation added and report files generated</li>
   *     </ul>
   *   </li>
   * </ul>
@@ -43,11 +45,18 @@
   * <section>Reference</section>
   *
   * <ul>
-  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix" /></li>
-  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation" /></li>
-  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation" /></li>
-  *   <li><a target="_blank" href="http://www.euclideanspace.com/maths/geometry/rotations/index.htm" /></li>
-  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles" /></li>
+  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix"/></li>
+  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation"/></li>
+  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation"/></li>
+  *   <li><a target="_blank" href="http://www.euclideanspace.com/maths/geometry/rotations/index.htm"/></li>
+  *   <li><a target="_blank" href="https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles"/></li>
+  * </ul>
+  *
+  * <section>Subfile</section>
+  *
+  * <ul>
+  *   <li><a target="_blank" href="rotation_misc.xml">rotation_misc.inc</a></li>
+  *   <li><a target="_blank" href="rotation_extra.xml">rotation_extra.inc</a></li>
   * </ul>
   *//** */
 
@@ -88,7 +97,7 @@ enum rotationtype {
     rtype_rotation_matrix
 }
 /// <summary>All supported rotation types</summary>
-/// <export />
+/// <export/>
 
 static stock __rotationtype[rotationtype]; // necessary for report file, it doesn't detect "tag only" usage
 
@@ -125,7 +134,7 @@ enum E_ROTATION {
     E_ROTATION_DATA[__largestType]
 }
 /// <summary>Rotation array</summary>
-/// <export />
+/// <export/>
 
 #undef __largestType
 
@@ -134,10 +143,16 @@ const E_ROTATION_DATA_OFFSET = _: E_ROTATION_DATA << 2;
 // native SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...);
 stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
     /// <summary>Set the rotation array from the given rotation</summary>
-    /// <export />
+    /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
     /// <param name="type">Source rotation type</param>
     /// <param name="...">Source rotation</param>
+    /// <example>
+    ///     SetRotation(rotation, rtype_axis_angle, w, x, y, z);<br/>
+    ///     SetRotation(rotation, rtype_euler_samp, x, y, z);<br/>
+    ///     SetRotation(rotation, rtype_quaternion, w, x, y, z);<br/>
+    ///     SetRotation(rotation, rtype_rotation_matrix, matrix);
+    /// </example>
 
     debug("SetRotation(%d)", _: type);
     // store address in E_ROTATION_BASE
@@ -171,7 +186,7 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
 // native ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]);
 stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
     /// <summary>Convert the given rotation matrix into the target rotation</summary>
-    /// <export />
+    /// <export/>
     /// <param name="src">Source rotation array</param>
     /// <param name="type">Dest rotation type</param>
     /// <param name="dest">Dest rotation array</param>
@@ -315,7 +330,7 @@ stock CombineRotation(left[E_ROTATION], right[E_ROTATION], dest[E_ROTATION]) {
 // native GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...);
 stock GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
     /// <summary>Get the rotation from the given rotation array</summary>
-    /// <export />
+    /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
     /// <param name="type">Dest rotation type</param>
     /// <param name="...">Dest rotation</param>
@@ -351,7 +366,7 @@ stock GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
 // native RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ);
 stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) around origin (cX, cY, cZ) and stores the output position (oX, oY, oZ)</summary>
-    /// <export />
+    /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
     /// <param name="cX">Rotation origin x</param>
     /// <param name="cY">Rotation origin y</param>
@@ -398,7 +413,7 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
 // native ReverseRotation(src[E_ROTATION], dest[E_ROTATION]);
 stock ReverseRotation(src[E_ROTATION], dest[E_ROTATION]) {
     /// <summary>Stores the reverse rotation in dest</summary>
-    /// <export />
+    /// <export/>
     /// <param name="src">Source rotation [<ref name="E_ROTATION"/>]</param>
     /// <param name="dest">Dest rotation [<ref name="E_ROTATION"/>]</param>
 

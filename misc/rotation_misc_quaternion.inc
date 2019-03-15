@@ -1,10 +1,12 @@
 #if defined _inc_rotation_misc_quaternion_
+    #endinput
 #else
     #define _inc_rotation_misc_quaternion_
 #endif
 
 stock QuatNormalise(& Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Normalizes quaternion</summary>
+    /// <export>quat</export>
     /// <param name="w">Quaternion scalar part</param>
     /// <param name="x">Quaternion imaginary part x</param>
     /// <param name="y">Quaternion imaginary part y</param>
@@ -20,6 +22,7 @@ stock QuatNormalise(& Float: w, & Float: x, & Float: y, & Float: z) {
 
 stock QuatScale(& Float: w, & Float: x, & Float: y, & Float: z, Float: s) {
     /// <summary>Scales quaternion by s</summary>
+    /// <export>quat</export>
     /// <param name="w">Quaternion scalar part</param>
     /// <param name="x">Quaternion imaginary part x</param>
     /// <param name="y">Quaternion imaginary part y</param>
@@ -34,6 +37,7 @@ stock QuatScale(& Float: w, & Float: x, & Float: y, & Float: z, Float: s) {
 
 stock QuatMul(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2, & Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Multiplies two quaternion</summary>
+    /// <export>quat</export>
     /// <param name="w1">First quaternion scalar part</param>
     /// <param name="x1">First quaternion imaginary part x</param>
     /// <param name="y1">First quaternion imaginary part y</param>
@@ -52,6 +56,7 @@ stock QuatMul(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, 
 
 stock QuatAdd(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2, & Float: w3, & Float: x3, & Float: y3, & Float: z3) {
     /// <summary>Adds two quaternion together</summary>
+    /// <export>quat</export>
     /// <param name="w1">First quaternion scalar part</param>
     /// <param name="x1">First quaternion imaginary part x</param>
     /// <param name="y1">First quaternion imaginary part y</param>

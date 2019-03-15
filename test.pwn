@@ -1,5 +1,6 @@
 #include "rotation"
 #include "rotation_misc"
+#include "rotation_extra"
 
 #define RUN_TESTS
 
@@ -53,12 +54,12 @@ Test:Compile() { // all functions which should call all subfunctions
     RotatePoint(rotation, x, y, z, x, y, z, x, y, z);           // RotateMatrix
     CombineRotation(rotation, rotation, rotation);              // CombineMatrix
     ReverseRotation(rotation, rotation);                        // ReverseMatrix
-    // rotation_quat.inc
+    // rotation_misc.inc
     QuatNormalise(w, x, y, z);
     QuatScale(w, x, y, z, 5.0);
     QuatMul(w, x, y, z, w, x, y, z, w, x, y, z);
     QuatAdd(w, x, y, z, w, x, y, z, w, x, y, z);
-    // rotation_matrix.inc
+
     MatrixMul(matrix, matrix, matrix);
     MatrixAdd(matrix, matrix, matrix);
     MatrixSub(matrix, matrix, matrix);
@@ -68,6 +69,18 @@ Test:Compile() { // all functions which should call all subfunctions
     RotationMatrixZ(matrix, w);
     ScalerMatrix(matrix, w, x, y, z);
     TranslationMatrix(matrix, x, y, z);
+    // rotation_extra.inc
+    GetAttachedPos(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
+    GetAttachedOffset(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
+
+    GetVehicleRotation(0, rotation);
+    GetVehicleAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    GetVehicleAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
+    AttachObjectToVehicleEx(0, 0);
+    GetVehicleRelativePos(0, x, y, z, x, y, z);
+    GetVehicleForwardVector(0, x, y, z);
+    GetVehicleRightVector(0, x, y, z);
+    GetVehicleUpVector(0, x, y, z);
 }
 
 Test:ConvertRotation() { // check all conversion functions, although occasionally some test fail due to floating point inaccuracy 
@@ -239,40 +252,26 @@ Test:CombineRotation() {
 
 Test:ReverseRotation() {
     new rotation[E_ROTATION];
+    new comment[32] = "ReverseRotation_";
     new Float: dest_oX = (random(5000) - 2500) / 100.0; 
     new Float: dest_oY = (random(5000) - 2500) / 100.0;
     new Float: dest_oZ = (random(5000) - 2500) / 100.0;
 
     SetRotation(rotation, rtype_euler_yxz, dest_oX, dest_oY, dest_oZ);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
-    ReverseRotation(rotation, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
-    // checks only one euler variant, others should be identical
-    ASSERT(CheckOrPrintEuler("ReverseEuler", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
 
-    ConvertRotation(rotation, rtype_axis_angle, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
-    ReverseRotation(rotation, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
+    for(new rotationtype: type; type < rotationtype; ++type) {
+        valstr(comment[16], _: type);
 
-    ASSERT(CheckOrPrintEuler("ReverseAxisAngle", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+        ConvertRotation(rotation, type, rotation);
+        RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
+        ReverseRotation(rotation, rotation);
+        RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
 
-    ConvertRotation(rotation, rtype_quaternion, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
-    ReverseRotation(rotation, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
-
-    ASSERT(CheckOrPrintEuler("ReverseQuat", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
-
-    ConvertRotation(rotation, rtype_rotation_matrix, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ);
-    ReverseRotation(rotation, rotation);
-    RotatePoint(rotation, 0.0, 0.0, 0.0, dest_oX, dest_oY, dest_oZ, dest_oX, dest_oY, dest_oZ);
-
-    ASSERT(CheckOrPrintEuler("ReverseMatrix", dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+        ASSERT(CheckOrPrintEuler(comment, dest_oX, dest_oY, dest_oZ, 1.0, 0.0, 0.0));
+    }
 }
 
-#define EPSILON 0.0002
+#define EPSILON 0.001
 
 bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2) {
     new

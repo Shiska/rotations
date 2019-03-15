@@ -10,6 +10,7 @@ enum E_RMATRIX {
     Float: E_RMATRIX_20, Float: E_RMATRIX_21, Float: E_RMATRIX_22
 }
 /// <summary>Rotation matrix enum (3 rows, 4 coloums)</summary>
+/// <export>rmatrix</export>
 
 #if !defined E_AANGLE
     #include "rotation_axis_angle"
@@ -30,6 +31,7 @@ static // unroll variables for speed
 
 stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
     /// <summary>Normalizes rotation matrix with Givens-Rotations</summary>
+    /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
 
     debug("NormalizeMatrix(...)");
@@ -72,6 +74,7 @@ stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
 
 stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matrix[][]) {
     /// <summary>Set the rotation array from rotation matrix</summary>
+    /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Source rotation type, unused</param>
     /// <param name="matrix">Source matrix[row][coloum]</param>
@@ -97,6 +100,7 @@ stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matri
 
 stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given axis angle into a rotation matrix</summary>
+    /// <export>rmatrix</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -136,6 +140,7 @@ stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[
 
 stock ConvertEulerToMatrix(euler[E_EULER], rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given euler angle into a rotation matrix</summary>
+    /// <export>rmatrix</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -346,6 +351,7 @@ stock ConvertEulerToMatrix(euler[E_EULER], rotationtype: type[2], rmatrix[E_RMAT
 
 stock ConvertQuatToMatrix(quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given quaternion into a rotation matrix</summary>
+    /// <export>rmatrix</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="rmatrix">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -383,6 +389,7 @@ stock ConvertQuatToMatrix(quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX
 
 stock CombineMatrix(left[E_RMATRIX], right[E_RMATRIX], dest[E_RMATRIX]) {
     /// <summary>Combines two rotation matrices</summary>
+    /// <export>rmatrix</export>
     /// <param name="left">Left rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="right">Right rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="dest">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -411,6 +418,7 @@ stock CombineMatrix(left[E_RMATRIX], right[E_RMATRIX], dest[E_RMATRIX]) {
 
 stock GetMatrixFromRotation(rmatrix[E_RMATRIX], rotationtype: type, Float: matrix[][]) {
     /// <summary>Get the matrix from the rotation array</summary>
+    /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Dest rotation type, unused</param>
     /// <param name="matrix">Dest matrix</param>
@@ -436,6 +444,7 @@ stock GetMatrixFromRotation(rmatrix[E_RMATRIX], rotationtype: type, Float: matri
 
 stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using a rotation matrix</summary>
+    /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="cX">Rotation origin x</param>
     /// <param name="cY">Rotation origin y</param>
@@ -463,7 +472,7 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
 
 stock ReverseMatrix(src[E_RMATRIX], dest[E_RMATRIX]) {
     /// <summary>Stores the inverse rotation matrix in dest</summary>
-    /// <export />
+    /// <export>rmatrix</export>
     /// <param name="src">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="dest">Dest rotation matrix [<ref name="E_RMATRIX"/>]</param>
 

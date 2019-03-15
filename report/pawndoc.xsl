@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html" version="5.0" encoding="UTF-8" omit-xml-declaration="yes"/>
+<xsl:key name="extra" match="//export/text()" use="."/>
 <xsl:template match="/">
 <html>
 <head>
@@ -62,35 +63,6 @@
             font-size: x-small;
             border: medium none;
         }
-        <!-- CODE { FON-SIZE: small; } -->
-        <!-- DL { MARGIN-LEFT: 4em; DISPLAY: compact } -->
-        <!-- DT { FONT-WEIGHT: bold } -->
-        <!-- A:link { COLOR: #4e4887 } -->
-        <!-- A:visited { COLOR: #8080c8 } -->
-        <!-- A:active { COLOR: #f16043 } -->
-        <!-- A:hover { COLOR: #f16043 } -->
-        <!-- P { MARGIN-BOTTOM: 0.5em; MARGIN-TOP: 0.5em; MARGIN-LEFT: 4em } -->
-        <!-- P.noindent { MARGIN-LEFT: 0em } -->
-        <!-- HR.para { HEIGHT: 0; BORDER: 0; COLOR: transparent; BACKGROUND-COLOR: transparent; MARGIN-TOP: 0.5em; MARGIN-BOTTOM: 0; } -->
-        <!-- XMP { BACKGROUND-COLOR: #ddeeff; FONT-SIZE: x-small; MARGIN: 1em } -->
-        <!-- PRE { BACKGROUND-COLOR: #ddeeff; FONT-SIZE: x-small; MARGIN: 1em } -->
-        <!-- TH { BACKGROUND-COLOR: #336699; COLOR: #ddeeff; BORDER-BOTTOM: medium none; BORDER-LEFT: medium none; BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: x-small; MARGIN: 2px; PADDING-BOTTOM: 2px; PADDING-LEFT: 4px; PADDING-RIGHT: 4px; PADDING-TOP: 2px; TEXT-ALIGN: left } -->
-        <!-- UL { MARGIN-TOP: 0.5em; } -->
-        <!-- LI.referrer { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.dependency { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.seealso { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.attribute { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.post { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.author { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.fixes { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.see { DISPLAY: inline; PADDING-RIGHT: 8px } -->
-        <!-- LI.changelog { DISPLAY: inline; } -->
-        <!-- .symbol { PADDING-RIGHT: 8px } -->
-        <!-- OL { MARGIN-TOP: 0.5em; } -->
-        <!-- DIV.library { TEXT-ALIGN: center; BORDER-RIGHT: #4e4887 8px solid; BORDER-TOP: #4e4887 2px solid; COLOR: #4e4887; MARGIN-BOTTOM: 0.5em; MARGIN-TOP: 1em; } -->
-        <!-- H1.library { TEXT-ALIGN: center; COLOR: #4e4887; MARGIN-TOP: 0.3em; } -->
-        <!-- H2.library { TEXT-ALIGN: center; BORDER: none; } -->
-        <!-- PRE { BACKGROUND-COLOR: #ddeeff; FONT-SIZE: small; MARGIN: 1em } -->
     </style>
     <script>
         var displayed = []
@@ -131,7 +103,7 @@
                     displayed.push(dest);
                 }
             } else { // id not found
-                
+                console.log("id " + id + " not found!");
             }
         }
     </script>
@@ -145,22 +117,23 @@
     <section id="body">
         <xsl:variable name="members" select="doc/members/member[not(@name='F:__file' or @name='F:__date' or @name='F:__time')]"/>
         <section id="index">
-            <xsl:call-template name="index">
-                <xsl:with-param name="name" select="'enumeration'"/>
-                <xsl:with-param name="export" select="$members[starts-with(@name,'T:')][export]"/>
+            <xsl:call-template name="indexSection">
+                <xsl:with-param name="name" select="'general'"/>
+                <xsl:with-param name="export" select="$members[export/. = '']"/>
             </xsl:call-template>
-            <xsl:call-template name="index">
-                <xsl:with-param name="name" select="'constant'"/>
-                <xsl:with-param name="export" select="$members[starts-with(@name,'C:')][export]"/>
-            </xsl:call-template>
-            <xsl:call-template name="index">
-                <xsl:with-param name="name" select="'variable'"/>
-                <xsl:with-param name="export" select="$members[starts-with(@name,'F:')][export]"/>
-            </xsl:call-template>
-            <xsl:call-template name="index">
-                <xsl:with-param name="name" select="'function'"/>
-                <xsl:with-param name="export" select="$members[starts-with(@name,'M:')][export]"/>
-            </xsl:call-template>
+            <xsl:for-each select="$members/export/text()[generate-id() = generate-id(key('extra', .))]">
+                <xsl:sort select="."/>
+                <xsl:variable name="export" select="."/>
+
+                <xsl:call-template name="indexSection">
+                    <xsl:with-param name="name" select="$export"/>
+                    <xsl:with-param name="export" select="$members[export/text() = $export]"/>
+                </xsl:call-template>
+            </xsl:for-each>
+            <!-- <xsl:call-template name="indexSection">
+                <xsl:with-param name="name" select="'misc'"/>
+                <xsl:with-param name="export" select="$members[not(export)]"/>
+            </xsl:call-template> -->
         </section>
         <xsl:apply-templates select="$members"/>
     </section>
@@ -175,15 +148,45 @@
 <xsl:template match="section"><h2 class="general"><xsl:apply-templates/></h2></xsl:template>
 <xsl:template match="subsection"><h3 class="general"><xsl:apply-templates/></h3></xsl:template>
 
+<xsl:template name="indexSection">
+    <xsl:param name="name"/>
+    <xsl:param name="export"/>
+
+    <xsl:if test="count($export) != 0">
+        <xsl:variable name="Name" select="concat(translate(substring($name,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($name,2))"/>
+        <h2>
+            <xsl:value-of select="$Name"/>
+        </h2>
+        <ul>
+            <xsl:call-template name="index">
+                <xsl:with-param name="name" select="'enumeration'"/>
+                <xsl:with-param name="export" select="$export[starts-with(@name,'T:')]"/>
+            </xsl:call-template>
+            <xsl:call-template name="index">
+                <xsl:with-param name="name" select="'constant'"/>
+                <xsl:with-param name="export" select="$export[starts-with(@name,'C:')]"/>
+            </xsl:call-template>
+            <xsl:call-template name="index">
+                <xsl:with-param name="name" select="'variable'"/>
+                <xsl:with-param name="export" select="$export[starts-with(@name,'F:')]"/>
+            </xsl:call-template>
+            <xsl:call-template name="index">
+                <xsl:with-param name="name" select="'function'"/>
+                <xsl:with-param name="export" select="$export[starts-with(@name,'M:')]"/>
+            </xsl:call-template>
+        </ul>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template name="index">
     <xsl:param name="name"/>
     <xsl:param name="export"/>
     <xsl:if test="count($export) != 0">
         <xsl:variable name="Name" select="concat(translate(substring($name,1,1),'ecvf','ECVF'),substring($name,2))"/>
-        <h2>
+        <h3>
             <xsl:attribute name="class"><xsl:value-of select="$name"/></xsl:attribute>
             <xsl:value-of select="$Name"/>s
-        </h2>
+        </h3>
         <ul>
             <xsl:for-each select="$export">
                 <xsl:variable name="sub" select="substring(@name,3)"/>
@@ -223,6 +226,7 @@
         <xsl:apply-templates select="automaton"/>
         <xsl:call-template name="transition"/>
         <xsl:apply-templates select="stacksize"/>
+        <xsl:apply-templates select="code"/>
         <xsl:call-template name="seealso"/>
     </section>
 </xsl:template>
@@ -331,7 +335,11 @@
     <xsl:if test=".//example">
         <h4>Example</h4>
         <xsl:for-each select=".//example">
-            <p><xsl:apply-templates/></p>
+            <table>
+                <code>
+                    <xsl:apply-templates/>
+                </code>
+            </table>
         </xsl:for-each>
     </xsl:if>
 </xsl:template>
@@ -402,7 +410,10 @@
 
 <xsl:template match="stacksize">
     <h4>Estimated stack usage</h4>
-    <p><xsl:value-of select="@value"/> cell<xsl:if test="@value > 1">s</xsl:if></p>
+    <ul>
+        <li><xsl:value-of select="@value"/> cell<xsl:if test="@value > 1">s</xsl:if></li>
+        <li><xsl:value-of select="@value * 4"/> Bytes</li>
+    </ul>
 </xsl:template>
 
 <xsl:template name="seealso">
@@ -420,10 +431,6 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="code">
-    <pre><xsl:apply-templates/></pre>
-</xsl:template>
-
 <xsl:template match="paramref">
     <i class="param"><xsl:value-of select="@name"/></i>
 </xsl:template>
@@ -431,7 +438,7 @@
 <!-- pawn-lang html tags -->
 <xsl:template match="c"><code><xsl:apply-templates/></code></xsl:template>
 <xsl:template match="em"><em><xsl:apply-templates/></em></xsl:template>
-<xsl:template match="p"><hr class="para"/><xsl:apply-templates/></xsl:template>
+<xsl:template match="p"><p><xsl:apply-templates/></p></xsl:template>
 <xsl:template match="para"><hr class="para"/><xsl:apply-templates/></xsl:template>
 <xsl:template match="ul"><ul><xsl:apply-templates/></ul></xsl:template>
 <xsl:template match="ol"><ol><xsl:apply-templates/></ol></xsl:template>

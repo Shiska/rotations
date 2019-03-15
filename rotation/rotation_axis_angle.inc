@@ -11,6 +11,7 @@ enum E_AANGLE {
     Float: E_AANGLE_Z
 }
 /// <summary>Axis angle enum (angle, x, y, z)</summary>
+/// <export>aangle</export>
 
 #if !defined E_EULER
     #include "rotation_euler"
@@ -22,6 +23,7 @@ enum E_AANGLE {
 
 stock NormalizeAxisAngle(aangle[E_AANGLE]) {
     /// <summary>Normalizes axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
 
     new Float: size = VectorSize(aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
@@ -35,6 +37,7 @@ stock NormalizeAxisAngle(aangle[E_AANGLE]) {
 
 stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
     /// <summary>Set the rotation array from axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Source rotation type, unused</param>
     /// <param name="angle">Source axis angle rotation</param>
@@ -56,6 +59,7 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: an
 
 stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given euler angle into axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
@@ -73,6 +77,7 @@ stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AA
 
 stock ConvertQuatToAxisAngle(quat[E_QUAT], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given quaternion into axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
@@ -97,6 +102,7 @@ stock ConvertQuatToAxisAngle(quat[E_QUAT], rotationtype: type[2], aangle[E_AANGL
 
 stock ConvertMatrixToAxisAngle(rmatrix[E_RMATRIX], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given rotation matrix into axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
     /// <param name="type">Rotation type, unused</param>
     /// <param name="aangle">Dest axis angle [<ref name="E_AANGLE"/>]</param>
@@ -118,6 +124,7 @@ stock ConvertMatrixToAxisAngle(rmatrix[E_RMATRIX], rotationtype: type[2], aangle
 
 stock GetAxisAngleFromRotation(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
     /// <summary>Get the axis angle from the rotation array</summary>
+    /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
     /// <param name="type">Dest rotation type, unused</param>
     /// <param name="angle">Dest axis angle rotation</param>
@@ -137,6 +144,7 @@ stock GetAxisAngleFromRotation(aangle[E_AANGLE], rotationtype: type, & Float: an
 
 stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using axis angle</summary>
+    /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
     /// <param name="cX">Rotation origin x</param>
     /// <param name="cY">Rotation origin y</param>
@@ -171,7 +179,7 @@ stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: 
 
 stock ReverseAxisAngle(src[E_AANGLE], dest[E_AANGLE]) {
     /// <summary>Stores the reverse axis angle in dest</summary>
-    /// <export />
+    /// <export>aangle</export>
     /// <param name="src">Source axis angle [<ref name="E_AANGLE"/>]</param>
     /// <param name="dest">Dest axis angle [<ref name="E_AANGLE"/>]</param>
 
