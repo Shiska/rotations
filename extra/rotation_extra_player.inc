@@ -24,6 +24,8 @@ stock bool: GetPlayerAttachedPos(playerid, Float: attachX, Float: attachY, Float
     /// <param name="RotZ">Global rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetPlayerAttachedPos(%d, %f, %f, %f, %f, %f, %f, ...)", playerid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ);
+
     if(GetPlayerPos(playerid, X, Y, Z)) {
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
@@ -57,6 +59,8 @@ stock bool: GetPlayerAttachedOffset(playerid, Float: X, Float: Y, Float: Z, Floa
     /// <param name="attachRotZ">Attach rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetPlayerAttachedOffset(%d, %f, %f, %f, %f, %f, %f, ...)", playerid, X, Y, Z, RotX, RotY, RotZ);
+
     if(GetPlayerPos(playerid, attachX, attachY, attachZ)) {
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
@@ -78,6 +82,8 @@ stock bool: AttachObjectToPlayerEx(objectid, playerid) {
     /// <param name="objectid">Objectid to attach</param>
     /// <param name="playerid">Target playerid</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("AttachObjectToPlayerEx(%d, %d)", objectid, playerid);
 
     new Float: X;
     new Float: Y;

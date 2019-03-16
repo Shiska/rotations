@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <?xml-stylesheet href="pawndoc.xsl" type="text/xsl"?>
-<doc source="C:\Program Files\samp\rotations\rotation_extra.inc">
+<doc source="rotation_extra.inc">
 	<assembly>
 		<name>rotation_extra.inc</name>
 	</assembly>
 
 	<!-- general -->
 	<general>
-		<summary>  Extra / additional functions which apply rotations  </summary> 
+		<summary>  Extra / additional functions which apply rotations  </summary>
 	</general>
 
 	<members>
@@ -59,6 +59,7 @@
 			<referrer name="ConvertAxisAngleToEuler"/>
 			<referrer name="ConvertEulerToEuler"/>
 			<referrer name="ConvertEulerToAxisAngle"/>
+			<referrer name="GetVehicleRelativePos"/>
 			<summary>Quaternion enum (w, x, y, z)</summary> 
 		</member>
 		<member name="T:E_RMATRIX" value="9">
@@ -103,9 +104,12 @@
 			</member>
 			<referrer name="GetRotation"/>
 			<referrer name="GetAttachedOffset"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
-			<referrer name="GetVehicleRelativePos"/>
 			<summary>Rotation array</summary> 
 		</member>
 		<member name="T:rotationtype" value="20">
@@ -169,10 +173,16 @@
 		</member>
 		<member name="C:false" value="0">
 			<tagname value="bool"/>
-			<referrer name="GetVehicleRotation"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
+			<referrer name="AttachObjectToPlayerEx"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<referrer name="AttachObjectToVehicleEx"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
 			<referrer name="GetVehicleRelativePos"/>
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
@@ -180,10 +190,16 @@
 		</member>
 		<member name="C:true" value="1">
 			<tagname value="bool"/>
-			<referrer name="GetVehicleRotation"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
+			<referrer name="AttachObjectToPlayerEx"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<referrer name="AttachObjectToVehicleEx"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
 			<referrer name="GetVehicleRelativePos"/>
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
@@ -192,6 +208,12 @@
 
 		<!-- variables -->
 		<member name="F:__date">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
 		</member>
 		<member name="F:__file">
 		</member>
@@ -351,6 +373,42 @@
 		<member name="F:m222">
 			<tagname value="Float"/>
 			<referrer name="CombineMatrix"/>
+		</member>
+		<member name="F:w1">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+			<referrer name="RotateQuat"/>
+		</member>
+		<member name="F:w2">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+		</member>
+		<member name="F:x1">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+			<referrer name="RotateQuat"/>
+		</member>
+		<member name="F:x2">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+		</member>
+		<member name="F:y1">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+			<referrer name="RotateQuat"/>
+		</member>
+		<member name="F:y2">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+		</member>
+		<member name="F:z1">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
+			<referrer name="RotateQuat"/>
+		</member>
+		<member name="F:z2">
+			<tagname value="Float"/>
+			<referrer name="CombineQuat"/>
 		</member>
 
 		<!-- functions -->
@@ -514,6 +572,7 @@
 			<referrer name="ConvertAxisAngleToMatrix"/>
 			<referrer name="ConvertEulerToMatrix"/>
 			<referrer name="ConvertQuatToMatrix"/>
+			<referrer name="RotateMatrix"/>
 			<referrer name="ConvertEulerToQuat"/>
 			<referrer name="ConvertMatrixToQuat"/>
 			<referrer name="CombineQuat"/>
@@ -521,7 +580,6 @@
 			<referrer name="ConvertQuatToEuler"/>
 			<referrer name="ConvertMatrixToAxisAngle"/>
 			<referrer name="RotateAxisAngle"/>
-			<referrer name="RotatePoint"/>
 			<referrer name="GetAttachedOffset"/>
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
@@ -796,6 +854,116 @@
 			</param>
 			<summary>A packed was received.</summary>   <seealso name="@receivepacket"/> <seealso name="sendstring"/> <remarks>The string is in unpacked format if the original packet contained a string in UTF-8 format. Note that messages in the ASCII character set are also UTF-8 compliant.</remarks> <remarks>This function does not work in the current SA:MP version!</remarks> <returns>The return value of this function is currently ignored.</returns>
 		</member>
+		<member name="M:AttachObjectToObject" syntax="AttachObjectToObject(objectid, attachtoid, OffsetX, OffsetY, OffsetZ, RotX, RotY, RotZ, SyncRotation)">
+			<attribute name="native"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<param name="objectid">
+				The object to attach to another object
+			</param>
+			<param name="attachtoid">
+				The object to attach the object to
+			</param>
+			<param name="OffsetX">
+				<paraminfo>Float </paraminfo>
+				The distance between the main object and the object in the X direction
+			</param>
+			<param name="OffsetY">
+				<paraminfo>Float </paraminfo>
+				The distance between the main object and the object in the Y direction
+			</param>
+			<param name="OffsetZ">
+				<paraminfo>Float </paraminfo>
+				The distance between the main object and the object in the Z direction
+			</param>
+			<param name="RotX">
+				<paraminfo>Float </paraminfo>
+				The X rotation between the object and the main object
+			</param>
+			<param name="RotY">
+				<paraminfo>Float </paraminfo>
+				The Y rotation between the object and the main object
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				The Z rotation between the object and the main object
+			</param>
+			<param name="SyncRotation">
+				If set to <b><c>0</c></b>, objectid's rotation will not change with <paramref name="attachtoid"/>'s (optional=<b><c>1</c></b>)
+			</param>
+			<summary>You can use this function to attach objects to other objects. The objects will folow the main object.</summary>          <seealso name="AttachObjectToPlayer"/> <seealso name="AttachObjectToVehicle"/> <seealso name="CreateObject"/> <remarks>This function was added in <b>SA-MP 0.3d</b> and will not work in earlier versions!</remarks> <remarks> <ul> <li>Both objects need to be created before attempting to attach them.</li> <li>There is no player-object version of this function (AttachPlayerObjectToObject), meaning it will not be supported by streamers.</li> </ul> </remarks> <returns> <b><c>1</c></b>: The function executed successfully.<p/> <b><c>0</c></b>: The function failed to execute. This means the first object (<paramref name="objectid"/>) does not exist. There are no internal checks to verify that the second object (<paramref name="attachtoid"/>) exists. </returns>
+		</member>
+		<member name="M:AttachObjectToObjectEx" syntax="AttachObjectToObjectEx(objectid, attachtoid, syncrotation)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachObjectToObject"/>
+			<dependency name="GetObjectAttachedOffset"/>
+			<dependency name="GetObjectPos"/>
+			<dependency name="GetObjectRot"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Objectid to attach
+			</param>
+			<param name="attachtoid">
+				Target objectid
+			</param>
+			<param name="syncrotation">
+				Synchronize rotation
+			</param>
+			<summary>Attaches the objectid to attachtoid without changing position or rotation</summary> <export>object</export>    <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:AttachObjectToPlayer" syntax="AttachObjectToPlayer(objectid, playerid, OffsetX, OffsetY, OffsetZ, RotX, RotY, RotZ)">
+			<attribute name="native"/>
+			<referrer name="AttachObjectToPlayerEx"/>
+			<param name="objectid">
+				The ID of the object to attach to the player
+			</param>
+			<param name="playerid">
+				The ID of the player to attach the object to
+			</param>
+			<param name="OffsetX">
+				<paraminfo>Float </paraminfo>
+				The distance between the player and the object in the X direction
+			</param>
+			<param name="OffsetY">
+				<paraminfo>Float </paraminfo>
+				The distance between the player and the object in the Y direction
+			</param>
+			<param name="OffsetZ">
+				<paraminfo>Float </paraminfo>
+				The distance between the player and the object in the Z direction
+			</param>
+			<param name="RotX">
+				<paraminfo>Float </paraminfo>
+				The X rotation between the object and the player
+			</param>
+			<param name="RotY">
+				<paraminfo>Float </paraminfo>
+				The Y rotation between the object and the player
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				The Z rotation between the object and the player
+			</param>
+			<summary>Attach an object to a player.</summary>         <seealso name="AttachObjectToVehicle"/> <seealso name="AttachObjectToObject"/> <seealso name="AttachPlayerObjectToPlayer"/> <seealso name="SetPlayerAttachedObject"/> <seealso name="CreateObject"/> <returns>This function always returns <b><c>0</c></b>.</returns>
+		</member>
+		<member name="M:AttachObjectToPlayerEx" syntax="AttachObjectToPlayerEx(objectid, playerid)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachObjectToPlayer"/>
+			<dependency name="GetObjectPos"/>
+			<dependency name="GetObjectRot"/>
+			<dependency name="GetPlayerAttachedOffset"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Objectid to attach
+			</param>
+			<param name="playerid">
+				Target playerid
+			</param>
+			<summary>Attaches the objectid to playerid without changing position or rotation</summary> <export>player</export>   <returns>true for success otherwise false</returns>
+		</member>
 		<member name="M:AttachObjectToVehicle" syntax="AttachObjectToVehicle(objectid, vehicleid, OffsetX, OffsetY, OffsetZ, RotX, RotY, RotZ)">
 			<attribute name="native"/>
 			<referrer name="AttachObjectToVehicleEx"/>
@@ -831,7 +999,7 @@
 			</param>
 			<summary>Attach an object to a vehicle.</summary>         <seealso name="AttachObjectToPlayer"/> <seealso name="AttachObjectToObject"/> <seealso name="AttachPlayerObjectToVehicle"/> <seealso name="CreateObject"/> <remarks>This function was added in <b>SA-MP 0.3c</b> and will not work in earlier versions!</remarks> <remarks>The object must be created first.</remarks> <remarks>When the vehicle is destroyed or respawned, the attached objects won't be destroyed with it; they will remain stationary at the position the vehicle disappeared and be reattached to the next vehicle to claim the vehicle ID that the objects were attached to.</remarks>
 		</member>
-		<member name="M:AttachObjectToVehicleEx" syntax="AttachObjectToVehicleEx(vehicleid, objectid)">
+		<member name="M:AttachObjectToVehicleEx" syntax="AttachObjectToVehicleEx(objectid, vehicleid)">
 			<tagname value="bool"/>
 			<stacksize value="22"/>
 			<dependency name="AttachObjectToVehicle"/>
@@ -840,13 +1008,71 @@
 			<dependency name="GetVehicleAttachedOffset"/>
 			<dependency name="false"/>
 			<dependency name="true"/>
+			<param name="objectid">
+				Objectid to attach
+			</param>
 			<param name="vehicleid">
 				Target vehicleid
+			</param>
+			<summary>Attaches the objectid to vehicleid without changing position or rotation</summary> <export>vehicle</export>   <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:AttachPlayerObjectToVehicle" syntax="AttachPlayerObjectToVehicle(playerid, objectid, vehicleid, fOffsetX, fOffsetY, fOffsetZ, fRotX, fRotY, RotZ)">
+			<attribute name="native"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
+			<param name="playerid">
+				The ID of the player the object was created for
+			</param>
+			<param name="objectid">
+				The ID of the object to attach to the vehicle
+			</param>
+			<param name="vehicleid">
+				The ID of the vehicle to attach the object to
+			</param>
+			<param name="fOffsetX">
+				<paraminfo>Float </paraminfo>
+				The X position offset for attachment
+			</param>
+			<param name="fOffsetY">
+				<paraminfo>Float </paraminfo>
+				The Y position offset for attachment
+			</param>
+			<param name="fOffsetZ">
+				<paraminfo>Float </paraminfo>
+				The Z position offset for attachment
+			</param>
+			<param name="fRotX">
+				<paraminfo>Float </paraminfo>
+				The X rotation offset for attachment
+			</param>
+			<param name="fRotY">
+				<paraminfo>Float </paraminfo>
+				The Y rotation offset for attachment
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				The Z rotation offset for attachment
+			</param>
+			<summary>Attach a player object to a vehicle.</summary>          <seealso name="CreatePlayerObject"/> <seealso name="AttachPlayerObjectToPlayer"/> <seealso name="AttachObjectToVehicle"/> <remarks>This function was added in <b>SA-MP 0.3e</b> and will not work in earlier versions!</remarks> <remarks>You need to create the object before attempting to attach it to a vehicle.</remarks>
+		</member>
+		<member name="M:AttachPlayerObjectToVehicleEx" syntax="AttachPlayerObjectToVehicleEx(playerid, objectid, vehicleid)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachPlayerObjectToVehicle"/>
+			<dependency name="GetPlayerObjectPos"/>
+			<dependency name="GetPlayerObjectRot"/>
+			<dependency name="GetVehicleAttachedOffset"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="playerid">
+				Playerid who owns the object
 			</param>
 			<param name="objectid">
 				Objectid to attach
 			</param>
-			<summary>Attaches the objectid to vehicleid without changing position</summary> <export>vehicle</export>   <returns>true for success otherwise false</returns>
+			<param name="vehicleid">
+				Target vehicleid
+			</param>
+			<summary>Attaches the objectid to vehicleid without changing position or rotation</summary> <export>vehicle</export>    <returns>true for success otherwise false</returns>
 		</member>
 		<member name="M:CombineMatrix" syntax="CombineMatrix(left[], right[], dest[])">
 			<stacksize value="1"/>
@@ -905,6 +1131,14 @@
 			<dependency name="E_QUAT_X"/>
 			<dependency name="E_QUAT_Y"/>
 			<dependency name="E_QUAT_Z"/>
+			<dependency name="w1"/>
+			<dependency name="w2"/>
+			<dependency name="x1"/>
+			<dependency name="x2"/>
+			<dependency name="y1"/>
+			<dependency name="y2"/>
+			<dependency name="z1"/>
+			<dependency name="z2"/>
 			<param name="left">
 				<paraminfo> [4] </paraminfo>
 				Left quaternion [<ref name="E_QUAT"/>]
@@ -1458,6 +1692,8 @@
 		</member>
 		<member name="M:GetAttachedOffset" syntax="GetAttachedOffset(parentX, parentY, parentZ, parentRotation[], X, Y, Z, worldRotation[], &amp;attachX, &amp;attachY, &amp;attachZ, attachRotation[])">
 			<stacksize value="23"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<dependency name="operator-(Float:,Float:)"/>
 			<dependency name="CombineRotation"/>
@@ -1516,6 +1752,8 @@
 		</member>
 		<member name="M:GetAttachedPos" syntax="GetAttachedPos(parentX, parentY, parentZ, parentRotation[], attachX, attachY, attachZ, attachRotation[], &amp;X, &amp;Y, &amp;Z, worldRotation[])">
 			<stacksize value="13"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetPlayerAttachedPos"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<dependency name="operator+(Float:,Float:)"/>
 			<dependency name="CombineRotation"/>
@@ -1657,8 +1895,143 @@
 			</param>
 			<summary>Get the matrix from the rotation array</summary>    
 		</member>
+		<member name="M:GetObjectAttachedOffset" syntax="GetObjectAttachedOffset(objectid, X, Y, Z, RotX, RotY, RotZ, &amp;attachX, &amp;attachY, &amp;attachZ, &amp;attachRotX, &amp;attachRotY, &amp;attachRotZ)">
+			<tagname value="bool"/>
+			<stacksize value="35"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="GetAttachedOffset"/>
+			<dependency name="GetObjectPos"/>
+			<dependency name="GetObjectRot"/>
+			<dependency name="GetRotation"/>
+			<dependency name="SetRotation"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Target objectid
+			</param>
+			<param name="X">
+				<paraminfo>Float </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				Global rotation z
+			</param>
+			<param name="attachX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation z
+			</param>
+			<summary>Get the attach offset for the given position</summary> <export>object</export>              <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetObjectAttachedPos" syntax="GetObjectAttachedPos(objectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
+			<tagname value="bool"/>
+			<stacksize value="35"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="GetAttachedPos"/>
+			<dependency name="GetObjectPos"/>
+			<dependency name="GetObjectRot"/>
+			<dependency name="GetRotation"/>
+			<dependency name="SetRotation"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Target objectid
+			</param>
+			<param name="attachX">
+				<paraminfo>Float </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float </paraminfo>
+				Attach rotation z
+			</param>
+			<param name="X">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation z
+			</param>
+			<summary>Get the position for the given attach offset</summary> <export>object</export>              <returns>true for success otherwise false</returns>
+		</member>
 		<member name="M:GetObjectPos" syntax="GetObjectPos(objectid, &amp;X, &amp;Y, &amp;Z)">
 			<attribute name="native"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<referrer name="AttachObjectToPlayerEx"/>
 			<referrer name="AttachObjectToVehicleEx"/>
 			<param name="objectid">
 				The ID of the object to get the position of.
@@ -1679,6 +2052,10 @@
 		</member>
 		<member name="M:GetObjectRot" syntax="GetObjectRot(objectid, &amp;RotX, &amp;RotY, &amp;RotZ)">
 			<attribute name="native"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="AttachObjectToObjectEx"/>
+			<referrer name="AttachObjectToPlayerEx"/>
 			<referrer name="AttachObjectToVehicleEx"/>
 			<param name="objectid">
 				The objectid of the object you want to get the rotation from
@@ -1696,6 +2073,217 @@
 				The variable to store the Z rotation, passed by reference
 			</param>
 			<summary>Use this function to get the objects current rotation. The rotation is saved by reference in three RotX/RotY/RotZ variables.</summary>     <seealso name="SetObjectRot"/> <seealso name="SetObjectPos"/> <seealso name="SetPlayerObjectRot"/> <seealso name="CreateObject"/> <returns>The object's rotation is stored in the referenced variables, not in the return value.</returns>
+		</member>
+		<member name="M:GetPlayerAttachedOffset" syntax="GetPlayerAttachedOffset(playerid, X, Y, Z, RotX, RotY, RotZ, &amp;attachX, &amp;attachY, &amp;attachZ, &amp;attachRotX, &amp;attachRotY, &amp;attachRotZ)">
+			<tagname value="bool"/>
+			<stacksize value="35"/>
+			<referrer name="AttachObjectToPlayerEx"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="GetAttachedOffset"/>
+			<dependency name="GetPlayerFacingAngle"/>
+			<dependency name="GetPlayerPos"/>
+			<dependency name="GetRotation"/>
+			<dependency name="SetRotation"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="playerid">
+				Target playerid
+			</param>
+			<param name="X">
+				<paraminfo>Float </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				Global rotation z
+			</param>
+			<param name="attachX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation z
+			</param>
+			<summary>Get the attach offset for the given position</summary> <export>player</export>              <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetPlayerAttachedPos" syntax="GetPlayerAttachedPos(playerid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
+			<tagname value="bool"/>
+			<stacksize value="35"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="GetAttachedPos"/>
+			<dependency name="GetPlayerFacingAngle"/>
+			<dependency name="GetPlayerPos"/>
+			<dependency name="GetRotation"/>
+			<dependency name="SetRotation"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="playerid">
+				Target playerid
+			</param>
+			<param name="attachX">
+				<paraminfo>Float </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float </paraminfo>
+				Attach rotation z
+			</param>
+			<param name="X">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation z
+			</param>
+			<summary>Get the position for the given attach offset</summary> <export>player</export>              <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetPlayerFacingAngle" syntax="GetPlayerFacingAngle(playerid, &amp;ang)">
+			<attribute name="native"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
+			<param name="playerid">
+				The player you want to get the angle of
+			</param>
+			<param name="ang">
+				<paraminfo>Float &amp; </paraminfo>
+				The Float to store the angle in, passed by reference
+			</param>
+			<summary>Gets the angle a player is facing.</summary>   <seealso name="GetVehicleZAngle"/> <seealso name="SetPlayerFacingAngle"/> <remarks>Angles are reversed in GTA:SA; 90 degrees would be East in the real world, but in GTA:SA 90 degrees is in fact West. North and South are still 0/360 and 180. To convert this, simply do <b>360 - angle</b>.</remarks> <remarks>Angles returned when inside a vehicle is rarely correct. To get the correct facing angle while inside a vehicle, use <a href="#GetVehicleZAngle">GetVehicleZAngle</a>.</remarks>
+		</member>
+		<member name="M:GetPlayerObjectPos" syntax="GetPlayerObjectPos(playerid, objectid, &amp;X, &amp;Y, &amp;Z)">
+			<attribute name="native"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
+			<param name="playerid">
+				The ID of the player whose player object to get the position of
+			</param>
+			<param name="objectid">
+				The object's id of which you want the current location
+			</param>
+			<param name="X">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the X coordinate, passed by reference
+			</param>
+			<param name="Y">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the Y coordinate, passed by reference
+			</param>
+			<param name="Z">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the Z coordinate, passed by reference
+			</param>
+			<summary>Get the position of a player object (<a href="#CreatePlayerObject">CreatePlayerObject</a>).</summary>      <seealso name=""/> <seealso name="SetPlayerObjectPos"/> <seealso name="GetPlayerObjectRot"/> <seealso name="GetObjectPos"/> <seealso name="CreatePlayerObject"/> <returns> <b><c>1</c></b>: The function executed successfully.<p/> <b><c>0</c></b>: The function failed to execute. The player and/or the object don't exist.<p/> The object's position is stored in the specified variables. </returns>
+		</member>
+		<member name="M:GetPlayerObjectRot" syntax="GetPlayerObjectRot(playerid, objectid, &amp;RotX, &amp;RotY, &amp;RotZ)">
+			<attribute name="native"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
+			<param name="playerid">
+				The player you associated this object to
+			</param>
+			<param name="objectid">
+				The objectid of the object you want to get the rotation from
+			</param>
+			<param name="RotX">
+				<paraminfo>Float &amp; </paraminfo>
+				The variable to store the X rotation, passed by reference
+			</param>
+			<param name="RotY">
+				<paraminfo>Float &amp; </paraminfo>
+				The variable to store the Y rotation, passed by reference
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				The variable to store the Z rotation, passed by reference
+			</param>
+			<summary>Use this function to get the object's current rotation. The rotation is saved by reference in three RotX/RotY/RotZ variables.</summary>      <seealso name="SetPlayerObjectRot"/> <seealso name="GetPlayerObjectPos"/> <seealso name="GetObjectRot"/> <seealso name="CreatePlayerObject"/> <returns>The object's rotation is stored in the specified variables.</returns>
+		</member>
+		<member name="M:GetPlayerPos" syntax="GetPlayerPos(playerid, &amp;x, &amp;y, &amp;z)">
+			<attribute name="native"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
+			<param name="playerid">
+				The ID of the player to get the position of
+			</param>
+			<param name="x">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the X coordinate in, passed by reference
+			</param>
+			<param name="y">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the Y coordinate in, passed by reference
+			</param>
+			<param name="z">
+				<paraminfo>Float &amp; </paraminfo>
+				A float variable in which to store the Z coordinate in, passed by reference
+			</param>
+			<summary>Get the position of a player, represented by X, Y and Z coordinates.</summary>     <seealso name="SetPlayerPos"/> <seealso name="GetVehiclePos"/> <seealso name="IsPlayerInRangeOfPoint"/> <seealso name="GetPlayerDistanceFromPoint"/> <remarks>This function is known to return unreliable values when used in <a href="#OnPlayerDisconnect">OnPlayerDisconnect</a> and <a href="#OnPlayerRequestClass">OnPlayerRequestClass</a>. This is because the player is not spawned.</remarks> <returns><b><c>true</c></b> on success, <b><c>false</c></b> on failure (i.e. player not connected).</returns>
 		</member>
 		<member name="M:GetQuatFromRotation" syntax="GetQuatFromRotation(quat[], type, &amp;w, &amp;x, &amp;y, &amp;z)">
 			<stacksize value="1"/>
@@ -1732,6 +2320,10 @@
 		</member>
 		<member name="M:GetRotation" syntax="GetRotation(rotation[], type, ...)">
 			<stacksize value="6"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<dependency name="ConvertRotation"/>
@@ -1760,14 +2352,16 @@
 			<tagname value="bool"/>
 			<stacksize value="35"/>
 			<referrer name="AttachObjectToVehicleEx"/>
+			<referrer name="AttachPlayerObjectToVehicleEx"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAttachedOffset"/>
 			<dependency name="GetRotation"/>
 			<dependency name="GetVehiclePos"/>
-			<dependency name="GetVehicleRotation"/>
+			<dependency name="GetVehicleRotationQuat"/>
 			<dependency name="SetRotation"/>
 			<dependency name="false"/>
 			<dependency name="rtype_euler_samp"/>
+			<dependency name="rtype_quaternion"/>
 			<dependency name="true"/>
 			<param name="vehicleid">
 				Target vehicleid
@@ -1829,10 +2423,11 @@
 			<dependency name="GetAttachedPos"/>
 			<dependency name="GetRotation"/>
 			<dependency name="GetVehiclePos"/>
-			<dependency name="GetVehicleRotation"/>
+			<dependency name="GetVehicleRotationQuat"/>
 			<dependency name="SetRotation"/>
 			<dependency name="false"/>
 			<dependency name="rtype_euler_samp"/>
+			<dependency name="rtype_quaternion"/>
 			<dependency name="true"/>
 			<param name="vehicleid">
 				Target vehicleid
@@ -1937,12 +2532,16 @@
 		</member>
 		<member name="M:GetVehicleRelativePos" syntax="GetVehicleRelativePos(vehicleid, offsetX, offsetY, offsetZ, &amp;X, &amp;Y, &amp;Z)">
 			<tagname value="bool"/>
-			<stacksize value="23"/>
+			<stacksize value="17"/>
 			<dependency name="operator+(Float:,Float:)"/>
-			<dependency name="E_ROTATION"/>
+			<dependency name="E_QUAT"/>
+			<dependency name="E_QUAT_W"/>
+			<dependency name="E_QUAT_X"/>
+			<dependency name="E_QUAT_Y"/>
+			<dependency name="E_QUAT_Z"/>
 			<dependency name="GetVehiclePos"/>
-			<dependency name="GetVehicleRotation"/>
-			<dependency name="RotatePoint"/>
+			<dependency name="GetVehicleRotationQuat"/>
+			<dependency name="RotateQuat"/>
 			<dependency name="false"/>
 			<dependency name="true"/>
 			<param name="vehicleid">
@@ -2000,29 +2599,11 @@
 			</param>
 			<summary>Gets the vehicle forward vector</summary> <export>vehicle</export>     <returns>true for success otherwise false</returns>
 		</member>
-		<member name="M:GetVehicleRotation" syntax="GetVehicleRotation(vehicleid, rotation[])">
-			<tagname value="bool"/>
-			<stacksize value="13"/>
+		<member name="M:GetVehicleRotationQuat" syntax="GetVehicleRotationQuat(vehicleid, &amp;w, &amp;x, &amp;y, &amp;z)">
+			<attribute name="native"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<referrer name="GetVehicleRelativePos"/>
-			<dependency name="GetVehicleRotationQuat"/>
-			<dependency name="SetRotation"/>
-			<dependency name="false"/>
-			<dependency name="rtype_quaternion"/>
-			<dependency name="true"/>
-			<param name="vehicleid">
-				Vehicleid to get rotation from
-			</param>
-			<param name="rotation">
-				<paraminfo> [10] </paraminfo>
-				Dest rotation array [<ref name="E_ROTATION"/>]
-			</param>
-			<summary>Get the vehicle rotation</summary> <export>vehicle</export>   <returns>true for success otherwise false</returns>
-		</member>
-		<member name="M:GetVehicleRotationQuat" syntax="GetVehicleRotationQuat(vehicleid, &amp;w, &amp;x, &amp;y, &amp;z)">
-			<attribute name="native"/>
-			<referrer name="GetVehicleRotation"/>
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
 			<referrer name="GetVehicleUpVector"/>
@@ -3077,6 +3658,7 @@
 		<member name="M:RotateMatrix" syntax="RotateMatrix(rmatrix[], cX, cY, cZ, pX, pY, pZ, &amp;oX, &amp;oY, &amp;oZ)">
 			<stacksize value="1"/>
 			<referrer name="RotatePoint"/>
+			<dependency name="operator-(Float:,Float:)"/>
 			<dependency name="operator+(Float:,Float:)"/>
 			<dependency name="operator*(Float:,Float:)"/>
 			<dependency name="m100"/>
@@ -3134,8 +3716,6 @@
 			<stacksize value="6"/>
 			<referrer name="GetAttachedPos"/>
 			<referrer name="GetAttachedOffset"/>
-			<referrer name="GetVehicleRelativePos"/>
-			<dependency name="operator-(Float:,Float:)"/>
 			<dependency name="ConvertRotation"/>
 			<dependency name="E_ROTATION_TYPE"/>
 			<dependency name="RotateAxisAngle"/>
@@ -3187,15 +3767,16 @@
 			<summary>Rotates the given point (pX, pY, pZ) around origin (cX, cY, cZ) and stores the output position (oX, oY, oZ)</summary>           
 		</member>
 		<member name="M:RotateQuat" syntax="RotateQuat(quat[], cX, cY, cZ, pX, pY, pZ, &amp;oX, &amp;oY, &amp;oZ)">
-			<stacksize value="7"/>
+			<stacksize value="3"/>
 			<referrer name="RotatePoint"/>
+			<referrer name="GetVehicleRelativePos"/>
 			<dependency name="operator-(Float:,Float:)"/>
 			<dependency name="operator+(Float:,Float:)"/>
 			<dependency name="operator*(Float:,Float:)"/>
-			<dependency name="E_QUAT_W"/>
-			<dependency name="E_QUAT_X"/>
-			<dependency name="E_QUAT_Y"/>
-			<dependency name="E_QUAT_Z"/>
+			<dependency name="w1"/>
+			<dependency name="x1"/>
+			<dependency name="y1"/>
+			<dependency name="z1"/>
 			<param name="quat">
 				<paraminfo> [4] </paraminfo>
 				Quaternion array [<ref name="E_QUAT"/>]
@@ -3240,7 +3821,10 @@
 		</member>
 		<member name="M:SetRotation" syntax="SetRotation(rotation[], type, ...)">
 			<stacksize value="1"/>
-			<referrer name="GetVehicleRotation"/>
+			<referrer name="GetObjectAttachedPos"/>
+			<referrer name="GetObjectAttachedOffset"/>
+			<referrer name="GetPlayerAttachedPos"/>
+			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
 			<dependency name="E_ROTATION_TYPE"/>
@@ -3675,7 +4259,7 @@
 			<param name="length">
 				When this length is set, the first x chars will be compared - doing "Hello" and "Hell No" with a length of 4 will say it's the same string (optional=<b><c>cellmax</c></b>)
 			</param>
-			<summary>Compares two strings to see if they are the same.</summary>     <seealso name="strcmp"/> <remarks>This is a conveniece function that depends on <a href="#strcmp">strcmp</a>.</remarks> <returns><b><c>true</c></b> if the strings match each other on given length, <b><c>false</c></b> otherwise.</returns>
+			<summary>Compares two strings to see if they are the same.</summary>     <seealso name="strcmp"/> <remarks>This is a conveniece function that depends on <a href=#strcmp>strcmp</a>.</remarks> <returns><b><c>true</c></b> if the strings match each other on given length, <b><c>false</c></b> otherwise.</returns> </returns>
 		</member>
 
 	</members>

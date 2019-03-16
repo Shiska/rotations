@@ -13,17 +13,11 @@
   *
   * <ul>
   *   <li>
-  *     <subsection>1.0 (14.08.2016)</subsection>
+  *     <subsection>2.0 (16.03.2019) - incompatible with version 1.x</subsection>
   *     <ul>
-  *       <li>Release</li>
-  *     </ul>
-  *   </li>
-  *   <li>
-  *     <subsection>1.1 (07.01.2017)</subsection>
-  *     <ul>
-  *       <li>euler_default renamed to euler_samp</li>
-  *       <li>Translation function added for Rotation Matrix</li>
-  *       <li>additional translate parameter 'oT' in MatrixRotate</li>
+  *       <li>All functions rewritten with arrays instead of multiple variables</li>
+  *       <li>Documentation added and report files generated</li>
+  *       <li>Additional function added</li>
   *     </ul>
   *   </li>
   *   <li>
@@ -33,11 +27,17 @@
   *     </ul>
   *   </li>
   *   <li>
-  *     <subsection>2.0 (xx.xx.2019) - incompatible with version 1.x</subsection>
+  *     <subsection>1.1 (07.01.2017)</subsection>
   *     <ul>
-  *       <li>All functions rewritten with arrays instead of multiple variables</li>
-  *       <li>Set, get, reverse, normalize function added</li>
-  *       <li>Documentation added and report files generated</li>
+  *       <li>euler_default renamed to euler_samp</li>
+  *       <li>Translation function added for Rotation Matrix</li>
+  *       <li>Additional translate parameter 'oT' in MatrixRotate</li>
+  *     </ul>
+  *   </li>
+  *   <li>
+  *     <subsection>1.0 (14.08.2016)</subsection>
+  *     <ul>
+  *       <li>Release</li>
   *     </ul>
   *   </li>
   * </ul>

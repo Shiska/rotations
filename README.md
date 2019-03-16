@@ -26,8 +26,6 @@ sampctl package run
 
 # Reference
 
-Go to [GitHub Pages](https://shiska.github.io/rotations/) for the transformed output.
-
-* [rotation.inc](report/rotation.xml#index)
-* [rotation_misc.inc](report/rotation_misc.xml#index)
-* [rotation_extra.inc](report/rotation_extra.xml#index)
+* [rotation.inc](https://shiska.github.io/rotations/report/rotation.xml#index)
+* [rotation_misc.inc](https://shiska.github.io/rotations/report/rotation_misc.xml#index)
+* [rotation_extra.inc](https://shiska.github.io/rotations/report/rotation_extra.xml#index)

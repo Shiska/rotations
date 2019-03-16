@@ -30,6 +30,8 @@ stock bool: GetDynamicObjectAttachedPos(objectid, Float: attachX, Float: attachY
     /// <param name="RotZ">Global rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetDynamicObjectAttachedPos(%d, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f)", objectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, X, Y, Z, RotX, RotY, RotZ);
+
     if(IsValidDynamicObject(objectid)) { // valid objectid
         new Float: attX;
 
@@ -83,23 +85,25 @@ stock bool: GetDynamicObjectAttachedPos(objectid, Float: attachX, Float: attachY
     return false;
 }
 
-stock GetDynamicObjectPosRot(objectid, & Float: X, & Float: Y, & Float: Z, & Float: rX, & Float: rY, & Float: rZ) {
+stock GetDynamicObjectPosRot(objectid, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the object global position and rotation, even if attached</summary>
     /// <export>dynamic</export>
     /// <param name="objectid">Target objectid</param>
     /// <param name="X">Global position x</param>
     /// <param name="Y">Global position y</param>
     /// <param name="Z">Global position z</param>
-    /// <param name="rX">Global rotation x</param>
-    /// <param name="rY">Global rotation y</param>
-    /// <param name="rZ">Global rotation z</param>
+    /// <param name="RotX">Global rotation x</param>
+    /// <param name="RotY">Global rotation y</param>
+    /// <param name="RotZ">Global rotation z</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("GetDynamicObjectPosRot(%d, ...)", objectid);
 
     if(IsValidDynamicObject(objectid)) {
         if(Streamer_GetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_ATTACH_OFFSET_X, X)) { // objectid is attached to something
-            return GetDynamicObjectAttachedPos(objectid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, X, Y, Z, rX, rY, rZ);
+            return GetDynamicObjectAttachedPos(objectid, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, X, Y, Z, RotX, RotY, RotZ);
         }
-        return GetDynamicObjectPos(objectid, X, Y, Z) && GetDynamicObjectRot(objectid, rX, rY, rZ);
+        return GetDynamicObjectPos(objectid, X, Y, Z) && GetDynamicObjectRot(objectid, RotX, RotY, RotZ);
     }
     return false;
 }
@@ -122,6 +126,8 @@ stock bool: GetDynamicObjectAttachedOffset(objectid, Float: X, Float: Y, Float: 
     /// <param name="attachRotZ">Attach rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetDynamicObjectAttachedOffset(%d, %f, %f, %f, %f, %f, %f, ...)", objectid, X, Y, Z, RotX, RotY, RotZ);
+
     if(GetDynamicObjectPosRot(objectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ)) {
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
@@ -136,44 +142,47 @@ stock bool: GetDynamicObjectAttachedOffset(objectid, Float: X, Float: Y, Float: 
     return false;
 }
 
-stock DetachDynamicObject(objectid) {
+stock DetachDynamicObject(oldobjectid, & newobjectid) {
     /// <summary>Destroyes the dynamic objectid and recreates it at the correct position</summary>
     /// <export>dynamic</export>
-    /// <param name="objectid">Dynamic objectid to destroy</param>
-    /// <returns>The new objectid for success otherwise INVALID_OBJECT_ID</returns>
+    /// <param name="oldobjectid">Dynamic objectid to destroy</param>
+    /// <param name="newobjectid">New objectid if successful</param>
+    /// <returns>true for success otherwise false</returns>
+
+    debug("DetachDynamicObject(%d, ...)", oldobjectid);
 
     new Float: attachX;
 
-    if(Streamer_GetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_ATTACH_OFFSET_X, attachX)) { // object is attached to something
+    if(Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_ATTACH_OFFSET_X, attachX)) { // object is attached to something
         new Float: attachY;
         new Float: attachZ;
         new Float: attachRotX;
         new Float: attachRotY;
         new Float: attachRotZ;
 
-        if(GetDynamicObjectPosRot(objectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ)) {
+        if(GetDynamicObjectPosRot(oldobjectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ)) {
             new Float: streamdistance;
             new Float: drawdistance;
 
-            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_STREAM_DISTANCE, streamdistance);
-            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_DRAW_DISTANCE, drawdistance);
+            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_STREAM_DISTANCE, streamdistance);
+            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_DRAW_DISTANCE, drawdistance);
 
-            new retn = CreateDynamicObject(
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_MODEL_ID),
+            newobjectid = CreateDynamicObject(
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_MODEL_ID),
                 attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ,
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_WORLD_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_INTERIOR_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_PLAYER_ID),
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_WORLD_ID),
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_INTERIOR_ID),
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PLAYER_ID),
                 streamdistance, drawdistance,
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_AREA_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, objectid, E_STREAMER_PRIORITY)
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_AREA_ID),
+                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PRIORITY)
             );
-            DestroyDynamicObject(objectid);
+            DestroyDynamicObject(oldobjectid);
 
-            return retn;
+            return true;
         }
     }
-    return INVALID_OBJECT_ID;
+    return false;
 }
 
 stock bool: AttachDynamicObjectToObjectEx(objectid, attachtoid, syncrotation = 1) {
@@ -183,6 +192,8 @@ stock bool: AttachDynamicObjectToObjectEx(objectid, attachtoid, syncrotation = 1
     /// <param name="attachtoid">Target objectid</param>
     /// <param name="syncrotation">Synchronize rotation</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("AttachDynamicObjectToObjectEx(%d, %d, %d)", objectid, attachtoid, syncrotation);
 
     new Float: X;
     new Float: Y;
@@ -206,6 +217,8 @@ stock bool: AttachDynamicObjectToPlayerEx(objectid, playerid) {
     /// <param name="playerid">Target playerid</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("AttachDynamicObjectToPlayerEx(%d, %d)", objectid, playerid);
+
     new Float: X;
     new Float: Y;
     new Float: Z;
@@ -227,6 +240,8 @@ stock bool: AttachDynamicObjectToVehicleEx(objectid, vehicleid) {
     /// <param name="objectid">Dynamic objectid to attach</param>
     /// <param name="vehicleid">Target vehicleid</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("AttachDynamicObjectToVehicleEx(%d, %d)", objectid, vehicleid);
 
     new Float: X;
     new Float: Y;

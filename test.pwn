@@ -84,6 +84,7 @@ Test:Compile() { // all functions which should call all subfunctions
     AttachObjectToObjectEx(0, 0);
     AttachObjectToPlayerEx(0, 0);
     AttachObjectToVehicleEx(0, 0);
+    AttachPlayerObjectToVehicleEx(0, 0, 0);
 
     GetVehicleRelativePos(0, x, y, z, x, y, z);
     GetVehicleForwardVector(0, x, y, z);
@@ -95,7 +96,7 @@ Test:Compile() { // all functions which should call all subfunctions
 
     GetDynamicObjectPosRot(0, x, y, z, x, y, z);
 
-    DetachDynamicObject(0);
+    DetachDynamicObject(0, _: x);
 
     AttachDynamicObjectToObjectEx(0, 0);
     AttachDynamicObjectToPlayerEx(0, 0);

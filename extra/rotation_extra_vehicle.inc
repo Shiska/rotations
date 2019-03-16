@@ -24,6 +24,8 @@ stock bool: GetVehicleAttachedPos(vehicleid, Float: attachX, Float: attachY, Flo
     /// <param name="RotZ">Global rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetVehicleAttachedPos(%d, %f, %f, %f, %f, %f, %f, ...)", vehicleid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ);
+
     if(GetVehiclePos(vehicleid, X, Y, Z)) {
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
@@ -57,6 +59,8 @@ stock bool: GetVehicleAttachedOffset(vehicleid, Float: X, Float: Y, Float: Z, Fl
     /// <param name="attachRotZ">Attach rotation z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetVehicleAttachedOffset(%d, %f, %f, %f, %f, %f, %f, ...)", vehicleid, X, Y, Z, RotX, RotY, RotZ);
+
     if(GetVehiclePos(vehicleid, attachX, attachY, attachZ)) {
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
@@ -79,6 +83,8 @@ stock bool: AttachObjectToVehicleEx(objectid, vehicleid) {
     /// <param name="vehicleid">Target vehicleid</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("AttachObjectToVehicleEx(%d, %d)", objectid, vehicleid);
+
     new Float: X;
     new Float: Y;
     new Float: Z;
@@ -99,6 +105,36 @@ stock bool: AttachObjectToVehicleEx(objectid, vehicleid) {
     return false;
 }
 
+stock bool: AttachPlayerObjectToVehicleEx(playerid, objectid, vehicleid) {
+    /// <summary>Attaches the objectid to vehicleid without changing position or rotation</summary>
+    /// <export>vehicle</export>
+    /// <param name="playerid">Playerid who owns the object</param>
+    /// <param name="objectid">Objectid to attach</param>
+    /// <param name="vehicleid">Target vehicleid</param>
+    /// <returns>true for success otherwise false</returns>
+
+    debug("AttachPlayerObjectToVehicleEx(%d, %d)", objectid, vehicleid);
+
+    new Float: X;
+    new Float: Y;
+    new Float: Z;
+
+    if(GetPlayerObjectPos(playerid, objectid, X, Y, Z)) {
+        new Float: rX;
+        new Float: rY;
+        new Float: rZ;
+
+        GetPlayerObjectRot(playerid, objectid, rX, rY, rZ);
+
+        if(GetVehicleAttachedOffset(vehicleid, X, Y, Z, rX, rY, rZ, X, Y, Z, rX, rY, rZ)) {
+            AttachPlayerObjectToVehicle(playerid, objectid, vehicleid, X, Y, Z, rX, rY, rZ);
+
+            return true;
+        }
+    }
+    return false;
+}
+
 stock bool: GetVehicleRelativePos(vehicleid, Float: offsetX, Float: offsetY, Float: offsetZ, & Float: X, & Float: Y, & Float: Z) {
     /// <summary>Gets the relative position to the given vehicle</summary>
     /// <export>vehicle</export>
@@ -110,6 +146,8 @@ stock bool: GetVehicleRelativePos(vehicleid, Float: offsetX, Float: offsetY, Flo
     /// <param name="Y">Global position y</param>
     /// <param name="Z">Global position z</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("GetVehicleRelativePos(%d, %f, %f, %f, ...)", vehicleid, offsetX, offsetY, offsetZ);
 
     if(GetVehiclePos(vehicleid, X, Y, Z)) {
         new quat[E_QUAT];
@@ -130,6 +168,8 @@ stock bool: GetVehicleForwardVector(vehicleid, & Float: X, & Float: Y, & Float: 
     /// <param name="Y">Forward vector y</param>
     /// <param name="Z">Forward vector z</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("GetVehicleForwardVector(%d, ...)", vehicleid);
 
     new Float: w;
     new Float: x;
@@ -155,6 +195,8 @@ stock bool: GetVehicleRightVector(vehicleid, & Float: X, & Float: Y, & Float: Z)
     /// <param name="Z">Right vector z</param>
     /// <returns>true for success otherwise false</returns>
 
+    debug("GetVehicleRightVector(%d, ...)", vehicleid);
+
     new Float: w;
     new Float: x;
     new Float: y;
@@ -178,6 +220,8 @@ stock bool: GetVehicleUpVector(vehicleid, & Float: X, & Float: Y, & Float: Z) {
     /// <param name="Y">Up vector y</param>
     /// <param name="Z">Up vector z</param>
     /// <returns>true for success otherwise false</returns>
+
+    debug("GetVehicleUpVector(%d, ...)", vehicleid);
 
     new Float: w;
     new Float: x;
