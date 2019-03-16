@@ -12,6 +12,8 @@ stock QuatNormalise(& Float: w, & Float: x, & Float: y, & Float: z) {
     /// <param name="y">Quaternion imaginary part y</param>
     /// <param name="z">Quaternion imaginary part z</param>
 
+    debug("QuatNormalise(%f, %f, %f, %f)", w, x, y, z);
+
     new Float: size = VectorSize(w, VectorSize(x, y, z), 0.0);
 
     w /= size;
@@ -28,6 +30,8 @@ stock QuatScale(& Float: w, & Float: x, & Float: y, & Float: z, Float: s) {
     /// <param name="y">Quaternion imaginary part y</param>
     /// <param name="z">Quaternion imaginary part z</param>
     /// <param name="s">Scale factor</param>
+
+    debug("QuatScale(%f, %f, %f, %f)", w, x, y, z);
 
     w *= s;
     x *= s;
@@ -47,6 +51,8 @@ stock QuatMul(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, 
     /// <param name="y2">Second quaternion imaginary part y</param>
     /// <param name="z2">Second quaternion imaginary part z</param>
 
+    debug("QuatMul(%f, %f, %f, %f, %f, %f, %f, %f)", w1, x1, y1, z1, w2, x2, y2, z2);
+
     // v1v2 = (v1 x v2) - (v1 . v2) | (w1, v1)(w2, v2) = (w1 * w2 - v1 . v2), (w1 * v2) + (w2 * v1) + (v1 x v2)
     w = w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2;
     x = w1 * x2 + w2 * x1 + y1 * z2 - z1 * y2;
@@ -65,6 +71,8 @@ stock QuatAdd(Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, 
     /// <param name="x2">Second quaternion imaginary part x</param>
     /// <param name="y2">Second quaternion imaginary part y</param>
     /// <param name="z2">Second quaternion imaginary part z</param>
+
+    debug("QuatAdd(%f, %f, %f, %f, %f, %f, %f, %f)", w1, x1, y1, z1, w2, x2, y2, z2);
 
     w3 = w1 + w2;
     x3 = x1 + x2;

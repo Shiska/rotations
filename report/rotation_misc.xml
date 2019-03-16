@@ -1822,7 +1822,7 @@
 			<param name="length">
 				When this length is set, the first x chars will be compared - doing "Hello" and "Hell No" with a length of 4 will say it's the same string (optional=<b><c>cellmax</c></b>)
 			</param>
-			<summary>Compares two strings to see if they are the same.</summary>     <seealso name="strcmp"/> <remarks>This is a conveniece function that depends on <a href=#strcmp>strcmp</a>.</remarks> <returns><b><c>true</c></b> if the strings match each other on given length, <b><c>false</c></b> otherwise.</returns> </returns>
+			<summary>Compares two strings to see if they are the same.</summary>     <seealso name="strcmp"/> <remarks>This is a conveniece function that depends on <a href="#strcmp">strcmp</a>.</remarks> <returns><b><c>true</c></b> if the strings match each other on given length, <b><c>false</c></b> otherwise.</returns>
 		</member>
 
 	</members>
