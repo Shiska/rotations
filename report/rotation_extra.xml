@@ -7,7 +7,7 @@
 
 	<!-- general -->
 	<general>
-		<summary>  Extra / additional functions which apply rotations  </summary>
+		<summary>  Extra / additional functions which apply rotations  </summary> 
 	</general>
 
 	<members>
@@ -110,6 +110,8 @@
 			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
 			<summary>Rotation array</summary> 
 		</member>
 		<member name="T:rotationtype" value="20">
@@ -165,6 +167,59 @@
 		<member name="C:EOS" value="0">
 			<referrer name="strcopy"/>
 		</member>
+		<member name="C:E_STREAMER_AREA_ID" value="0">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACHED_OBJECT" value="1">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACHED_PLAYER" value="2">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACHED_VEHICLE" value="3">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_OFFSET_X" value="4">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_OFFSET_Y" value="5">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_OFFSET_Z" value="6">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_R_X" value="7">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_R_Y" value="8">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_ATTACH_R_Z" value="9">
+			<referrer name="GetDynamicObjectAttachedPos"/>
+		</member>
+		<member name="C:E_STREAMER_DRAW_DISTANCE" value="14">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_INTERIOR_ID" value="17">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_MODEL_ID" value="25">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_PLAYER_ID" value="36">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_PRIORITY" value="37">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_STREAM_DISTANCE" value="43">
+			<referrer name="DetachDynamicObject"/>
+		</member>
+		<member name="C:E_STREAMER_WORLD_ID" value="48">
+			<referrer name="DetachDynamicObject"/>
+		</member>
 		<member name="C:cellmax" value="2147483647">
 			<referrer name="operator!(Float:)"/>
 		</member>
@@ -187,6 +242,13 @@
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
 			<referrer name="GetVehicleUpVector"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
+			<referrer name="DetachDynamicObject"/>
+			<referrer name="AttachDynamicObjectToObjectEx"/>
+			<referrer name="AttachDynamicObjectToPlayerEx"/>
+			<referrer name="AttachDynamicObjectToVehicleEx"/>
 		</member>
 		<member name="C:true" value="1">
 			<tagname value="bool"/>
@@ -204,10 +266,29 @@
 			<referrer name="GetVehicleForwardVector"/>
 			<referrer name="GetVehicleRightVector"/>
 			<referrer name="GetVehicleUpVector"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
+			<referrer name="DetachDynamicObject"/>
+			<referrer name="AttachDynamicObjectToObjectEx"/>
+			<referrer name="AttachDynamicObjectToPlayerEx"/>
+			<referrer name="AttachDynamicObjectToVehicleEx"/>
 		</member>
 
 		<!-- variables -->
+		<member name="F:Streamer_IncludeFileVersion">
+			<attribute name="public"/>
+		</member>
 		<member name="F:__date">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
+		</member>
+		<member name="F:__file">
 		</member>
 		<member name="F:__file">
 		</member>
@@ -853,6 +934,137 @@
 				Contains the IP address and the port number of the sender of this packet.
 			</param>
 			<summary>A packed was received.</summary>   <seealso name="@receivepacket"/> <seealso name="sendstring"/> <remarks>The string is in unpacked format if the original packet contained a string in UTF-8 format. Note that messages in the ASCII character set are also UTF-8 compliant.</remarks> <remarks>This function does not work in the current SA:MP version!</remarks> <returns>The return value of this function is currently ignored.</returns>
+		</member>
+		<member name="M:AttachDynamicObjectToObject" syntax="AttachDynamicObjectToObject(objectid, attachtoid, offsetx, offsety, offsetz, rx, ry, rz, syncrotation)">
+			<attribute name="native"/>
+			<referrer name="AttachDynamicObjectToObjectEx"/>
+			<param name="objectid">
+			</param>
+			<param name="attachtoid">
+			</param>
+			<param name="offsetx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsety">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsetz">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="syncrotation">
+			</param>
+		</member>
+		<member name="M:AttachDynamicObjectToObjectEx" syntax="AttachDynamicObjectToObjectEx(objectid, attachtoid, syncrotation)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachDynamicObjectToObject"/>
+			<dependency name="GetDynamicObjectAttachedOffset"/>
+			<dependency name="GetDynamicObjectPosRot"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Dynamic objectid to attach
+			</param>
+			<param name="attachtoid">
+				Target objectid
+			</param>
+			<param name="syncrotation">
+				Synchronize rotation
+			</param>
+			<summary>Attaches the dynamic objectid to attachtoid without changing position</summary> <export>dynamic</export>    <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:AttachDynamicObjectToPlayer" syntax="AttachDynamicObjectToPlayer(objectid, playerid, offsetx, offsety, offsetz, rx, ry, rz)">
+			<attribute name="native"/>
+			<referrer name="AttachDynamicObjectToPlayerEx"/>
+			<param name="objectid">
+			</param>
+			<param name="playerid">
+			</param>
+			<param name="offsetx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsety">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsetz">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:AttachDynamicObjectToPlayerEx" syntax="AttachDynamicObjectToPlayerEx(objectid, playerid)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachDynamicObjectToPlayer"/>
+			<dependency name="GetDynamicObjectPosRot"/>
+			<dependency name="GetPlayerAttachedOffset"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Dynamic objectid to attach
+			</param>
+			<param name="playerid">
+				Target playerid
+			</param>
+			<summary>Attaches the dynamic objectid to playerid without changing position</summary> <export>dynamic</export>   <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:AttachDynamicObjectToVehicle" syntax="AttachDynamicObjectToVehicle(objectid, vehicleid, offsetx, offsety, offsetz, rx, ry, rz)">
+			<attribute name="native"/>
+			<referrer name="AttachDynamicObjectToVehicleEx"/>
+			<param name="objectid">
+			</param>
+			<param name="vehicleid">
+			</param>
+			<param name="offsetx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsety">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="offsetz">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
+		<member name="M:AttachDynamicObjectToVehicleEx" syntax="AttachDynamicObjectToVehicleEx(objectid, vehicleid)">
+			<tagname value="bool"/>
+			<stacksize value="22"/>
+			<dependency name="AttachDynamicObjectToVehicle"/>
+			<dependency name="GetDynamicObjectPosRot"/>
+			<dependency name="GetVehicleAttachedOffset"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Dynamic objectid to attach
+			</param>
+			<param name="vehicleid">
+				Target vehicleid
+			</param>
+			<summary>Attaches the dynamic objectid to vehicleid without changing position</summary> <export>dynamic</export>   <returns>true for success otherwise false</returns>
 		</member>
 		<member name="M:AttachObjectToObject" syntax="AttachObjectToObject(objectid, attachtoid, OffsetX, OffsetY, OffsetZ, RotX, RotY, RotZ, SyncRotation)">
 			<attribute name="native"/>
@@ -1690,11 +1902,86 @@
 			</param>
 			<summary>Convert the given rotation matrix into the target rotation</summary>    
 		</member>
+		<member name="M:CreateDynamicObject" syntax="CreateDynamicObject(modelid, x, y, z, rx, ry, rz, worldid, interiorid, playerid, streamdistance, drawdistance, areaid, priority)">
+			<attribute name="native"/>
+			<referrer name="DetachDynamicObject"/>
+			<param name="modelid">
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="worldid">
+			</param>
+			<param name="interiorid">
+			</param>
+			<param name="playerid">
+			</param>
+			<param name="streamdistance">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="drawdistance">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="areaid">
+			</param>
+			<param name="priority">
+			</param>
+		</member>
+		<member name="M:DestroyDynamicObject" syntax="DestroyDynamicObject(objectid)">
+			<attribute name="native"/>
+			<referrer name="DetachDynamicObject"/>
+			<param name="objectid">
+			</param>
+		</member>
+		<member name="M:DetachDynamicObject" syntax="DetachDynamicObject(oldobjectid, &amp;newobjectid)">
+			<tagname value="bool"/>
+			<stacksize value="26"/>
+			<dependency name="CreateDynamicObject"/>
+			<dependency name="DestroyDynamicObject"/>
+			<dependency name="E_STREAMER_AREA_ID"/>
+			<dependency name="E_STREAMER_ATTACH_OFFSET_X"/>
+			<dependency name="E_STREAMER_DRAW_DISTANCE"/>
+			<dependency name="E_STREAMER_INTERIOR_ID"/>
+			<dependency name="E_STREAMER_MODEL_ID"/>
+			<dependency name="E_STREAMER_PLAYER_ID"/>
+			<dependency name="E_STREAMER_PRIORITY"/>
+			<dependency name="E_STREAMER_STREAM_DISTANCE"/>
+			<dependency name="E_STREAMER_WORLD_ID"/>
+			<dependency name="GetDynamicObjectPosRot"/>
+			<dependency name="Streamer_GetFloatData"/>
+			<dependency name="Streamer_GetIntData"/>
+			<dependency name="false"/>
+			<dependency name="true"/>
+			<param name="oldobjectid">
+				Dynamic objectid to destroy
+			</param>
+			<param name="newobjectid">
+				<paraminfo> &amp; </paraminfo>
+				New objectid if successful
+			</param>
+			<summary>Destroyes the dynamic objectid and recreates it at the correct position</summary> <export>dynamic</export>   <returns>true for success otherwise false</returns>
+		</member>
 		<member name="M:GetAttachedOffset" syntax="GetAttachedOffset(parentX, parentY, parentZ, parentRotation[], X, Y, Z, worldRotation[], &amp;attachX, &amp;attachY, &amp;attachZ, attachRotation[])">
 			<stacksize value="23"/>
 			<referrer name="GetObjectAttachedOffset"/>
 			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedOffset"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
 			<dependency name="operator-(Float:,Float:)"/>
 			<dependency name="CombineRotation"/>
 			<dependency name="E_ROTATION"/>
@@ -1748,13 +2035,14 @@
 				<paraminfo> [10] </paraminfo>
 				Attach rotation [<ref name="E_ROTATION"/>]
 			</param>
-			<summary>Get the attach offset for the given position</summary> <export>object</export>             <returns>true for success otherwise false</returns>
+			<summary>Get the attach offset for the given position</summary> <export>object</export>            
 		</member>
 		<member name="M:GetAttachedPos" syntax="GetAttachedPos(parentX, parentY, parentZ, parentRotation[], attachX, attachY, attachZ, attachRotation[], &amp;X, &amp;Y, &amp;Z, worldRotation[])">
 			<stacksize value="13"/>
 			<referrer name="GetObjectAttachedPos"/>
 			<referrer name="GetPlayerAttachedPos"/>
 			<referrer name="GetVehicleAttachedPos"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
 			<dependency name="operator+(Float:,Float:)"/>
 			<dependency name="CombineRotation"/>
 			<dependency name="RotatePoint"/>
@@ -1806,7 +2094,7 @@
 				<paraminfo> [10] </paraminfo>
 				Global rotation [<ref name="E_ROTATION"/>]
 			</param>
-			<summary>Get the position for the given attach offset</summary> <export>object</export>             <returns>true for success otherwise false</returns>
+			<summary>Get the position for the given attach offset</summary> <export>object</export>            
 		</member>
 		<member name="M:GetAxisAngleFromRotation" syntax="GetAxisAngleFromRotation(aangle[], type, &amp;angle, &amp;x, &amp;y, &amp;z)">
 			<stacksize value="1"/>
@@ -1840,6 +2128,228 @@
 				Dest axis angle unit vector z
 			</param>
 			<summary>Get the axis angle from the rotation array</summary>       
+		</member>
+		<member name="M:GetDynamicObjectAttachedOffset" syntax="GetDynamicObjectAttachedOffset(objectid, X, Y, Z, RotX, RotY, RotZ, &amp;attachX, &amp;attachY, &amp;attachZ, &amp;attachRotX, &amp;attachRotY, &amp;attachRotZ)">
+			<tagname value="bool"/>
+			<stacksize value="35"/>
+			<referrer name="AttachDynamicObjectToObjectEx"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="GetAttachedOffset"/>
+			<dependency name="GetDynamicObjectPosRot"/>
+			<dependency name="GetRotation"/>
+			<dependency name="SetRotation"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Target objectid
+			</param>
+			<param name="X">
+				<paraminfo>Float </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float </paraminfo>
+				Global rotation z
+			</param>
+			<param name="attachX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Attach rotation z
+			</param>
+			<summary>Get the attach offset for the given position</summary> <export>dynamic</export>              <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetDynamicObjectAttachedPos" syntax="GetDynamicObjectAttachedPos(objectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
+			<tagname value="bool"/>
+			<stacksize value="42"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<dependency name="E_ROTATION"/>
+			<dependency name="E_STREAMER_ATTACHED_OBJECT"/>
+			<dependency name="E_STREAMER_ATTACHED_PLAYER"/>
+			<dependency name="E_STREAMER_ATTACHED_VEHICLE"/>
+			<dependency name="E_STREAMER_ATTACH_OFFSET_X"/>
+			<dependency name="E_STREAMER_ATTACH_OFFSET_Y"/>
+			<dependency name="E_STREAMER_ATTACH_OFFSET_Z"/>
+			<dependency name="E_STREAMER_ATTACH_R_X"/>
+			<dependency name="E_STREAMER_ATTACH_R_Y"/>
+			<dependency name="E_STREAMER_ATTACH_R_Z"/>
+			<dependency name="GetAttachedPos"/>
+			<dependency name="GetDynamicObjectPos"/>
+			<dependency name="GetDynamicObjectRot"/>
+			<dependency name="GetPlayerAttachedPos"/>
+			<dependency name="GetRotation"/>
+			<dependency name="GetVehicleAttachedPos"/>
+			<dependency name="IsValidDynamicObject"/>
+			<dependency name="SetRotation"/>
+			<dependency name="Streamer_GetFloatData"/>
+			<dependency name="Streamer_GetIntData"/>
+			<dependency name="false"/>
+			<dependency name="rtype_euler_samp"/>
+			<dependency name="true"/>
+			<param name="objectid">
+				Target objectid
+			</param>
+			<param name="attachX">
+				<paraminfo>Float </paraminfo>
+				Attach offset x
+			</param>
+			<param name="attachY">
+				<paraminfo>Float </paraminfo>
+				Attach offset y
+			</param>
+			<param name="attachZ">
+				<paraminfo>Float </paraminfo>
+				Attach offset z
+			</param>
+			<param name="attachRotX">
+				<paraminfo>Float </paraminfo>
+				Attach rotation x
+			</param>
+			<param name="attachRotY">
+				<paraminfo>Float </paraminfo>
+				Attach rotation y
+			</param>
+			<param name="attachRotZ">
+				<paraminfo>Float </paraminfo>
+				Attach rotation z
+			</param>
+			<param name="X">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation z
+			</param>
+			<summary>Get the position for the given attach offset</summary> <export>dynamic</export>              <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetDynamicObjectPos" syntax="GetDynamicObjectPos(objectid, &amp;x, &amp;y, &amp;z)">
+			<attribute name="native"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<param name="objectid">
+			</param>
+			<param name="x">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:GetDynamicObjectPosRot" syntax="GetDynamicObjectPosRot(objectid, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
+			<tagname value="bool"/>
+			<stacksize value="16"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
+			<referrer name="DetachDynamicObject"/>
+			<referrer name="AttachDynamicObjectToObjectEx"/>
+			<referrer name="AttachDynamicObjectToPlayerEx"/>
+			<referrer name="AttachDynamicObjectToVehicleEx"/>
+			<dependency name="E_STREAMER_ATTACH_OFFSET_X"/>
+			<dependency name="GetDynamicObjectAttachedPos"/>
+			<dependency name="GetDynamicObjectPos"/>
+			<dependency name="GetDynamicObjectRot"/>
+			<dependency name="IsValidDynamicObject"/>
+			<dependency name="Streamer_GetFloatData"/>
+			<dependency name="false"/>
+			<param name="objectid">
+				Target objectid
+			</param>
+			<param name="X">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position x
+			</param>
+			<param name="Y">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position y
+			</param>
+			<param name="Z">
+				<paraminfo>Float &amp; </paraminfo>
+				Global position z
+			</param>
+			<param name="RotX">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation x
+			</param>
+			<param name="RotY">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation y
+			</param>
+			<param name="RotZ">
+				<paraminfo>Float &amp; </paraminfo>
+				Global rotation z
+			</param>
+			<summary>Get the object global position and rotation, even if attached</summary> <export>dynamic</export>        <returns>true for success otherwise false</returns>
+		</member>
+		<member name="M:GetDynamicObjectRot" syntax="GetDynamicObjectRot(objectid, &amp;rx, &amp;ry, &amp;rz)">
+			<attribute name="native"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<param name="objectid">
+			</param>
+			<param name="rx">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
 		</member>
 		<member name="M:GetEulerFromRotation" syntax="GetEulerFromRotation(euler[], type, &amp;alpha, &amp;beta, &amp;gamma)">
 			<stacksize value="1"/>
@@ -2078,6 +2588,7 @@
 			<tagname value="bool"/>
 			<stacksize value="35"/>
 			<referrer name="AttachObjectToPlayerEx"/>
+			<referrer name="AttachDynamicObjectToPlayerEx"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAttachedOffset"/>
 			<dependency name="GetPlayerFacingAngle"/>
@@ -2143,6 +2654,7 @@
 		<member name="M:GetPlayerAttachedPos" syntax="GetPlayerAttachedPos(playerid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
 			<tagname value="bool"/>
 			<stacksize value="35"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAttachedPos"/>
 			<dependency name="GetPlayerFacingAngle"/>
@@ -2326,6 +2838,8 @@
 			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
 			<dependency name="ConvertRotation"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAxisAngleFromRotation"/>
@@ -2353,6 +2867,7 @@
 			<stacksize value="35"/>
 			<referrer name="AttachObjectToVehicleEx"/>
 			<referrer name="AttachPlayerObjectToVehicleEx"/>
+			<referrer name="AttachDynamicObjectToVehicleEx"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAttachedOffset"/>
 			<dependency name="GetRotation"/>
@@ -2419,6 +2934,7 @@
 		<member name="M:GetVehicleAttachedPos" syntax="GetVehicleAttachedPos(vehicleid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ, &amp;X, &amp;Y, &amp;Z, &amp;RotX, &amp;RotY, &amp;RotZ)">
 			<tagname value="bool"/>
 			<stacksize value="35"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
 			<dependency name="E_ROTATION"/>
 			<dependency name="GetAttachedPos"/>
 			<dependency name="GetRotation"/>
@@ -2654,6 +3170,13 @@
 			</param>
 			<summary>Gets the vehicle forward vector</summary> <export>vehicle</export>     <returns>true for success otherwise false</returns>
 		</member>
+		<member name="M:IsValidDynamicObject" syntax="IsValidDynamicObject(objectid)">
+			<attribute name="native"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<param name="objectid">
+			</param>
+		</member>
 		<member name="M:NormalizeAxisAngle" syntax="NormalizeAxisAngle(aangle[])">
 			<stacksize value="6"/>
 			<referrer name="SetRotationFromAxisAngle"/>
@@ -2746,6 +3269,25 @@
 				The text entered into the input box by the player or the selected list item text
 			</param>
 			<summary>This callback is called when a player responds to a dialog shown using <a href="#ShowPlayerDialog">ShowPlayerDialog</a> by either clicking a button, pressing ENTER/ESC or double-clicking a list item (if using a list style dialog).</summary>      <seealso name="ShowPlayerDialog"/> <remarks>This callback was added in <b>SA-MP 0.3a</b> and will not work in earlier versions!</remarks> <remarks>A player's dialog doesn't hide when the gamemode restarts, causing the server to print <c>"Warning: PlayerDialogResponse PlayerId: 0 dialog ID doesn't match last sent dialog ID"</c> if a player responded to this dialog after restart.</remarks> <remarks>Parameters can contain different values, based on dialog's <a href="http://wiki.sa-mp.com/wiki/Dialog_Styles">style</a>.</remarks> <returns> Returning <b><c>0</c></b> in this callback will pass the dialog to another script in case no matching code were found in your gamemode's callback.<p/> It is always called first in filterscripts so returning <b><c>1</c></b> there blocks other filterscripts from seeing it. </returns>
+		</member>
+		<member name="M:OnDynamicActorStreamIn" syntax="OnDynamicActorStreamIn(actorid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="actorid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnDynamicActorStreamOut" syntax="OnDynamicActorStreamOut(actorid, forplayerid)">
+			<stacksize value="1"/>
+			<param name="actorid">
+			</param>
+			<param name="forplayerid">
+			</param>
+		</member>
+		<member name="M:OnDynamicObjectMoved" syntax="OnDynamicObjectMoved(objectid)">
+			<stacksize value="1"/>
+			<param name="objectid">
+			</param>
 		</member>
 		<member name="M:OnEnterExitModShop" syntax="OnEnterExitModShop(playerid, enterexit, interiorid)">
 			<stacksize value="1"/>
@@ -2947,6 +3489,33 @@
 			</param>
 			<summary>This callback is called when a player ends attached object edition mode.</summary>               <seealso name="EditAttachedObject"/> <seealso name="SetPlayerAttachedObject"/> <remarks>This callback was added in <b>SA-MP 0.3e</b> and will not work in earlier versions!</remarks> <remarks>Editions should be discarded if response was <b><c>0</c></b> (cancelled). This must be done by storing the offsets etc. in an array BEFORE using <a href="#EditAttachedObject">EditAttachedObject</a>.</remarks> <returns> <b><c>1</c></b> - Will prevent other scripts from receiving this callback.<p/> <b><c>0</c></b> - Indicates that this callback will be passed to the next script.<p/> It is always called first in filterscripts. </returns>
 		</member>
+		<member name="M:OnPlayerEditDynamicObject" syntax="OnPlayerEditDynamicObject(playerid, objectid, response, x, y, z, rx, ry, rz)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="objectid">
+			</param>
+			<param name="response">
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rx">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="ry">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="rz">
+				<paraminfo>Float </paraminfo>
+			</param>
+		</member>
 		<member name="M:OnPlayerEditObject" syntax="OnPlayerEditObject(playerid, playerobject, objectid, response, fX, fY, fZ, fRotX, fRotY, fRotZ)">
 			<stacksize value="1"/>
 			<param name="playerid">
@@ -2993,6 +3562,27 @@
 				The player who entered the checkpoint
 			</param>
 			<summary>This callback is called when a player enters the checkpoint set for that player.</summary>  <seealso name="OnPlayerLeaveCheckpoint"/> <seealso name="OnPlayerEnterRaceCheckpoint"/> <seealso name="OnPlayerLeaveRaceCheckpoint"/> <seealso name="SetPlayerCheckpoint"/> <seealso name="DisablePlayerCheckpoint"/> <seealso name="IsPlayerInCheckpoint"/> <seealso name="SetPlayerRaceCheckpoint"/> <seealso name="DisablePlayerRaceCheckpoint"/> <seealso name="IsPlayerInRaceCheckpoint"/> <remarks>This callback can also be called by NPC.</remarks> <returns> This callback does not handle returns.<p/> It is always called first in filterscripts. </returns>
+		</member>
+		<member name="M:OnPlayerEnterDynamicArea" syntax="OnPlayerEnterDynamicArea(playerid, areaid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="areaid">
+			</param>
+		</member>
+		<member name="M:OnPlayerEnterDynamicCP" syntax="OnPlayerEnterDynamicCP(playerid, checkpointid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="checkpointid">
+			</param>
+		</member>
+		<member name="M:OnPlayerEnterDynamicRaceCP" syntax="OnPlayerEnterDynamicRaceCP(playerid, checkpointid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="checkpointid">
+			</param>
 		</member>
 		<member name="M:OnPlayerEnterRaceCheckpoint" syntax="OnPlayerEnterRaceCheckpoint(playerid)">
 			<stacksize value="1"/>
@@ -3081,6 +3671,20 @@
 			</param>
 			<summary>This callback is called when a player gives damage to an actor.</summary>      <seealso name="CreateActor"/> <seealso name="SetActorInvulnerable"/> <seealso name="SetActorHealth"/> <seealso name="GetActorHealth"/> <seealso name="IsActorInvulnerable"/> <seealso name="IsValidActor"/> <seealso name="OnActorStreamOut"/> <seealso name="OnPlayerStreamIn"/> <remarks>This callback was added in <b>SA-MP 0.3.7</b> and will not work in earlier versions!</remarks> <remarks>This function does not get called if the actor is set invulnerable (WHICH IS BY DEFAULT). See <a href="#SetActorInvulnerable">SetActorInvulnerable</a>.</remarks> <returns> <b><c>1</c></b> - Callback will not be called in other filterscripts.<p/> <b><c>0</c></b> - Allows this callback to be called in other filterscripts.<p/> It is always called first in filterscripts so returning <b><c>1</c></b> there blocks other filterscripts from seeing it. </returns>
 		</member>
+		<member name="M:OnPlayerGiveDamageDynamicActor" syntax="OnPlayerGiveDamageDynamicActor(playerid, actorid, amount, weaponid, bodypart)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="actorid">
+			</param>
+			<param name="amount">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="bodypart">
+			</param>
+		</member>
 		<member name="M:OnPlayerInteriorChange" syntax="OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)">
 			<stacksize value="1"/>
 			<param name="playerid">
@@ -3114,6 +3718,27 @@
 			</param>
 			<summary>This callback is called when a player leaves the checkpoint set for them by <a href="#SetPlayerCheckpoint">SetPlayerCheckpoint</a>. Only one checkpoint can be set at a time.</summary>  <seealso name="OnPlayerEnterCheckpoint"/> <seealso name="OnPlayerEnterRaceCheckpoint"/> <seealso name="OnPlayerLeaveRaceCheckpoint"/> <seealso name="SetPlayerCheckpoint"/> <seealso name="DisablePlayerCheckpoint"/> <seealso name="IsPlayerInCheckpoint"/> <seealso name="SetPlayerRaceCheckpoint"/> <seealso name="DisablePlayerRaceCheckpoint"/> <seealso name="IsPlayerInRaceCheckpoint"/> <remarks>This callback can also be called by NPC.</remarks> <returns> This callback does not handle returns.<p/> It is always called first in filterscripts. </returns>
 		</member>
+		<member name="M:OnPlayerLeaveDynamicArea" syntax="OnPlayerLeaveDynamicArea(playerid, areaid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="areaid">
+			</param>
+		</member>
+		<member name="M:OnPlayerLeaveDynamicCP" syntax="OnPlayerLeaveDynamicCP(playerid, checkpointid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="checkpointid">
+			</param>
+		</member>
+		<member name="M:OnPlayerLeaveDynamicRaceCP" syntax="OnPlayerLeaveDynamicRaceCP(playerid, checkpointid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="checkpointid">
+			</param>
+		</member>
 		<member name="M:OnPlayerLeaveRaceCheckpoint" syntax="OnPlayerLeaveRaceCheckpoint(playerid)">
 			<stacksize value="1"/>
 			<param name="playerid">
@@ -3130,6 +3755,13 @@
 				The ID of the player object that was moved
 			</param>
 			<summary>This callback is called when a player object is moved after <a href="#MovePlayerObject">MovePlayerObject</a> (when it stops moving).</summary>   <seealso name="OnObjectMoved"/> <seealso name="MovePlayerObject"/> <seealso name="IsPlayerObjectMoving"/> <seealso name="StopPlayerObject"/> <remarks>This callback can also be called for NPC.</remarks> <returns> This callback does not handle returns.<p/> It is always called first in filterscripts. </returns>
+		</member>
+		<member name="M:OnPlayerPickUpDynamicPickup" syntax="OnPlayerPickUpDynamicPickup(playerid, pickupid)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="pickupid">
+			</param>
 		</member>
 		<member name="M:OnPlayerPickUpPickup" syntax="OnPlayerPickUpPickup(playerid, pickupid)">
 			<stacksize value="1"/>
@@ -3166,6 +3798,24 @@
 				The ID of the player that requested to spawn
 			</param>
 			<summary>Called when a player attempts to spawn via class selection either by pressing SHIFT or clicking the 'Spawn' button.</summary>  <seealso name="OnPlayerSpawn"/> <seealso name="OnPlayerRequestClass"/> <remarks>This callback can also be called by NPC.</remarks> <remarks>To prevent players from spawning with certain classes, the last viewed class must be saved in a variable in <a href="#OnPlayerRequestClass">OnPlayerRequestClass</a>.</remarks> <returns> Returning <b><c>0</c></b> in this callback will prevent the player from spawning.<p/> It is always called first in filterscripts so returning <b><c>0</c></b> there also blocks other scripts from seeing it. </returns>
+		</member>
+		<member name="M:OnPlayerSelectDynamicObject" syntax="OnPlayerSelectDynamicObject(playerid, objectid, modelid, x, y, z)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="objectid">
+			</param>
+			<param name="modelid">
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
 		</member>
 		<member name="M:OnPlayerSelectObject" syntax="OnPlayerSelectObject(playerid, type, objectid, modelid, fX, fY, fZ)">
 			<stacksize value="1"/>
@@ -3204,6 +3854,24 @@
 				The ID of the row that was selected. The first row is ID <b><c>0</c></b>
 			</param>
 			<summary>This callback is called when a player selects an item from a menu (<a href="#ShowMenuForPlayer">ShowMenuForPlayer</a>).</summary>   <seealso name="OnPlayerExitedMenu"/> <seealso name="OnDialogResponse"/> <seealso name="CreateMenu"/> <seealso name="DestroyMenu"/> <seealso name="AddMenuItem"/> <seealso name="ShowMenuForPlayer"/> <seealso name="HideMenuForPlayer"/> <remarks>The menu ID is not passed to this callback. <a href="#GetPlayerMenu">GetPlayerMenu</a> must be used to determine which menu the player selected an item on.</remarks> <returns> This callback does not handle returns.<p/> It is always called first in gamemode. </returns>
+		</member>
+		<member name="M:OnPlayerShootDynamicObject" syntax="OnPlayerShootDynamicObject(playerid, weaponid, objectid, x, y, z)">
+			<stacksize value="1"/>
+			<param name="playerid">
+			</param>
+			<param name="weaponid">
+			</param>
+			<param name="objectid">
+			</param>
+			<param name="x">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="y">
+				<paraminfo>Float </paraminfo>
+			</param>
+			<param name="z">
+				<paraminfo>Float </paraminfo>
+			</param>
 		</member>
 		<member name="M:OnPlayerSpawn" syntax="OnPlayerSpawn(playerid)">
 			<stacksize value="1"/>
@@ -3827,6 +4495,8 @@
 			<referrer name="GetPlayerAttachedOffset"/>
 			<referrer name="GetVehicleAttachedPos"/>
 			<referrer name="GetVehicleAttachedOffset"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectAttachedOffset"/>
 			<dependency name="E_ROTATION_TYPE"/>
 			<dependency name="SetRotationFromAxisAngle"/>
 			<dependency name="SetRotationFromEuler"/>
@@ -3970,6 +4640,56 @@
 				Source quaternion imaginary part z
 			</param>
 			<summary>Set the rotation array from quaternion</summary>       
+		</member>
+		<member name="M:Streamer_GetFloatData" syntax="Streamer_GetFloatData(type, id, data, &amp;result)">
+			<attribute name="native"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="GetDynamicObjectPosRot"/>
+			<referrer name="DetachDynamicObject"/>
+			<param name="type">
+			</param>
+			<param name="id">
+				<paraminfo> {Text3D,_} </paraminfo>
+			</param>
+			<param name="data">
+			</param>
+			<param name="result">
+				<paraminfo>Float &amp; </paraminfo>
+			</param>
+		</member>
+		<member name="M:Streamer_GetIntData" syntax="Streamer_GetIntData(type, id, data)">
+			<attribute name="native"/>
+			<referrer name="GetDynamicObjectAttachedPos"/>
+			<referrer name="DetachDynamicObject"/>
+			<param name="type">
+			</param>
+			<param name="id">
+				<paraminfo> {Text3D,_} </paraminfo>
+			</param>
+			<param name="data">
+			</param>
+		</member>
+		<member name="M:Streamer_OnItemStreamIn" syntax="Streamer_OnItemStreamIn(type, id)">
+			<stacksize value="1"/>
+			<param name="type">
+			</param>
+			<param name="id">
+				<paraminfo> {Text3D,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:Streamer_OnItemStreamOut" syntax="Streamer_OnItemStreamOut(type, id)">
+			<stacksize value="1"/>
+			<param name="type">
+			</param>
+			<param name="id">
+				<paraminfo> {Text3D,_} </paraminfo>
+			</param>
+		</member>
+		<member name="M:Streamer_OnPluginError" syntax="Streamer_OnPluginError(error[])">
+			<stacksize value="1"/>
+			<param name="error">
+				<paraminfo> [] </paraminfo>
+			</param>
 		</member>
 		<member name="M:VectorSize" syntax="VectorSize(x, y, z)">
 			<tagname value="Float"/>

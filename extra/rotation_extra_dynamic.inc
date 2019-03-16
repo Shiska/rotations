@@ -85,7 +85,7 @@ stock bool: GetDynamicObjectAttachedPos(objectid, Float: attachX, Float: attachY
     return false;
 }
 
-stock GetDynamicObjectPosRot(objectid, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
+stock bool: GetDynamicObjectPosRot(objectid, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the object global position and rotation, even if attached</summary>
     /// <export>dynamic</export>
     /// <param name="objectid">Target objectid</param>
@@ -142,7 +142,7 @@ stock bool: GetDynamicObjectAttachedOffset(objectid, Float: X, Float: Y, Float: 
     return false;
 }
 
-stock DetachDynamicObject(oldobjectid, & newobjectid) {
+stock bool: DetachDynamicObject(oldobjectid, & newobjectid) {
     /// <summary>Destroyes the dynamic objectid and recreates it at the correct position</summary>
     /// <export>dynamic</export>
     /// <param name="oldobjectid">Dynamic objectid to destroy</param>

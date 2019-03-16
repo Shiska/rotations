@@ -19,7 +19,6 @@ stock GetAttachedPos(Float: parentX, Float: parentY, Float: parentZ, parentRotat
     /// <param name="Y">Global position y</param>
     /// <param name="Z">Global position z</param>
     /// <param name="worldRotation">Global rotation [<ref name="E_ROTATION"/>]</param>
-    /// <returns>true for success otherwise false</returns>
 
     debug("GetAttachedPos(%f, %f, %f, %f, %f, %f, ...)", parentX, parentY, parentZ, attachX, attachY, attachZ);
 
@@ -42,7 +41,6 @@ stock GetAttachedOffset(Float: parentX, Float: parentY, Float: parentZ, parentRo
     /// <param name="attachY">Attach offset y</param>
     /// <param name="attachZ">Attach offset z</param>
     /// <param name="attachRotation">Attach rotation [<ref name="E_ROTATION"/>]</param>
-    /// <returns>true for success otherwise false</returns>
 
     debug("GetAttachedOffset(%f, %f, %f, %f, %f, %f, ...)", parentX, parentY, parentZ, X, Y, Z);
 
