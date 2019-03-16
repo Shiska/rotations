@@ -21,8 +21,8 @@ stock GetAttachedPos(Float: parentX, Float: parentY, Float: parentZ, parentRotat
     /// <param name="worldRotation">Global rotation [<ref name="E_ROTATION"/>]</param>
     /// <returns>true for success otherwise false</returns>
 
-    CombineRotation(parentRotation, attachRotation, worldRotation); // TODO: test
     RotatePoint(parentRotation, parentX, parentY, parentZ, parentX + attachX, parentY + attachY, parentZ + attachZ, X, Y, Z);
+    CombineRotation(parentRotation, attachRotation, worldRotation); // combine afterwards if dest and parentRotation is the same array
 }
 
 stock GetAttachedOffset(Float: parentX, Float: parentY, Float: parentZ, parentRotation[E_ROTATION], Float: X, Float: Y, Float: Z, worldRotation[E_ROTATION], & Float: attachX, & Float: attachY, & Float: attachZ, attachRotation[E_ROTATION]) {
@@ -54,41 +54,6 @@ stock GetAttachedOffset(Float: parentX, Float: parentY, Float: parentZ, parentRo
     CombineRotation(rotation, worldRotation, attachRotation); // combine worldRotation and reversed parentRotation
 }
 
-stock bool: GetObjectRotation(objectid, rotation[E_ROTATION]) {
-    /// <summary>Get the object rotation</summary>
-    /// <export>object</export>
-    /// <param name="objectid">Objectid to get rotation from</param>
-    /// <param name="rotation">Dest rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: rX;
-    new Float: rY;
-    new Float: rZ;
-
-    if(GetObjectRot(objectid, rX, rY, rZ)) {
-        SetRotation(rotation, rtype_euler_samp, rX, rY, rZ);
-
-        return true;
-    }
-    return false; 
-}
-
-stock bool: SetObjectRotation(objectid, rotation[E_ROTATION]) {
-    /// <summary>Set the object rotation</summary>
-    /// <export>object</export>
-    /// <param name="objectid">Objectid to set rotation</param>
-    /// <param name="rotation">Source rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: rX;
-    new Float: rY;
-    new Float: rZ;
-
-    GetRotation(rotation, rtype_euler_samp, rX, rY, rZ);
-
-    return bool: SetObjectRot(objectid, rX, rY, rZ);
-}
-
 stock bool: GetObjectAttachedPos(objectid, Float: attachX, Float: attachY, Float: attachZ, Float: attachRotX, Float: attachRotY, Float: attachRotZ, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the position for the given attach offset</summary>
     /// <export>object</export>
@@ -111,7 +76,8 @@ stock bool: GetObjectAttachedPos(objectid, Float: attachX, Float: attachY, Float
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetObjectRotation(objectid, parentRotation);
+        GetObjectRot(objectid, RotX, RotY, RotZ);
+        SetRotation(parentRotation, rtype_euler_samp, RotX, RotY, RotZ);
         SetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
         GetAttachedPos(X, Y, Z, parentRotation, attachX, attachY, attachZ, attachRotation, X, Y, Z, parentRotation);
         GetRotation(parentRotation, rtype_euler_samp, RotX, RotY, RotZ);
@@ -143,7 +109,8 @@ stock bool: GetObjectAttachedOffset(objectid, Float: X, Float: Y, Float: Z, Floa
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetObjectRotation(objectid, parentRotation);
+        GetObjectRot(objectid, attachRotX, attachRotY, attachRotZ);
+        SetRotation(parentRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
         SetRotation(attachRotation, rtype_euler_samp, RotX, RotY, RotZ);
         GetAttachedOffset(attachX, attachY, attachZ, parentRotation, X, Y, Z, attachRotation, attachX, attachY, attachZ, attachRotation);
         GetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);

@@ -6,43 +6,6 @@
 
 #include "rotation_extra_object"
 
-stock bool: GetVehicleRotation(vehicleid, rotation[E_ROTATION]) {
-    /// <summary>Get the vehicle rotation</summary>
-    /// <export>vehicle</export>
-    /// <param name="vehicleid">Vehicleid to get rotation from</param>
-    /// <param name="rotation">Dest rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: w;
-    new Float: x;
-    new Float: y;
-    new Float: z;
-
-    if(GetVehicleRotationQuat(vehicleid, w, x, y, z)) {
-        SetRotation(rotation, rtype_quaternion, w, x, y, z);
-
-        return true;
-    }
-    return false; 
-}
-
-stock bool: SetVehicleRotation(vehicleid, rotation[E_ROTATION]) {
-    /// <summary>Set the vehicle rotation</summary>
-    /// <export>vehicle</export>
-    /// <param name="vehicleid">Vehicleid to set rotation</param>
-    /// <param name="rotation">Source rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <remarks>Only sets the z angle</remarks>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: rX;
-    new Float: rY;
-    new Float: rZ;
-
-    GetRotation(rotation, rtype_euler_samp, rX, rY, rZ);
-
-    return bool: SetVehicleZAngle(vehicleid, rZ);
-}
-
 stock bool: GetVehicleAttachedPos(vehicleid, Float: attachX, Float: attachY, Float: attachZ, Float: attachRotX, Float: attachRotY, Float: attachRotZ, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the position for the given attach offset</summary>
     /// <export>vehicle</export>
@@ -65,8 +28,9 @@ stock bool: GetVehicleAttachedPos(vehicleid, Float: attachX, Float: attachY, Flo
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetVehicleRotation(vehicleid, parentRotation);
         SetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
+        GetVehicleRotationQuat(vehicleid, attachRotZ, RotX, RotY, RotZ);
+        SetRotation(parentRotation, rtype_quaternion, attachRotZ, RotX, RotY, RotZ);
         GetAttachedPos(X, Y, Z, parentRotation, attachX, attachY, attachZ, attachRotation, X, Y, Z, parentRotation);
         GetRotation(parentRotation, rtype_euler_samp, RotX, RotY, RotZ);
 
@@ -97,8 +61,9 @@ stock bool: GetVehicleAttachedOffset(vehicleid, Float: X, Float: Y, Float: Z, Fl
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetVehicleRotation(vehicleid, parentRotation);
         SetRotation(attachRotation, rtype_euler_samp, RotX, RotY, RotZ);
+        GetVehicleRotationQuat(vehicleid, attachRotZ, RotX, RotY, RotZ);
+        SetRotation(parentRotation, rtype_quaternion, attachRotZ, RotX, RotY, RotZ);
         GetAttachedOffset(attachX, attachY, attachZ, parentRotation, X, Y, Z, attachRotation, attachX, attachY, attachZ, attachRotation);
         GetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
 
@@ -147,10 +112,10 @@ stock bool: GetVehicleRelativePos(vehicleid, Float: offsetX, Float: offsetY, Flo
     /// <returns>true for success otherwise false</returns>
 
     if(GetVehiclePos(vehicleid, X, Y, Z)) {
-        new rotation[E_ROTATION];
+        new quat[E_QUAT];
 
-        GetVehicleRotation(vehicleid, rotation);
-        RotatePoint(rotation, X, Y, Z, X + offsetX, Y + offsetY, Z + offsetZ, X, Y, Z);
+        GetVehicleRotationQuat(vehicleid, quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
+        RotateQuat(quat, X, Y, Z, X + offsetX, Y + offsetY, Z + offsetZ, X, Y, Z);
 
         return true;
     }

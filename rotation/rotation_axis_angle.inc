@@ -157,7 +157,9 @@ stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: 
     /// <param name="oZ">Output position z</param>
     /// <remarks>Uses Rodrigues' rotation formula</remarks>
 
-    #pragma unused cX, cY, cZ
+    pX -= cX;
+    pY -= cY;
+    pZ -= cZ;
 
     debug("RotateAxisAngle(%f, %f, %f)", pX, pY, pZ);
 
@@ -172,9 +174,9 @@ stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: 
     // u = unit vector = [aX, aY, aZ]
     // v = [rX, rY, rZ]
     // cos * v + sin * (u x v) + (1 - cos) * (u.v) * u
-    oX += cos * pX + sin * (aY * pZ - aZ * pY) + ts * aX;
-    oY += cos * pY + sin * (aZ * pX - aX * pZ) + ts * aY;
-    oZ += cos * pZ + sin * (aX * pY - aY * pX) + ts * aZ;
+    oX = cX + cos * pX + sin * (aY * pZ - aZ * pY) + ts * aX;
+    oY = cY + cos * pY + sin * (aZ * pX - aX * pZ) + ts * aY;
+    oZ = cZ + cos * pZ + sin * (aX * pY - aY * pX) + ts * aZ;
 }
 
 stock ReverseAxisAngle(src[E_AANGLE], dest[E_AANGLE]) {

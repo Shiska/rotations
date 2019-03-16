@@ -371,11 +371,9 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
 
-    debug("RotatePoint(%f, %f, %f)", pX, pY, pZ);
+    #pragma unused cX, cY, cZ, pX, pY, pZ
 
-    pX -= (oX = cX);
-    pY -= (oY = cY);
-    pZ -= (oZ = cZ);
+    debug("RotatePoint(%f, %f, %f)", pX, pY, pZ);
 
     switch(rotation[E_ROTATION_TYPE]) {
         case rtype_axis_angle: {

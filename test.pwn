@@ -74,16 +74,10 @@ Test:Compile() { // all functions which should call all subfunctions
     GetAttachedPos(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
     GetAttachedOffset(x, y, z, rotation, x, y, z, rotation, x, y, z, rotation);
 
-    GetObjectRotation(0, rotation);
-    SetObjectRotation(0, rotation);
     GetObjectAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetObjectAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
-    GetPlayerRotation(0, rotation);
-    SetPlayerRotation(0, rotation);
     GetPlayerAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetPlayerAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
-    GetVehicleRotation(0, rotation);
-    SetVehicleRotation(0, rotation);
     GetVehicleAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetVehicleAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
 
@@ -96,10 +90,10 @@ Test:Compile() { // all functions which should call all subfunctions
     GetVehicleRightVector(0, x, y, z);
     GetVehicleUpVector(0, x, y, z);
 
-    GetDynamicObjectRotation(0, rotation);
-    SetDynamicObjectRotation(0, rotation);
     GetDynamicObjectAttachedPos(0, x, y, z, x, y, z, x, y, z, x, y, z);
     GetDynamicObjectAttachedOffset(0, x, y, z, x, y, z, x, y, z, x, y, z);
+
+    GetDynamicObjectPosRot(0, x, y, z, x, y, z);
 
     DetachDynamicObject(0);
 

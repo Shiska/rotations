@@ -6,43 +6,6 @@
 
 #include "rotation_extra_object"
 
-stock bool: GetPlayerRotation(playerid, rotation[E_ROTATION]) {
-    /// <summary>Get the player rotation</summary>
-    /// <export>player</export>
-    /// <param name="playerid">Playerid to get rotation from</param>
-    /// <param name="rotation">Dest rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <remarks>Only gets the z angle</remarks>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: rZ;
-
-    if(GetPlayerFacingAngle(playerid, rZ)) {
-        new Float: zero;
-
-        SetRotation(rotation, rtype_euler_samp, zero, zero, rZ);
-
-        return true;
-    }
-    return false; 
-}
-
-stock bool: SetPlayerRotation(playerid, rotation[E_ROTATION]) {
-    /// <summary>Set the player rotation</summary>
-    /// <export>player</export>
-    /// <param name="playerid">Playerid to set rotation</param>
-    /// <param name="rotation">Source rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <remarks>Only sets the z angle</remarks>
-    /// <returns>true for success otherwise false</returns>
-
-    new Float: rX;
-    new Float: rY;
-    new Float: rZ;
-
-    GetRotation(rotation, rtype_euler_samp, rX, rY, rZ);
-
-    return bool: SetPlayerFacingAngle(playerid, rZ);
-}
-
 stock bool: GetPlayerAttachedPos(playerid, Float: attachX, Float: attachY, Float: attachZ, Float: attachRotX, Float: attachRotY, Float: attachRotZ, & Float: X, & Float: Y, & Float: Z, & Float: RotX, & Float: RotY, & Float: RotZ) {
     /// <summary>Get the position for the given attach offset</summary>
     /// <export>player</export>
@@ -65,7 +28,8 @@ stock bool: GetPlayerAttachedPos(playerid, Float: attachX, Float: attachY, Float
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetPlayerRotation(playerid, parentRotation);
+        GetPlayerFacingAngle(playerid, RotZ), RotX = 0.0;
+        SetRotation(parentRotation, rtype_euler_samp, RotX, RotX, RotZ);
         SetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);
         GetAttachedPos(X, Y, Z, parentRotation, attachX, attachY, attachZ, attachRotation, X, Y, Z, parentRotation);
         GetRotation(parentRotation, rtype_euler_samp, RotX, RotY, RotZ);
@@ -97,7 +61,8 @@ stock bool: GetPlayerAttachedOffset(playerid, Float: X, Float: Y, Float: Z, Floa
         new parentRotation[E_ROTATION];
         new attachRotation[E_ROTATION];
 
-        GetPlayerRotation(playerid, parentRotation);
+        GetPlayerFacingAngle(playerid, attachRotZ), attachRotX = 0.0;
+        SetRotation(parentRotation, rtype_euler_samp, attachRotX, attachRotX, attachRotZ);
         SetRotation(attachRotation, rtype_euler_samp, RotX, RotY, RotZ);
         GetAttachedOffset(attachX, attachY, attachZ, parentRotation, X, Y, Z, attachRotation, attachX, attachY, attachZ, attachRotation);
         GetRotation(attachRotation, rtype_euler_samp, attachRotX, attachRotY, attachRotZ);

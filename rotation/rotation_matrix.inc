@@ -456,7 +456,9 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
 
-    #pragma unused cX, cY, cZ
+    pX -= cX;
+    pY -= cY;
+    pZ -= cZ;
 
     debug("RotateMatrix(%f, %f, %f)", pX, pY, pZ);
     // fill variables
@@ -465,9 +467,9 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
     #emit movs 36
     // oT = Translation, 0.0 for no translation, 1.0 for translation
     // M * v | v = [oX, oY, oZ]
-    oX += pX * m100 + pY * m101 + pZ * m102;
-    oY += pX * m110 + pY * m111 + pZ * m112;
-    oZ += pX * m120 + pY * m121 + pZ * m122;
+    oX = cX + pX * m100 + pY * m101 + pZ * m102;
+    oY = cY + pX * m110 + pY * m111 + pZ * m112;
+    oZ = cZ + pX * m120 + pY * m121 + pZ * m122;
 }
 
 stock ReverseMatrix(src[E_RMATRIX], dest[E_RMATRIX]) {

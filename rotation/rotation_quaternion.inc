@@ -21,6 +21,11 @@ enum E_QUAT {
     #include "rotation_matrix"
 #endif
 
+static // unroll variables for speed
+    Float: w1, Float: x1, Float: y1, Float: z1,
+    Float: w2, Float: x2, Float: y2, Float: z2
+;
+
 stock NormalizeQuat(quat[E_QUAT]) {
     /// <summary>Normalizes quaternion</summary>
     /// <export>quat</export>
@@ -267,10 +272,7 @@ stock CombineQuat(left[E_QUAT], right[E_QUAT], dest[E_QUAT]) {
     /// <param name="right">Right quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="dest">Dest quaternion [<ref name="E_QUAT"/>]</param>
 
-    static // unroll variables for speed
-        Float: w1, Float: x1, Float: y1, Float: z1,
-        Float: w2, Float: x2, Float: y2, Float: z2
-    ; // fill variables, but reverse the order because this code works with conjugated quaternion due to GetVehicleRotationQuat
+    // fill variables, but reverse the order because this code works with conjugated quaternion due to GetVehicleRotationQuat
     #emit load.s.pri right
     #emit const.alt w1
     #emit movs 16
@@ -320,14 +322,16 @@ stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
 
-    #pragma unused cX, cY, cZ
+    pX -= cX;
+    pY -= cY;
+    pZ -= cZ;
 
     debug("RotateQuat(%f, %f, %f)", pX, pY, pZ);
 
-    new Float: w = quat[E_QUAT_W];
-    new Float: x = quat[E_QUAT_X];
-    new Float: y = quat[E_QUAT_Y];
-    new Float: z = quat[E_QUAT_Z];
+    // fill variables,
+    #emit load.s.pri quat
+    #emit const.alt w1
+    #emit movs 16
     // wikipedia suggest this formula (a x b - cross prudct)
     // v + 2*r x (r x v + w*v) | q = w,r
     // 15 muls, 15 adds, 9 saves, 42 loads
@@ -347,12 +351,12 @@ stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float
     // but I used this one because it more compact (a.b - dot product)
     // 2*((r.v)*r + (0.5 - (|r.r|^2))*v + w * (r x v)) | q = w,r
     // 22 muls, 12 adds, 5 saves, 38 loads
-    new Float: dot = x * pX + y * pY + z * pZ;
-    new Float: abs = w * w - 0.5;
+    new Float: dot = x1 * pX + y1 * pY + z1 * pZ;
+    new Float: abs = w1 * w1 - 0.5;
 
-    oX += 2.0 * (dot * x + abs * pX + w * (z * pY - y * pZ));
-    oY += 2.0 * (dot * y + abs * pY + w * (x * pZ - z * pX));
-    oZ += 2.0 * (dot * z + abs * pZ + w * (y * pX - x * pY));
+    oX = cX + 2.0 * (dot * x1 + abs * pX + w1 * (z1 * pY - y1 * pZ));
+    oY = cY + 2.0 * (dot * y1 + abs * pY + w1 * (x1 * pZ - z1 * pX));
+    oZ = cZ + 2.0 * (dot * z1 + abs * pZ + w1 * (y1 * pX - x1 * pY));
 }
 
 stock ReverseQuat(src[E_QUAT], dest[E_QUAT]) {
