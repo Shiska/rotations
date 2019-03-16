@@ -138,7 +138,7 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
     /// <summary>Set the rotation array from the given rotation</summary>
     /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <param name="type">Source rotation type</param>
+    /// <param name="type">Source rotation type [<ref name="rotationtype"/>]</param>
     /// <param name="...">Source rotation</param>
     /// <example>
     ///     SetRotation(rotation, rtype_axis_angle, w, x, y, z);<br/>
@@ -180,9 +180,9 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
 stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
     /// <summary>Convert the given rotation matrix into the target rotation</summary>
     /// <export/>
-    /// <param name="src">Source rotation array</param>
-    /// <param name="type">Dest rotation type</param>
-    /// <param name="dest">Dest rotation array</param>
+    /// <param name="src">Source rotation array [<ref name="E_ROTATION"/>]</param>
+    /// <param name="type">Dest rotation type [<ref name="rotationtype"/>]</param>
+    /// <param name="dest">Dest rotation array [<ref name="E_ROTATION"/>]</param>
 
     debug("ConvertRotation(%d)", _: type);
 
@@ -273,9 +273,9 @@ stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
 stock CombineRotation(left[E_ROTATION], right[E_ROTATION], dest[E_ROTATION]) {
     /// <summary>Combines two rotations, left * right = dest</summary>
     /// <export/>
-    /// <param name="left">Left rotation [<ref name="E_AANGLE"/>]</param>
-    /// <param name="right">Right rotation [<ref name="E_AANGLE"/>]</param>
-    /// <param name="dest">Dest rotation [<ref name="E_AANGLE"/>]</param>
+    /// <param name="left">Left rotation [<ref name="E_ROTATION"/>]</param>
+    /// <param name="right">Right rotation [<ref name="E_ROTATION"/>]</param>
+    /// <param name="dest">Dest rotation [<ref name="E_ROTATION"/>]</param>
     /// <remarks>If <paramref name="left"/> or <paramref name="right"/> is a rotation matrix than <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be converted to rotation matrices, in all other cases <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be quaternion</remarks>
     /// <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks>
     /// <remarks>[first Rotation] * [second Rotation] = local frame-of-reference - coordinate system / axis rotates with first rotation</remarks>
@@ -325,7 +325,7 @@ stock GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
     /// <summary>Get the rotation from the given rotation array</summary>
     /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
-    /// <param name="type">Dest rotation type</param>
+    /// <param name="type">Dest rotation type [<ref name="rotationtype"/>]</param>
     /// <param name="...">Dest rotation</param>
 
     debug("GetRotation(%d)", _: type);

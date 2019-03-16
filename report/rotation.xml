@@ -881,15 +881,15 @@
 			<dependency name="rtype_rotation_matrix"/>
 			<param name="left">
 				<paraminfo> [10] </paraminfo>
-				Left rotation [<ref name="E_AANGLE"/>]
+				Left rotation [<ref name="E_ROTATION"/>]
 			</param>
 			<param name="right">
 				<paraminfo> [10] </paraminfo>
-				Right rotation [<ref name="E_AANGLE"/>]
+				Right rotation [<ref name="E_ROTATION"/>]
 			</param>
 			<param name="dest">
 				<paraminfo> [10] </paraminfo>
-				Dest rotation [<ref name="E_AANGLE"/>]
+				Dest rotation [<ref name="E_ROTATION"/>]
 			</param>
 			<summary>Combines two rotations, left * right = dest</summary> <export/>    <remarks>If <paramref name="left"/> or <paramref name="right"/> is a rotation matrix than <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be converted to rotation matrices, in all other cases <paramref name="left"/>, <paramref name="right"/> and <paramref name="dest"/> will be quaternion</remarks> <remarks>[second Rotation] * [first Rotation] = global frame of reference - global coordinate system / axis stay the same for the second rotation</remarks> <remarks>[first Rotation] * [second Rotation] = local frame-of-reference - coordinate system / axis rotates with first rotation</remarks>
 		</member>
@@ -1394,15 +1394,15 @@
 			<dependency name="rtype_rotation_matrix"/>
 			<param name="src">
 				<paraminfo> [10] </paraminfo>
-				Source rotation array
+				Source rotation array [<ref name="E_ROTATION"/>]
 			</param>
 			<param name="type">
 				<paraminfo>rotationtype </paraminfo>
-				Dest rotation type
+				Dest rotation type [<ref name="rotationtype"/>]
 			</param>
 			<param name="dest">
 				<paraminfo> [10] </paraminfo>
-				Dest rotation array
+				Dest rotation array [<ref name="E_ROTATION"/>]
 			</param>
 			<summary>Convert the given rotation matrix into the target rotation</summary> <export/>   
 		</member>
@@ -1543,7 +1543,7 @@
 			</param>
 			<param name="type">
 				<paraminfo>rotationtype </paraminfo>
-				Dest rotation type
+				Dest rotation type [<ref name="rotationtype"/>]
 			</param>
 			<param name="...">
 				<paraminfo>Float </paraminfo>
@@ -2727,7 +2727,7 @@
 			</param>
 			<param name="type">
 				<paraminfo>rotationtype </paraminfo>
-				Source rotation type
+				Source rotation type [<ref name="rotationtype"/>]
 			</param>
 			<param name="...">
 				<paraminfo>Float </paraminfo>
