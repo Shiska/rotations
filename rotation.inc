@@ -140,12 +140,11 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
     /// <param name="type">Source rotation type [<ref name="rotationtype"/>]</param>
     /// <param name="...">Source rotation</param>
-    /// <example>
-    ///     SetRotation(rotation, rtype_axis_angle, w, x, y, z);<br/>
-    ///     SetRotation(rotation, rtype_euler_samp, x, y, z);<br/>
-    ///     SetRotation(rotation, rtype_quaternion, w, x, y, z);<br/>
-    ///     SetRotation(rotation, rtype_rotation_matrix, matrix);
-    /// </example>
+    /// <example>SetRotation(rotation, rtype_axis_angle, angle, x, y, z)</example>
+    /// <example>SetRotation(rotation, rtype_euler_samp, x, y, z)</example>
+    /// <example>SetRotation(rotation, rtype_quaternion, w, x, y, z)</example>
+    /// <example>SetRotation(rotation, rtype_rotation_matrix, matrix)</example>
+    /// 
 
     debug("SetRotation(%d)", _: type);
     // store address in E_ROTATION_BASE

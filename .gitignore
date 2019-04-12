@@ -1,7 +1,9 @@
 *.amx
 *.lst
 *.asm
+*.xml
 
+report/
 .vscode/
 dependencies/
 

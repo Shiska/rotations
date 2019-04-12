@@ -37,24 +37,21 @@
             "args": [
                 "-r"
             ],
-            "input": "rotation.inc",
-            "workingdir": "report"
+            "input": "rotation.inc"
         },
         {
             "name": "report_misc",
             "args": [
                 "-r"
             ],
-            "input": "rotation_misc.inc",
-            "workingdir": "report"
+            "input": "rotation_misc.inc"
         },
         {
             "name": "report_extra",
             "args": [
                 "-r"
             ],
-            "input": "rotation_extra.inc",
-            "workingdir": "report"
+            "input": "rotation_extra.inc"
         }
     ],
     "runtime": {
