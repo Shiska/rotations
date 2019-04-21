@@ -72,7 +72,7 @@ stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
     rmatrix = sum;
 }
 
-stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, const Float: matrix[][]) {
+stock SetRotationFromMatrix(rmatrix[E_RMATRIX], const rotationtype: type, const Float: matrix[][]) {
     /// <summary>Set the rotation array from rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
@@ -98,7 +98,7 @@ stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, const Float:
     NormalizeMatrix(rmatrix);
 }
 
-stock ConvertAxisAngleToMatrix(const aangle[E_AANGLE], rotationtype: type[2], rmatrix[E_RMATRIX]) {
+stock ConvertAxisAngleToMatrix(const aangle[E_AANGLE], const rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given axis angle into a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -349,7 +349,7 @@ stock ConvertEulerToMatrix(const euler[E_EULER], const rotationtype: type[2], rm
     }
 }
 
-stock ConvertQuatToMatrix(const quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX]) {
+stock ConvertQuatToMatrix(const quat[E_QUAT], const rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given quaternion into a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
@@ -387,7 +387,7 @@ stock ConvertQuatToMatrix(const quat[E_QUAT], rotationtype: type[2], rmatrix[E_R
     rmatrix[E_RMATRIX_22] = w2 - x2 - y2 + z2;
 }
 
-stock CombineMatrix(left[E_RMATRIX], right[E_RMATRIX], dest[E_RMATRIX]) {
+stock CombineMatrix(const left[E_RMATRIX], const right[E_RMATRIX], dest[E_RMATRIX]) {
     /// <summary>Combines two rotation matrices</summary>
     /// <export>rmatrix</export>
     /// <param name="left">Left rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -416,7 +416,7 @@ stock CombineMatrix(left[E_RMATRIX], right[E_RMATRIX], dest[E_RMATRIX]) {
     dest[E_RMATRIX_22] = m120 * m202 + m121 * m212 + m122 * m222;
 }
 
-stock GetMatrixFromRotation(rmatrix[E_RMATRIX], rotationtype: type, Float: matrix[][]) {
+stock GetMatrixFromRotation(const rmatrix[E_RMATRIX], const rotationtype: type, Float: matrix[][]) {
     /// <summary>Get the matrix from the rotation array</summary>
     /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
@@ -442,7 +442,7 @@ stock GetMatrixFromRotation(rmatrix[E_RMATRIX], rotationtype: type, Float: matri
     debug("GetMatrixFromRotation(...)");
 }
 
-stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+stock RotateMatrix(const rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -472,7 +472,7 @@ stock RotateMatrix(rmatrix[E_RMATRIX], Float: cX, Float: cY, Float: cZ, Float: p
     oZ = cZ + pX * m120 + pY * m121 + pZ * m122;
 }
 
-stock ReverseMatrix(src[E_RMATRIX], dest[E_RMATRIX]) {
+stock ReverseMatrix(const src[E_RMATRIX], dest[E_RMATRIX]) {
     /// <summary>Stores the inverse rotation matrix in dest</summary>
     /// <export>rmatrix</export>
     /// <param name="src">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>

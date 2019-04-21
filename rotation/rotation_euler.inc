@@ -20,7 +20,7 @@ enum E_EULER {
     #include "rotation_matrix"
 #endif
 
-stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
+stock SetRotationFromEuler(euler[E_EULER], const rotationtype: type, const & Float: alpha, const & Float: beta, const & Float: gamma) {
     /// <summary>Set the rotation array from euler angle</summary>
     /// <export>euler</export>
     /// <param name="euler">Euler angle array [<ref name="E_EULER"/>]</param>
@@ -41,7 +41,7 @@ stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, &
 #define EULER_SINGULARITY_THRESHOLD 0.9999
 #define EULER_SINGULARITY_THRESHOLD_H 0.49995 // EULER_SINGULARITY_THRESHOLD / 2.0 - preprocessor can't handle floats :/
 
-stock ConvertAxisAngleToEuler(const aangle[E_AANGLE], rotationtype: type[2], euler[E_EULER]) {
+stock ConvertAxisAngleToEuler(const aangle[E_AANGLE], const rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given axis angle into euler angle</summary>
     /// <export>euler</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -50,16 +50,18 @@ stock ConvertAxisAngleToEuler(const aangle[E_AANGLE], rotationtype: type[2], eul
     /// <remarks>Not optimized, uses <ref name="ConvertAxisAngleToQuat"/> and <ref name="ConvertQuatToEuler"/> for the conversion</remarks>
 
     new quat[E_QUAT]; // leaving that unoptimised, see no use for it
+    new rotationtype: ntype[2];
 
-    type[0] = rtype_quaternion;
+    ntype[0] = rtype_quaternion;
+    ntype[1] = type[1];
 
     ConvertAxisAngleToQuat(aangle, rotationtype: {rtype_axis_angle, rtype_quaternion}, quat);
-    ConvertQuatToEuler(quat, type, euler);
+    ConvertQuatToEuler(quat, ntype, euler);
 
     debug("ConvertAxisAngleToEuler(%f, %f, %f)", euler[E_EULER_ALPHA], euler[E_EULER_BETA], euler[E_EULER_GAMMA]);
 }
 
-stock ConvertEulerToEuler(const src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
+stock ConvertEulerToEuler(const src[E_EULER], const rotationtype: type[2], dest[E_EULER]) {
     /// <summary>Convert the given euler angle into euler angle</summary>
     /// <export>euler</export>
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -68,14 +70,18 @@ stock ConvertEulerToEuler(const src[E_EULER], rotationtype: type[2], dest[E_EULE
     /// <remarks>Not optimized, uses <ref name="ConvertEulerToQuat"/> and <ref name="ConvertQuatToEuler"/> for the conversion</remarks>
     /// <remarks>Doesn't check for same rotation type, that case should be caught in <ref name="ConvertRotation"/></remarks>
 
-    new quat[E_QUAT]; // to much work I guess
-    new rotationtype: type2[2] = rtype_quaternion;
+    new quat[E_QUAT];
+    new rotationtype: ntype[2];
 
-    type2[1] = type[1];
-    type[1] = rtype_quaternion;
+    ntype[0] = type[0];
+    ntype[1] = rtype_quaternion;
 
-    ConvertEulerToQuat(src, type, quat);
-    ConvertQuatToEuler(quat, type2, dest);
+    ConvertEulerToQuat(src, ntype, quat);
+
+    ntype[0] = rtype_quaternion;
+    ntype[1] = type[1];
+
+    ConvertQuatToEuler(quat, ntype, dest);
 
     debug("ConvertEulerToEuler(%f, %f, %f)", dest[E_EULER_ALPHA], dest[E_EULER_BETA], dest[E_EULER_GAMMA]);
 }
@@ -728,7 +734,7 @@ stock ConvertMatrixToEuler(const rmatrix[E_RMATRIX], const rotationtype: type[2]
 #undef EULER_SINGULARITY_THRESHOLD_H
 #undef EULER_SINGULARITY_THRESHOLD
 
-stock GetEulerFromRotation(const euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
+stock GetEulerFromRotation(const euler[E_EULER], const rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
     /// <summary>Gets the euler angle from the rotation array</summary>
     /// <export>euler</export>
     /// <param name="euler">Euler angle array [<ref name="E_EULER"/>]</param>
@@ -746,7 +752,7 @@ stock GetEulerFromRotation(const euler[E_EULER], rotationtype: type, & Float: al
     debug("GetEulerFromRotation(%f, %f, %f)", alpha, beta, gamma);
 }
 
-stock ReverseEuler(src[E_EULER], dest[E_EULER]) {
+stock ReverseEuler(const src[E_EULER], dest[E_EULER]) {
     /// <summary>Stores the reverse euler angle in dest</summary>
     /// <export>euler</export>
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>

@@ -18,9 +18,9 @@
     #define debug(%0\10
 #endif
 
-#include "extra\rotation_extra_object"
-#include "extra\rotation_extra_player"
-#include "extra\rotation_extra_vehicle"
-#include "extra\rotation_extra_dynamic"
+#include "rotation_extra\rotation_extra_object"
+#include "rotation_extra\rotation_extra_player"
+#include "rotation_extra\rotation_extra_vehicle"
+#include "rotation_extra\rotation_extra_dynamic"
 
 #undef debug

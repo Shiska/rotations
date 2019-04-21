@@ -370,7 +370,7 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
 
-    #pragma unused cX, cY, cZ, pX, pY, pZ
+    #pragma unused cX, cY, cZ, pX, pY, pZ, oX, oY, oZ
 
     debug("RotatePoint(%f, %f, %f)", pX, pY, pZ);
 

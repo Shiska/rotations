@@ -7,10 +7,10 @@
 #include "rotation_misc"
 #include "rotation_extra"
 
-forward bool: CheckOrPrintAxisAngle(comment[], Float: a1, Float: x1, Float: y1, Float: z1, Float: a2, Float: x2, Float: y2, Float: z2);
-forward bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2);
-forward bool: CheckOrPrintQuat(comment[], Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2);
-forward bool: CheckOrPrintMatrix(comment[], Float: matrix1[3][3], Float: matrix2[3][3]);
+forward bool: CheckOrPrintAxisAngle(const comment[], Float: a1, Float: x1, Float: y1, Float: z1, Float: a2, Float: x2, Float: y2, Float: z2);
+forward bool: CheckOrPrintEuler(const comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2);
+forward bool: CheckOrPrintQuat(const comment[], Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2);
+forward bool: CheckOrPrintMatrix(const comment[], const Float: matrix1[3][3], const Float: matrix2[3][3]);
 
 Test:Compile() { // all functions which should call all subfunctions
     new Float: matrix[4][4];
@@ -246,7 +246,6 @@ Test:RotatePoint() {
     ASSERT(CheckOrPrintEuler("rtype_rotation_matrix", dest_oX, dest_oY, dest_oZ, -3.0, -2.0, 0.0));
 }
 
-
 Test:CombineRotation() {
     new Float: dest_oX;
     new Float: dest_oY;
@@ -293,7 +292,7 @@ Test:ReverseRotation() {
 
 #define EPSILON 0.001
 
-bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2) {
+bool: CheckOrPrintEuler(const comment[], Float: x1, Float: y1, Float: z1, Float: x2, Float: y2, Float: z2) {
     new
         Float: x = x1 - x2,
         Float: y = y1 - y2,
@@ -311,7 +310,7 @@ bool: CheckOrPrintEuler(comment[], Float: x1, Float: y1, Float: z1, Float: x2, F
     ) || printf("%s\nvec1 - %4.4f %4.4f %4.4f\nvec2 - %4.4f %4.4f %4.4f\ndiff - %4.4f %4.4f %4.4f", comment, x1, y1, z1, x2, y2, z2, x, y, z);
 }
 
-bool: CheckOrPrintMatrix(comment[], Float: matrix1[3][3], Float: matrix2[3][3]) {
+bool: CheckOrPrintMatrix(const comment[], const Float: matrix1[3][3], const Float: matrix2[3][3]) {
     new
         Float: matrix[3][3]
     ;
@@ -329,7 +328,7 @@ bool: CheckOrPrintMatrix(comment[], Float: matrix1[3][3], Float: matrix2[3][3]) 
     ;
 }
 
-bool: CheckOrPrintQuat(comment[], Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2) {
+bool: CheckOrPrintQuat(const comment[], Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2) {
     new
         Float: w,
         Float: x,
@@ -352,7 +351,7 @@ bool: CheckOrPrintQuat(comment[], Float: w1, Float: x1, Float: y1, Float: z1, Fl
     ) || printf("%s\nquat1 - %4.4f %4.4f %4.4f %4.4f\nquat2 - %4.4f %4.4f %4.4f %4.4f\n diff - %4.4f %4.4f %4.4f %4.4f", comment, w1, x1, y1, z1, w2, x2, y2, z2, w, x, y, z);
 }
 
-bool: CheckOrPrintAxisAngle(comment[], Float: a1, Float: x1, Float: y1, Float: z1, Float: a2, Float: x2, Float: y2, Float: z2) {
+bool: CheckOrPrintAxisAngle(const comment[], Float: a1, Float: x1, Float: y1, Float: z1, Float: a2, Float: x2, Float: y2, Float: z2) {
     new
         Float: a,
         Float: x,

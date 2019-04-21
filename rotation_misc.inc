@@ -16,7 +16,7 @@
     #define debug(%0\10
 #endif
 
-#include "misc\rotation_misc_matrix"
-#include "misc\rotation_misc_quaternion"
+#include "rotation_misc\rotation_misc_matrix"
+#include "rotation_misc\rotation_misc_quaternion"
 
 #undef debug

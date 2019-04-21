@@ -4,7 +4,7 @@
     #define _inc_rotation_misc_matrix_
 #endif
 
-stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n = sizeof A[], n2 = sizeof B, o = sizeof B[], m2 = sizeof C, o2 = sizeof C[]) {
+stock bool: MatrixMul(const Float: A[][], const Float: B[][], Float: C[][], m = sizeof A, n = sizeof A[], n2 = sizeof B, o = sizeof B[], m2 = sizeof C, o2 = sizeof C[]) {
     /// <summary>Matrix multiplication, A * B = C</summary>
     /// <export>matrix</export>
     /// <param name="A">Matrix multiplicand (m x n)</param>
@@ -33,7 +33,7 @@ stock bool: MatrixMul(Float: A[][], Float: B[][], Float: C[][], m = sizeof A, n 
     return false;
 }
 
-stock bool: MatrixAdd(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
+stock bool: MatrixAdd(const Float: A[][], const Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
     /// <summary>Matrix addition, A + B = C</summary>
     /// <export>matrix</export>
     /// <param name="A">Summand (m x n)</param>
@@ -60,7 +60,7 @@ stock bool: MatrixAdd(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, n
     return false;
 }
 
-stock bool: MatrixSub(Float: A[][], Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
+stock bool: MatrixSub(const Float: A[][], const Float: B[][], Float: C[][], mA = sizeof A, nA = sizeof A[], mB = sizeof B, nB = sizeof B[], mC = sizeof C, nC = sizeof C[]) {
     /// <summary>Matrix subtraction, A - B = C</summary>
     /// <export>matrix</export>
     /// <param name="A">Subtrahend (m x n)</param>

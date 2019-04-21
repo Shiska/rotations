@@ -35,7 +35,7 @@ stock NormalizeAxisAngle(aangle[E_AANGLE]) {
     debug("NormalizeAxisAngle(...)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
+stock SetRotationFromAxisAngle(aangle[E_AANGLE], const rotationtype: type, const & Float: angle, const & Float: x, const & Float: y, const & Float: z) {
     /// <summary>Set the rotation array from axis angle</summary>
     /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
@@ -57,7 +57,7 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: an
     NormalizeAxisAngle(aangle);
 }
 
-stock ConvertEulerToAxisAngle(const euler[E_EULER], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertEulerToAxisAngle(const euler[E_EULER], const rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given euler angle into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -66,16 +66,18 @@ stock ConvertEulerToAxisAngle(const euler[E_EULER], rotationtype: type[2], aangl
     /// <remarks>Not optimized, uses <ref name="ConvertEulerToQuat"/> and <ref name="ConvertQuatToAxisAngle"/> for the conversion</remarks>
 
     new quat[E_QUAT];
+    new rotationtype: ntype[2];
 
-    type[1] = rtype_quaternion;
+    ntype[0] = type[0];
+    ntype[1] = rtype_quaternion;
 
-    ConvertEulerToQuat(euler, type, quat);
+    ConvertEulerToQuat(euler, ntype, quat);
     ConvertQuatToAxisAngle(quat, rotationtype: {rtype_quaternion, rtype_axis_angle}, aangle);
 
     debug("ConvertEulerToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock ConvertQuatToAxisAngle(const quat[E_QUAT], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertQuatToAxisAngle(const quat[E_QUAT], const rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given quaternion into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
@@ -100,7 +102,7 @@ stock ConvertQuatToAxisAngle(const quat[E_QUAT], rotationtype: type[2], aangle[E
     debug("ConvertQuatToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock ConvertMatrixToAxisAngle(const rmatrix[E_RMATRIX], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertMatrixToAxisAngle(const rmatrix[E_RMATRIX], const rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given rotation matrix into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -122,7 +124,7 @@ stock ConvertMatrixToAxisAngle(const rmatrix[E_RMATRIX], rotationtype: type[2], 
     debug("ConvertMatrixToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock GetAxisAngleFromRotation(const aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
+stock GetAxisAngleFromRotation(const aangle[E_AANGLE], const rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
     /// <summary>Get the axis angle from the rotation array</summary>
     /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
@@ -179,7 +181,7 @@ stock RotateAxisAngle(const aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, F
     oZ = cZ + cos * pZ + sin * (aX * pY - aY * pX) + ts * aZ;
 }
 
-stock ReverseAxisAngle(src[E_AANGLE], dest[E_AANGLE]) {
+stock ReverseAxisAngle(const src[E_AANGLE], dest[E_AANGLE]) {
     /// <summary>Stores the reverse axis angle in dest</summary>
     /// <export>aangle</export>
     /// <param name="src">Source axis angle [<ref name="E_AANGLE"/>]</param>

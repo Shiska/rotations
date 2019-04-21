@@ -41,7 +41,7 @@ stock NormalizeQuat(quat[E_QUAT]) {
     debug("NormalizeQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
-stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
+stock SetRotationFromQuat(quat[E_QUAT], const rotationtype: type, const & Float: w, const & Float: x, const & Float: y, const & Float: z) {
     /// <summary>Set the rotation array from quaternion</summary>
     /// <export>quat</export>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
@@ -63,7 +63,7 @@ stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float:
     NormalizeQuat(quat);
 }
 
-stock ConvertAxisAngleToQuat(const aangle[E_AANGLE], rotationtype: type[2], quat[E_QUAT]) {
+stock ConvertAxisAngleToQuat(const aangle[E_AANGLE], const rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given axis angle into quaternion</summary>
     /// <export>quat</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -218,7 +218,7 @@ stock ConvertEulerToQuat(const euler[E_EULER], const rotationtype: type[2], quat
     debug("ConvertEulerToQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
-stock ConvertMatrixToQuat(const rmatrix[E_RMATRIX], rotationtype: type[2], quat[E_QUAT]) {
+stock ConvertMatrixToQuat(const rmatrix[E_RMATRIX], const rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given rotation matrix into quaternion</summary>
     /// <export>quat</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -266,7 +266,7 @@ stock ConvertMatrixToQuat(const rmatrix[E_RMATRIX], rotationtype: type[2], quat[
     debug("ConvertMatrixToQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
-stock CombineQuat(left[E_QUAT], right[E_QUAT], dest[E_QUAT]) {
+stock CombineQuat(const left[E_QUAT], const right[E_QUAT], dest[E_QUAT]) {
     /// <summary>Combines two quaternion</summary>
     /// <param name="left">Left quaternion [<ref name="E_QUAT"/>]</param>
     /// <param name="right">Right quaternion [<ref name="E_QUAT"/>]</param>
@@ -288,7 +288,7 @@ stock CombineQuat(left[E_QUAT], right[E_QUAT], dest[E_QUAT]) {
     debug("CombineQuat(%f %f %f %f)", dest[E_QUAT_W], dest[E_QUAT_X], dest[E_QUAT_Y], dest[E_QUAT_Z]);
 }
 
-stock GetQuatFromRotation(const quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
+stock GetQuatFromRotation(const quat[E_QUAT], const rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Get the quaternion from the rotation array</summary>
     /// <export>quat</export>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
@@ -308,7 +308,7 @@ stock GetQuatFromRotation(const quat[E_QUAT], rotationtype: type, & Float: w, & 
     debug("GetQuatFromRotation(%f, %f, %f, %f)", w, x, y, z);
 }
 
-stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+stock RotateQuat(const quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using quaternion</summary>
     /// <export>quat</export>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
@@ -359,7 +359,7 @@ stock RotateQuat(quat[E_QUAT], Float: cX, Float: cY, Float: cZ, Float: pX, Float
     oZ = cZ + 2.0 * (dot * z1 + abs * pZ + w1 * (y1 * pX - x1 * pY));
 }
 
-stock ReverseQuat(src[E_QUAT], dest[E_QUAT]) {
+stock ReverseQuat(const src[E_QUAT], dest[E_QUAT]) {
     /// <summary>Stores the conjugated quaternion in dest</summary>
     /// <export>quat</export>
     /// <param name="src">Source quaternion [<ref name="E_QUAT"/>]</param>
