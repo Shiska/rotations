@@ -57,7 +57,7 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], rotationtype: type, & Float: an
     NormalizeAxisAngle(aangle);
 }
 
-stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertEulerToAxisAngle(const euler[E_EULER], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given euler angle into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -75,7 +75,7 @@ stock ConvertEulerToAxisAngle(euler[E_EULER], rotationtype: type[2], aangle[E_AA
     debug("ConvertEulerToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock ConvertQuatToAxisAngle(quat[E_QUAT], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertQuatToAxisAngle(const quat[E_QUAT], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given quaternion into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
@@ -100,7 +100,7 @@ stock ConvertQuatToAxisAngle(quat[E_QUAT], rotationtype: type[2], aangle[E_AANGL
     debug("ConvertQuatToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock ConvertMatrixToAxisAngle(rmatrix[E_RMATRIX], rotationtype: type[2], aangle[E_AANGLE]) {
+stock ConvertMatrixToAxisAngle(const rmatrix[E_RMATRIX], rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given rotation matrix into axis angle</summary>
     /// <export>aangle</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -122,7 +122,7 @@ stock ConvertMatrixToAxisAngle(rmatrix[E_RMATRIX], rotationtype: type[2], aangle
     debug("ConvertMatrixToAxisAngle(%f, %f, %f, %f)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
-stock GetAxisAngleFromRotation(aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
+stock GetAxisAngleFromRotation(const aangle[E_AANGLE], rotationtype: type, & Float: angle, & Float: x, & Float: y, & Float: z) {
     /// <summary>Get the axis angle from the rotation array</summary>
     /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>
@@ -142,7 +142,7 @@ stock GetAxisAngleFromRotation(aangle[E_AANGLE], rotationtype: type, & Float: an
     debug("GetAxisAngleFromRotation(%f, %f, %f, %f)", angle, x, y, z);
 }
 
-stock RotateAxisAngle(aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
+stock RotateAxisAngle(const aangle[E_AANGLE], Float: cX, Float: cY, Float: cZ, Float: pX, Float: pY, Float: pZ, & Float: oX, & Float: oY, & Float: oZ) {
     /// <summary>Rotates the given point (pX, pY, pZ) and add it to the output position (oX, oY, oZ) using axis angle</summary>
     /// <export>aangle</export>
     /// <param name="aangle">Axis angle array [<ref name="E_AANGLE"/>]</param>

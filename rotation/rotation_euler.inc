@@ -41,7 +41,7 @@ stock SetRotationFromEuler(euler[E_EULER], rotationtype: type, & Float: alpha, &
 #define EULER_SINGULARITY_THRESHOLD 0.9999
 #define EULER_SINGULARITY_THRESHOLD_H 0.49995 // EULER_SINGULARITY_THRESHOLD / 2.0 - preprocessor can't handle floats :/
 
-stock ConvertAxisAngleToEuler(aangle[E_AANGLE], rotationtype: type[2], euler[E_EULER]) {
+stock ConvertAxisAngleToEuler(const aangle[E_AANGLE], rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given axis angle into euler angle</summary>
     /// <export>euler</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -59,7 +59,7 @@ stock ConvertAxisAngleToEuler(aangle[E_AANGLE], rotationtype: type[2], euler[E_E
     debug("ConvertAxisAngleToEuler(%f, %f, %f)", euler[E_EULER_ALPHA], euler[E_EULER_BETA], euler[E_EULER_GAMMA]);
 }
 
-stock ConvertEulerToEuler(src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
+stock ConvertEulerToEuler(const src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
     /// <summary>Convert the given euler angle into euler angle</summary>
     /// <export>euler</export>
     /// <param name="src">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -80,7 +80,7 @@ stock ConvertEulerToEuler(src[E_EULER], rotationtype: type[2], dest[E_EULER]) {
     debug("ConvertEulerToEuler(%f, %f, %f)", dest[E_EULER_ALPHA], dest[E_EULER_BETA], dest[E_EULER_GAMMA]);
 }
 
-stock ConvertQuatToEuler(quat[E_QUAT], rotationtype: type[2], euler[E_EULER]) {
+stock ConvertQuatToEuler(const quat[E_QUAT], const rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given quaternion into euler angle</summary>
     /// <export>euler</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>
@@ -424,7 +424,7 @@ stock ConvertQuatToEuler(quat[E_QUAT], rotationtype: type[2], euler[E_EULER]) {
     debug("ConvertQuatToEuler(%f, %f, %f)", euler[E_EULER_ALPHA], euler[E_EULER_BETA], euler[E_EULER_GAMMA]);
 }
 
-stock ConvertMatrixToEuler(rmatrix[E_RMATRIX], rotationtype: type[2], euler[E_EULER]) {
+stock ConvertMatrixToEuler(const rmatrix[E_RMATRIX], const rotationtype: type[2], euler[E_EULER]) {
     /// <summary>Convert the given rotation matrix into euler angle</summary>
     /// <export>euler</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -728,7 +728,7 @@ stock ConvertMatrixToEuler(rmatrix[E_RMATRIX], rotationtype: type[2], euler[E_EU
 #undef EULER_SINGULARITY_THRESHOLD_H
 #undef EULER_SINGULARITY_THRESHOLD
 
-stock GetEulerFromRotation(euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
+stock GetEulerFromRotation(const euler[E_EULER], rotationtype: type, & Float: alpha, & Float: beta, & Float: gamma) {
     /// <summary>Gets the euler angle from the rotation array</summary>
     /// <export>euler</export>
     /// <param name="euler">Euler angle array [<ref name="E_EULER"/>]</param>

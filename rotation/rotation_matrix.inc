@@ -72,7 +72,7 @@ stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
     rmatrix = sum;
 }
 
-stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matrix[][]) {
+stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, const Float: matrix[][]) {
     /// <summary>Set the rotation array from rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix array [<ref name="E_RMATRIX"/>]</param>
@@ -98,7 +98,7 @@ stock SetRotationFromMatrix(rmatrix[E_RMATRIX], rotationtype: type, Float: matri
     NormalizeMatrix(rmatrix);
 }
 
-stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[E_RMATRIX]) {
+stock ConvertAxisAngleToMatrix(const aangle[E_AANGLE], rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given axis angle into a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -138,7 +138,7 @@ stock ConvertAxisAngleToMatrix(aangle[E_AANGLE], rotationtype: type[2], rmatrix[
     rmatrix[E_RMATRIX_21] = cos + sin * x;
 }
 
-stock ConvertEulerToMatrix(euler[E_EULER], rotationtype: type[2], rmatrix[E_RMATRIX]) {
+stock ConvertEulerToMatrix(const euler[E_EULER], const rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given euler angle into a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -349,7 +349,7 @@ stock ConvertEulerToMatrix(euler[E_EULER], rotationtype: type[2], rmatrix[E_RMAT
     }
 }
 
-stock ConvertQuatToMatrix(quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX]) {
+stock ConvertQuatToMatrix(const quat[E_QUAT], rotationtype: type[2], rmatrix[E_RMATRIX]) {
     /// <summary>Convert the given quaternion into a rotation matrix</summary>
     /// <export>rmatrix</export>
     /// <param name="quat">Source quaternion [<ref name="E_QUAT"/>]</param>

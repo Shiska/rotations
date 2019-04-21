@@ -63,7 +63,7 @@ stock SetRotationFromQuat(quat[E_QUAT], rotationtype: type, & Float: w, & Float:
     NormalizeQuat(quat);
 }
 
-stock ConvertAxisAngleToQuat(aangle[E_AANGLE], rotationtype: type[2], quat[E_QUAT]) {
+stock ConvertAxisAngleToQuat(const aangle[E_AANGLE], rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given axis angle into quaternion</summary>
     /// <export>quat</export>
     /// <param name="aangle">Source axis angle [<ref name="E_AANGLE"/>]</param>
@@ -92,7 +92,7 @@ stock ConvertAxisAngleToQuat(aangle[E_AANGLE], rotationtype: type[2], quat[E_QUA
     debug("ConvertAxisAngleToQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
-stock ConvertEulerToQuat(euler[E_EULER], rotationtype: type[2], quat[E_QUAT]) {
+stock ConvertEulerToQuat(const euler[E_EULER], const rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given euler angle into quaternion</summary>
     /// <export>quat</export>
     /// <param name="euler">Source euler angle [<ref name="E_EULER"/>]</param>
@@ -218,7 +218,7 @@ stock ConvertEulerToQuat(euler[E_EULER], rotationtype: type[2], quat[E_QUAT]) {
     debug("ConvertEulerToQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
-stock ConvertMatrixToQuat(rmatrix[E_RMATRIX], rotationtype: type[2], quat[E_QUAT]) {
+stock ConvertMatrixToQuat(const rmatrix[E_RMATRIX], rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given rotation matrix into quaternion</summary>
     /// <export>quat</export>
     /// <param name="rmatrix">Source rotation matrix [<ref name="E_RMATRIX"/>]</param>
@@ -288,7 +288,7 @@ stock CombineQuat(left[E_QUAT], right[E_QUAT], dest[E_QUAT]) {
     debug("CombineQuat(%f %f %f %f)", dest[E_QUAT_W], dest[E_QUAT_X], dest[E_QUAT_Y], dest[E_QUAT_Z]);
 }
 
-stock GetQuatFromRotation(quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
+stock GetQuatFromRotation(const quat[E_QUAT], rotationtype: type, & Float: w, & Float: x, & Float: y, & Float: z) {
     /// <summary>Get the quaternion from the rotation array</summary>
     /// <export>quat</export>
     /// <param name="quat">Quaternion array [<ref name="E_QUAT"/>]</param>
