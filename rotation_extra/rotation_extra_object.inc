@@ -26,7 +26,7 @@ stock GetAttachedPos(Float: parentX, Float: parentY, Float: parentZ, parentRotat
     CombineRotation(parentRotation, attachRotation, worldRotation); // combine afterwards if dest and parentRotation is the same array
 }
 
-stock GetAttachedOffset(Float: parentX, Float: parentY, Float: parentZ, parentRotation[E_ROTATION], Float: X, Float: Y, Float: Z, worldRotation[E_ROTATION], & Float: attachX, & Float: attachY, & Float: attachZ, attachRotation[E_ROTATION]) {
+stock GetAttachedOffset(Float: parentX, Float: parentY, Float: parentZ, const parentRotation[E_ROTATION], Float: X, Float: Y, Float: Z, worldRotation[E_ROTATION], & Float: attachX, & Float: attachY, & Float: attachZ, attachRotation[E_ROTATION]) {
     /// <summary>Get the attach offset for the given position</summary>
     /// <export>object</export>
     /// <param name="parentX">Parent position x</param>

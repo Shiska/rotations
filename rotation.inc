@@ -134,7 +134,7 @@ enum E_ROTATION {
 const E_ROTATION_DATA_OFFSET = _: E_ROTATION_DATA << 2;
 
 // native SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...);
-stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
+stock SetRotation(rotation[E_ROTATION], const rotationtype: type, const Float: ...) {
     /// <summary>Set the rotation array from the given rotation</summary>
     /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
@@ -176,7 +176,7 @@ stock SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
 }
 
 // native ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]);
-stock ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]) {
+stock ConvertRotation(const src[E_ROTATION], const rotationtype: type, dest[E_ROTATION]) {
     /// <summary>Convert the given rotation matrix into the target rotation</summary>
     /// <export/>
     /// <param name="src">Source rotation array [<ref name="E_ROTATION"/>]</param>
@@ -320,7 +320,7 @@ stock CombineRotation(left[E_ROTATION], right[E_ROTATION], dest[E_ROTATION]) {
 }
 
 // native GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...);
-stock GetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...) {
+stock GetRotation(const rotation[E_ROTATION], const rotationtype: type, Float: ...) {
     /// <summary>Get the rotation from the given rotation array</summary>
     /// <export/>
     /// <param name="rotation">Rotation array [<ref name="E_ROTATION"/>]</param>
@@ -369,6 +369,7 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
     /// <param name="oX">Output position x</param>
     /// <param name="oY">Output position y</param>
     /// <param name="oZ">Output position z</param>
+    /// <remarks>If <paramref name="rotation"/> is an euler angle it gets converted to a quaternion</remarks>
 
     #pragma unused cX, cY, cZ, pX, pY, pZ, oX, oY, oZ
 
@@ -401,7 +402,7 @@ stock RotatePoint(rotation[E_ROTATION], Float: cX, Float: cY, Float: cZ, Float: 
 }
 
 // native ReverseRotation(src[E_ROTATION], dest[E_ROTATION]);
-stock ReverseRotation(src[E_ROTATION], dest[E_ROTATION]) {
+stock ReverseRotation(const src[E_ROTATION], dest[E_ROTATION]) {
     /// <summary>Stores the reverse rotation in dest</summary>
     /// <export/>
     /// <param name="src">Source rotation [<ref name="E_ROTATION"/>]</param>

@@ -1,3 +1,7 @@
+#if defined REPORT
+    #include <streamer>
+#endif
+
 #if !defined _streamer_included
 	#endinput  // https://github.com/samp-incognito/samp-streamer-plugin not included
 #endif
