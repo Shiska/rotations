@@ -35,6 +35,8 @@ stock NormalizeAxisAngle(aangle[E_AANGLE]) {
     debug("NormalizeAxisAngle(...)", aangle[E_AANGLE_ANGLE], aangle[E_AANGLE_X], aangle[E_AANGLE_Y], aangle[E_AANGLE_Z]);
 }
 
+#pragma warning disable 238
+
 stock SetRotationFromAxisAngle(aangle[E_AANGLE], const rotationtype: type, const & Float: angle, const & Float: x, const & Float: y, const & Float: z) {
     /// <summary>Set the rotation array from axis angle</summary>
     /// <export>aangle</export>
@@ -56,6 +58,8 @@ stock SetRotationFromAxisAngle(aangle[E_AANGLE], const rotationtype: type, const
 
     NormalizeAxisAngle(aangle);
 }
+
+#pragma warning enable 238
 
 stock ConvertEulerToAxisAngle(const euler[E_EULER], const rotationtype: type[2], aangle[E_AANGLE]) {
     /// <summary>Convert the given euler angle into axis angle</summary>

@@ -133,6 +133,8 @@ enum E_ROTATION {
 
 const E_ROTATION_DATA_OFFSET = _: E_ROTATION_DATA << 2;
 
+#pragma warning disable 238
+
 // native SetRotation(rotation[E_ROTATION], rotationtype: type, Float: ...);
 stock SetRotation(rotation[E_ROTATION], const rotationtype: type, const Float: ...) {
     /// <summary>Set the rotation array from the given rotation</summary>
@@ -174,6 +176,8 @@ stock SetRotation(rotation[E_ROTATION], const rotationtype: type, const Float: .
     #emit add.c 4
     #emit sctrl 6
 }
+
+#pragma warning enable 238
 
 // native ConvertRotation(src[E_ROTATION], rotationtype: type, dest[E_ROTATION]);
 stock ConvertRotation(const src[E_ROTATION], const rotationtype: type, dest[E_ROTATION]) {

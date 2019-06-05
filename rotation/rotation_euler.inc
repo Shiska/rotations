@@ -20,6 +20,8 @@ enum E_EULER {
     #include "rotation_matrix"
 #endif
 
+#pragma warning disable 238
+
 stock SetRotationFromEuler(euler[E_EULER], const rotationtype: type, const & Float: alpha, const & Float: beta, const & Float: gamma) {
     /// <summary>Set the rotation array from euler angle</summary>
     /// <export>euler</export>
@@ -37,6 +39,8 @@ stock SetRotationFromEuler(euler[E_EULER], const rotationtype: type, const & Flo
     euler[E_EULER_BETA]  = beta;
     euler[E_EULER_GAMMA] = gamma;
 }
+
+#pragma warning enable 238
 
 #define EULER_SINGULARITY_THRESHOLD 0.9999
 #define EULER_SINGULARITY_THRESHOLD_H 0.49995 // EULER_SINGULARITY_THRESHOLD / 2.0 - preprocessor can't handle floats :/

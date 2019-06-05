@@ -41,6 +41,8 @@ stock NormalizeQuat(quat[E_QUAT]) {
     debug("NormalizeQuat(%f, %f, %f, %f)", quat[E_QUAT_W], quat[E_QUAT_X], quat[E_QUAT_Y], quat[E_QUAT_Z]);
 }
 
+#pragma warning disable 238
+
 stock SetRotationFromQuat(quat[E_QUAT], const rotationtype: type, const & Float: w, const & Float: x, const & Float: y, const & Float: z) {
     /// <summary>Set the rotation array from quaternion</summary>
     /// <export>quat</export>
@@ -62,6 +64,7 @@ stock SetRotationFromQuat(quat[E_QUAT], const rotationtype: type, const & Float:
 
     NormalizeQuat(quat);
 }
+#pragma warning enable 238
 
 stock ConvertAxisAngleToQuat(const aangle[E_AANGLE], const rotationtype: type[2], quat[E_QUAT]) {
     /// <summary>Convert the given axis angle into quaternion</summary>
