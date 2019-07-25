@@ -3,11 +3,11 @@
 #endif
 
 #if !defined _streamer_included
-	#endinput  // https://github.com/samp-incognito/samp-streamer-plugin not included
+    #endinput  // https://github.com/samp-incognito/samp-streamer-plugin not included
 #endif
 
 #if defined _inc_rotation_extra_dynamic_
-	#endinput
+    #endinput
 #else
     #define _inc_rotation_extra_dynamic_
 #endif

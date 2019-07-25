@@ -8,7 +8,7 @@
     ],
     "dev_dependencies": [
         "pawn-lang/YSI-Includes@5.x",
-		"samp-incognito/samp-streamer-plugin"
+        "samp-incognito/samp-streamer-plugin"
     ],
     "builds": [
         {

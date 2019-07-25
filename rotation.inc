@@ -54,7 +54,7 @@
   *//** */
 
 #if defined _inc_rotation_
-	#endinput
+    #endinput
 #else
     #define _inc_rotation_
 #endif

@@ -1,7 +1,7 @@
 #if defined _inc_rotation_rotation_matrix_
-	#endinput
+    #endinput
 #else
-	#define _inc_rotation_rotation_matrix_
+    #define _inc_rotation_rotation_matrix_
 #endif
 
 enum E_RMATRIX {

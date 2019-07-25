@@ -1,7 +1,7 @@
 #if defined _inc_rotation_quaternion_
-	#endinput
+    #endinput
 #else
-	#define _inc_rotation_quaternion_
+    #define _inc_rotation_quaternion_
 #endif
 
 enum E_QUAT {

@@ -10,11 +10,15 @@
 sampctl package install Shiska/rotations
 ```
 
-```pawn
-#include <rotation>         // base functions
-#include <rotation_misc>    // misc functions
-#include <rotation_extra>   // extra functions
-```
+# Usage
+
+For all basic functions use: `#include <rotation>`  
+For additional functions use: `#include <rotation_misc>`  
+And if you want the easy way use: `#include <rotation_extra>`  
+It applies the basic functions for players, objects and vehicles.  
+Note: Vehicle related function only work if occupied due to [GetVehicleRotationQuat](https://wiki.sa-mp.com/wiki/GetVehicleRotationQuat).
+
+Check the reference for further information.
 
 # Testing
 
@@ -26,6 +30,6 @@ sampctl package run
 
 # Reference
 
-* [rotation.inc](https://shiska.github.io/rotations/2.0.1/rotation.xml#index)
-* [rotation_misc.inc](https://shiska.github.io/rotations/2.0.1/rotation_misc.xml#index)
-* [rotation_extra.inc](https://shiska.github.io/rotations/2.0.1/rotation_extra.xml#index)
+* [rotation.inc](https://shiska.github.io/rotations/2.0.2/rotation.xml#index)
+* [rotation_misc.inc](https://shiska.github.io/rotations/2.0.2/rotation_misc.xml#index)
+* [rotation_extra.inc](https://shiska.github.io/rotations/2.0.2/rotation_extra.xml#index)

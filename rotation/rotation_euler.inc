@@ -1,7 +1,7 @@
 #if defined _inc_rotation_euler_
-	#endinput
+    #endinput
 #else
-	#define _inc_rotation_euler_
+    #define _inc_rotation_euler_
 #endif
 
 enum E_EULER {
