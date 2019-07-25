@@ -7,7 +7,7 @@
         "sampctl/samp-stdlib"
     ],
     "dev_dependencies": [
-        "pawn-lang/YSI-Includes",
+        "pawn-lang/YSI-Includes@5.x",
 		"samp-incognito/samp-streamer-plugin"
     ],
     "builds": [

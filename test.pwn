@@ -1,7 +1,7 @@
 #define RUN_TESTS
 
 #include <streamer>
-#include <YSI\y_testing>
+#include <YSI_Core\y_testing>
 
 #include "rotation"
 #include "rotation_misc"
@@ -133,8 +133,7 @@ Test:ConvertRotation() { // check all conversion functions, although occasionall
             src_matrix[i][j] = (random(200) - 100) / 100.0; 
         }
     }
-    SetRotation(src, rtype_axis_angle, src_angle, src_x, src_y, src_z);
-    ConvertRotation(src, rtype_quaternion, src); 
+    SetRotation(src, rtype_axis_angle, src_angle, src_x, src_y, src_z); // set / get to go through normalization
     GetRotation(src, rtype_axis_angle, src_angle, src_x, src_y, src_z);
 
     for(type = rotationtype: 0, comment = "rtype_axis_angle_"; type < rotationtype; ++type) {
@@ -166,7 +165,6 @@ Test:ConvertRotation() { // check all conversion functions, although occasionall
         }
     }
     SetRotation(src, rtype_quaternion, src_w, src_x, src_y, src_z);
-    ConvertRotation(src, rtype_axis_angle, src); 
     GetRotation(src, rtype_quaternion, src_w, src_x, src_y, src_z);
 
     for(type = rotationtype: 0, comment = "rtype_quaternion_"; type < rotationtype; ++type) {
@@ -180,7 +178,6 @@ Test:ConvertRotation() { // check all conversion functions, although occasionall
         }
     }
     SetRotation(src, rtype_rotation_matrix, src_matrix);
-    ConvertRotation(src, rtype_axis_angle, src);
     GetRotation(src, rtype_rotation_matrix, src_matrix);
 
     for(type = rotationtype: 0, comment = "rtype_rotation_matrix_"; type < rotationtype; ++type) {
@@ -321,11 +318,10 @@ bool: CheckOrPrintMatrix(const comment[], const Float: matrix1[3][3], const Floa
         -EPSILON < matrix[1][0] < EPSILON && -EPSILON < matrix[1][1] < EPSILON && -EPSILON < matrix[1][2] < EPSILON &&
         -EPSILON < matrix[2][0] < EPSILON && -EPSILON < matrix[2][1] < EPSILON && -EPSILON < matrix[2][2] < EPSILON
     ) || printf("%s\n%4.4f %4.4f %4.4f\n%4.4f %4.4f %4.4f\n%4.4f %4.4f %4.4f", comment,
-            matrix[0][0], matrix[0][1], matrix[0][2],
-            matrix[1][0], matrix[1][1], matrix[1][2],
-            matrix[2][0], matrix[2][1], matrix[2][2]
-        )
-    ;
+        matrix[0][0], matrix[0][1], matrix[0][2],
+        matrix[1][0], matrix[1][1], matrix[1][2],
+        matrix[2][0], matrix[2][1], matrix[2][2]
+    );
 }
 
 bool: CheckOrPrintQuat(const comment[], Float: w1, Float: x1, Float: y1, Float: z1, Float: w2, Float: x2, Float: y2, Float: z2) {

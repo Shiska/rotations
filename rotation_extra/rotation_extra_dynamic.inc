@@ -155,35 +155,37 @@ stock bool: DetachDynamicObject(oldobjectid, & newobjectid) {
 
     debug("DetachDynamicObject(%d, ...)", oldobjectid);
 
-    new Float: attachX;
+    if(IsValidDynamicObject(oldobjectid)) {
+        new Float: attachX;
 
-    if(Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_ATTACH_OFFSET_X, attachX)) { // object is attached to something
-        new Float: attachY;
-        new Float: attachZ;
-        new Float: attachRotX;
-        new Float: attachRotY;
-        new Float: attachRotZ;
+        if(Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_ATTACH_OFFSET_X, attachX)) { // object is attached to something
+            new Float: attachY;
+            new Float: attachZ;
+            new Float: attachRotX;
+            new Float: attachRotY;
+            new Float: attachRotZ;
 
-        if(GetDynamicObjectPosRot(oldobjectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ)) {
-            new Float: streamdistance;
-            new Float: drawdistance;
+            if(GetDynamicObjectPosRot(oldobjectid, attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ)) {
+                new Float: streamdistance;
+                new Float: drawdistance;
 
-            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_STREAM_DISTANCE, streamdistance);
-            Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_DRAW_DISTANCE, drawdistance);
+                Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_STREAM_DISTANCE, streamdistance);
+                Streamer_GetFloatData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_DRAW_DISTANCE, drawdistance);
 
-            newobjectid = CreateDynamicObject(
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_MODEL_ID),
-                attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ,
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_WORLD_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_INTERIOR_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PLAYER_ID),
-                streamdistance, drawdistance,
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_AREA_ID),
-                Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PRIORITY)
-            );
-            DestroyDynamicObject(oldobjectid);
+                newobjectid = CreateDynamicObject(
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_MODEL_ID),
+                    attachX, attachY, attachZ, attachRotX, attachRotY, attachRotZ,
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_WORLD_ID),
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_INTERIOR_ID),
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PLAYER_ID),
+                    streamdistance, drawdistance,
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_AREA_ID),
+                    Streamer_GetIntData(STREAMER_TYPE_OBJECT, oldobjectid, E_STREAMER_PRIORITY)
+                );
+                DestroyDynamicObject(oldobjectid);
 
-            return true;
+                return true;
+            }
         }
     }
     return false;

@@ -30,46 +30,82 @@ static // unroll variables for speed
 ;
 
 stock NormalizeMatrix(rmatrix[E_RMATRIX]) {
-    /// <summary>Normalizes rotation matrix with Givens-Rotations</summary>
+    /// <summary>Normalizes rotation matrix with Householder reflections</summary>
     /// <export>rmatrix</export>
     /// <param name="rmatrix">Rotation matrix [<ref name="E_RMATRIX"/>]</param>
+    // https://en.wikipedia.org/wiki/QR_decomposition
 
     debug("NormalizeMatrix(...)");
 
-    new Float: div;
-    new sum[E_RMATRIX];
-    new mul[E_RMATRIX];
-
-    if(rmatrix[E_RMATRIX_21] != 0.0) {
-        div = VectorSize(rmatrix[E_RMATRIX_11], rmatrix[E_RMATRIX_21], 0.0);
-
-        sum[E_RMATRIX_00] = 1.0;
-        sum[E_RMATRIX_11] = sum[E_RMATRIX_22] = rmatrix[E_RMATRIX_11] / div;
-        sum[E_RMATRIX_12] = -(sum[E_RMATRIX_21] = rmatrix[E_RMATRIX_21] / div);
+    new // using Householder reflections for the first column
+        Q[E_RMATRIX],
+        Float: uX = rmatrix[E_RMATRIX_00],
+        Float: uY = rmatrix[E_RMATRIX_10],
+        Float: uZ = rmatrix[E_RMATRIX_20],
+        Float: norm = VectorSize(uX, uY, uZ),
+        bool: swap = (uX >= 0.0)
+    ;
+    if(swap) { // swapping orientation to avoid loss of significance in floating point arithmetic
+        uX += norm;
     } else {
-        sum[E_RMATRIX_00] = sum[E_RMATRIX_11] = sum[E_RMATRIX_22] = 1.0;
+        uX -= norm;
     }
-    if(rmatrix[E_RMATRIX_10] != 0.0) {
-        div = VectorSize(rmatrix[E_RMATRIX_00], rmatrix[E_RMATRIX_10], 0.0);
+    norm = VectorSize(uX, uY, uZ);
 
-        mul[E_RMATRIX_22] = 1.0;
-        mul[E_RMATRIX_00] = mul[E_RMATRIX_11] = rmatrix[E_RMATRIX_00] / div;
-        mul[E_RMATRIX_01] = -(mul[E_RMATRIX_10] = rmatrix[E_RMATRIX_10] / div);
-
-        CombineMatrix(mul, sum, sum);
-
-        mul[E_RMATRIX_01] = mul[E_RMATRIX_10] = 0.0; // restore zeros
+    if(norm == 0.0) {
+        uX = -1.0;
+        uY = uZ = 0.0;
+    } else {
+        uX /= norm;
+        uY /= norm;
+        uZ /= norm;
     }
-    if(rmatrix[E_RMATRIX_20] != 0.0) {
-        div = VectorSize(rmatrix[E_RMATRIX_00], rmatrix[E_RMATRIX_20], 0.0);
+    Q[E_RMATRIX_00] = 1.0 - 2.0 * uX * uX;
+    Q[E_RMATRIX_11] = 1.0 - 2.0 * uY * uY;
+    Q[E_RMATRIX_22] = 1.0 - 2.0 * uZ * uZ;
+    // The calculation look similar to the quaternion to matrix conversion
+    // well it uses a hyperplane like quaternion so I guess it is somehow related
+    Q[E_RMATRIX_01] = Q[E_RMATRIX_10] = -2.0 * uX * uY;
+    Q[E_RMATRIX_02] = Q[E_RMATRIX_20] = -2.0 * uX * uZ;
+    Q[E_RMATRIX_12] = Q[E_RMATRIX_21] = -2.0 * uY * uZ;
 
-        mul[E_RMATRIX_11] = 1.0;
-        mul[E_RMATRIX_00] = mul[E_RMATRIX_22] = rmatrix[E_RMATRIX_00] / div;
-        mul[E_RMATRIX_02] = -(mul[E_RMATRIX_20] = rmatrix[E_RMATRIX_20] / div);
+    CombineMatrix(Q, rmatrix, rmatrix); // the householder matrix is unitary, no need to transpose it
 
-        CombineMatrix(mul, sum, sum);
+    if(swap) { // fix sign, so the orientation stays the same
+        Q[E_RMATRIX_00] = -Q[E_RMATRIX_00];
+        Q[E_RMATRIX_10] = -Q[E_RMATRIX_10];
+        Q[E_RMATRIX_20] = -Q[E_RMATRIX_20];
+    } // same thing with second column
+    uX = rmatrix[E_RMATRIX_11],
+    uY = rmatrix[E_RMATRIX_21],
+    norm = VectorSize(uX, uY, 0.0);
+    swap = (uX >= 0.0);
+
+    if(swap) {
+        uX += norm;
+    } else {
+        uX -= norm;
     }
-    rmatrix = sum;
+    norm = VectorSize(uX, uY, 0.0);
+
+    uX /= norm;
+    uY /= norm;
+
+    rmatrix[E_RMATRIX_00] = 1.0;
+    rmatrix[E_RMATRIX_01] = rmatrix[E_RMATRIX_02] = rmatrix[E_RMATRIX_10] = rmatrix[E_RMATRIX_20] = 0.0;
+
+    rmatrix[E_RMATRIX_11] = 1 - 2 * uX * uX;
+    rmatrix[E_RMATRIX_22] = 1 - 2 * uY * uY;
+
+    rmatrix[E_RMATRIX_12] = rmatrix[E_RMATRIX_21] = -2 * uX * uY;
+
+    CombineMatrix(Q, rmatrix, rmatrix);
+
+    if(swap) {
+        rmatrix[E_RMATRIX_01] = -rmatrix[E_RMATRIX_01];
+        rmatrix[E_RMATRIX_11] = -rmatrix[E_RMATRIX_11];
+        rmatrix[E_RMATRIX_21] = -rmatrix[E_RMATRIX_21];
+    }
 }
 
 stock SetRotationFromMatrix(rmatrix[E_RMATRIX], const rotationtype: type, const Float: matrix[][]) {
