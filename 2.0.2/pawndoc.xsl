@@ -70,7 +70,7 @@
         }
     </style>
     <script>
-        var displayed = []
+        var displayed = [];
 
         function getSection(element) {
             while(element.tagName != "SECTION") {
@@ -107,10 +107,27 @@
                     // no need to move it because it is already behind source
                     displayed.push(dest);
                 }
-            } else { // id not found
-                console.log("id " + id + " not found!");
+                return dest;
             }
+            console.log("id " + id + " not found!");
+
+            return event.target;
         }
+
+        window.addEventListener('DOMContentLoaded', function() {
+            var event = {target: document.getElementById('index')};
+            var params = new URLSearchParams(location.search);
+            var hash = window.top.location.hash;
+
+            params.set(hash.slice(1), '');
+
+            for(id of params.keys()) {
+                event = {target: display(event, id)};
+            }
+            if(displayed.length > 0) if(!hash) {
+                window.top.location.hash = '#' + displayed[0].id;
+            }
+        }, false);
     </script>
 </head>
 <body>
