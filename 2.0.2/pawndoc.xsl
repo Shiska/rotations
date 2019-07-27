@@ -8,13 +8,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title><xsl:value-of select="doc/assembly/name"/></title>
     <style type="text/css">
-        #body {
+        .body {
             display: flex;
         }
-        #index {
-            min-height: 100vh;
+        .title {
         }
-        .info, #index {
+        .index {
+            min-height: 100vh;
+            border-width: 0;
+        }
+        .info, .index {
             width: 100%;
             padding: 0 1em 0 1em;
             border-top: 1px solid;
@@ -70,8 +73,8 @@
         }
     </style>
     <script>
-        var displayed = [];
-        var historyLock = false;
+        let displayed = [];
+        let stateObj = {};
 
         function getSection(element) {
             while(element.tagName != "SECTION") {
@@ -79,7 +82,15 @@
             }
             return element;
         }
-        let stateObj = {};
+
+        function showNode(node) {
+            // add it to the array and make it visible
+            if(displayed.push(node) == 1) {
+                node.className = "index"; // first one got no border on the left side and has a fixed height
+            } else {
+                node.className = "info";
+            }
+        }
 
         function display(event, id) {
             var dest = document.getElementById(id);
@@ -107,12 +118,8 @@
                 } else { // element already shown
                     return dest; // return dest for reuse
                 }
-                // make it visible
-                dest.className = "info";
-                // add it to the array
-                displayed.push(dest);
+                showNode(dest); // make it visible
                 // change url to fit history
-                historyLock = true;
                 location.hash = '#' + id; // creates new entry
                 document.title = id; // sets title of entry
                 history.replaceState(stateObj, id, '?' + displayed.map(x => x.id).join('&#38;') + '#' + id);
@@ -125,38 +132,35 @@
         }
 
         function loadParams(loc) {
-            if(loc) {
-                if(historyLock == true) {
-                    historyLock = false;
+            if(loc) { // doesn't and shouldn't modify the url as it is given
+                var searchParams = new URLSearchParams(loc.search.slice(1));
+                var src = document.getElementById('index');
+                var hash = loc.hash.slice(1);
+                var dest;
+                // hide all, neccessary if called form popstate
+                while(displayed.length > 0) {
+                    displayed.pop().className = "hidden";
+                }
+                // add hash to keys
+                searchParams.set(hash, '');
+                // loop keys
+                for(id of searchParams.keys()) {
+                    dest = document.getElementById(id);
+
+                    if(dest) {
+                        dest = getSection(dest);
+                        showNode(dest);
+
+                        src.parentNode.insertBefore(dest, src.nextSibling);
+                        src = dest;
+                    }
+                }
+                if(hash) {
+                    document.title = hash;
+                } else if(displayed.length > 0) {
+                    document.title = src.id;
                 } else {
-                    var searchParams = new URLSearchParams(loc.search.slice(1));
-                    var src = document.getElementById('index');
-                    var hash = loc.hash.slice(1);
-                    var dest;
-                    // hide all, neccessary if called form popstate
-                    while(displayed.length > 0) {
-                        displayed.pop().className = "hidden";
-                    }
-                    // add hash to keys
-                    searchParams.set(hash, '');
-                    // loop keys
-                    for(id of searchParams.keys()) {
-                        dest = document.getElementById(id);
-
-                        if(dest) {
-                            dest = getSection(dest);
-                            dest.className = "info";
-                            displayed.push(dest);
-
-                            src.parentNode.insertBefore(dest, src.nextSibling);
-                            src = dest;
-                        }
-                    }
-                    if(hash) {
-                        document.title = hash;
-                    } else if(displayed.length > 0) {
-                        document.title = src.id;
-                    }
+                    document.getElementsByClassName('summary')[0].className = '';
                 }
             }
         }
@@ -164,10 +168,12 @@
         window.addEventListener('DOMContentLoaded', function() { loadParams(location) });
 
         window.addEventListener('popstate', function(e) {
-            var obj = e.target;
+            if(e.state) { // set if we move backwards forwards in history
+                var obj = e.target;
 
-            if(obj) {
-                loadParams(obj.location);
+                if(obj) {
+                    loadParams(obj.location);
+                }
             }
         });
     </script>
@@ -175,14 +181,16 @@
 <body>
     <section>
         <h1><xsl:value-of select="doc/assembly/name"/></h1>
-        <xsl:for-each select="doc/general">
-            <xsl:call-template name="summary"/>
-            <xsl:apply-templates select="*[not(name() = 'summary')]"/>
-        </xsl:for-each>
+        <section class="summary hidden">
+            <xsl:for-each select="doc/general">
+                <xsl:call-template name="summary"/>
+                <xsl:apply-templates select="*[not(name() = 'summary')]"/>
+            </xsl:for-each>
+        </section>
     </section>
-    <section id="body">
+    <section class="body">
         <xsl:variable name="members" select="doc/members/member[not(@name='F:__file' or @name='F:__date' or @name='F:__time')]"/>
-        <section id="index">
+        <section id="index" class="hidden">
             <xsl:call-template name="indexSection">
                 <xsl:with-param name="name" select="'general'"/>
                 <xsl:with-param name="export" select="$members[export/. = '']"/>
@@ -269,8 +277,7 @@
 <xsl:template match="member">
     <xsl:variable name="sub" select="substring(@name,3)"/>
 
-    <section>
-        <xsl:attribute name="class">hidden</xsl:attribute>
+    <section class="hidden">
         <xsl:attribute name="id"><xsl:value-of select="$sub"/></xsl:attribute>
         <a>
             <xsl:attribute name="name"><xsl:value-of select="$sub"/></xsl:attribute>
