@@ -71,6 +71,7 @@
     </style>
     <script>
         var displayed = [];
+        var historyLock = false;
 
         function getSection(element) {
             while(element.tagName != "SECTION") {
@@ -78,13 +79,16 @@
             }
             return element;
         }
+        let stateObj = {};
 
         function display(event, id) {
             var dest = document.getElementById(id);
 
-            if(dest) {
+            if(dest) { // set title to id
+                document.title = id;
+                // show element if not present
                 dest = getSection(dest);
-
+                // calculate index of nodes
                 var destidx = displayed.indexOf(dest);
                 var src = getSection(event.target);
                 var srcidx = displayed.indexOf(src) + 1;
@@ -94,40 +98,78 @@
                     while(displayed.length > srcidx) {
                         displayed.pop().className = "hidden";
                     }
-                    dest.className = "info";
                     // move new element behind source
                     src.parentNode.insertBefore(dest, src.nextSibling);
-                    // add it to the array
-                    displayed.push(dest);
                 } else if(destidx > srcidx) { // element is visible but could be further away, so move it down
                     while(displayed.length > srcidx) {
                         displayed.pop().className = "hidden";
                     }
-                    dest.className = "info";
-                    // no need to move it because it is already behind source
-                    displayed.push(dest);
+                } else { // element already shown
+                    return dest; // return dest for reuse
                 }
+                // make it visible
+                dest.className = "info";
+                // add it to the array
+                displayed.push(dest);
+                // change url to fit history
+                historyLock = true;
+                location.hash = '#' + id; // creates new entry
+                document.title = id; // sets title of entry
+                history.replaceState(stateObj, id, '?' + displayed.map(x => x.id).join('&#38;') + '#' + id);
+                // return added element
                 return dest;
             }
             console.log("id " + id + " not found!");
-
+            // return target for reuse
             return event.target;
         }
 
-        window.addEventListener('DOMContentLoaded', function() {
-            var event = {target: document.getElementById('index')};
-            var params = new URLSearchParams(location.search);
-            var hash = window.top.location.hash;
+        function loadParams(loc) {
+            if(loc) {
+                if(historyLock == true) {
+                    historyLock = false;
+                } else {
+                    var searchParams = new URLSearchParams(loc.search.slice(1));
+                    var src = document.getElementById('index');
+                    var hash = loc.hash.slice(1);
+                    var dest;
+                    // hide all, neccessary if called form popstate
+                    while(displayed.length > 0) {
+                        displayed.pop().className = "hidden";
+                    }
+                    // add hash to keys
+                    searchParams.set(hash, '');
+                    // loop keys
+                    for(id of searchParams.keys()) {
+                        dest = document.getElementById(id);
 
-            params.set(hash.slice(1), '');
+                        if(dest) {
+                            dest = getSection(dest);
+                            dest.className = "info";
+                            displayed.push(dest);
 
-            for(id of params.keys()) {
-                event = {target: display(event, id)};
+                            src.parentNode.insertBefore(dest, src.nextSibling);
+                            src = dest;
+                        }
+                    }
+                    if(hash) {
+                        document.title = hash;
+                    } else if(displayed.length > 0) {
+                        document.title = src.id;
+                    }
+                }
             }
-            if(displayed.length > 0) if(!hash) {
-                window.top.location.hash = '#' + displayed[0].id;
+        }
+
+        window.addEventListener('DOMContentLoaded', function() { loadParams(location) });
+
+        window.addEventListener('popstate', function(e) {
+            var obj = e.target;
+
+            if(obj) {
+                loadParams(obj.location);
             }
-        }, false);
+        });
     </script>
 </head>
 <body>
@@ -553,8 +595,9 @@
         <xsl:choose>
             <xsl:when test="//member[concat(':', $id) = substring(@name, 2)]">
                 <a>
-                    <xsl:attribute name="href">#<xsl:value-of select="$id"/></xsl:attribute>
-                    <xsl:attribute name="onclick">display(event, '<xsl:value-of select="$id"/>')</xsl:attribute>
+                    <xsl:attribute name="href">javascript:void(0)</xsl:attribute>
+                    <!-- <xsl:value-of select="$id"/> -->
+                    <xsl:attribute name="onclick">javascript:display(event, '<xsl:value-of select="$id"/>')</xsl:attribute>
                     <xsl:value-of select="$id"/>
                 </a>
             </xsl:when>
