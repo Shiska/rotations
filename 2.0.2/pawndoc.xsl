@@ -1,218 +1,208 @@
 <?xml version="1.0" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html" version="5.0" encoding="UTF-8" omit-xml-declaration="yes"/>
-<xsl:key name="extra" match="//export/text()" use="."/>
+<xsl:key name="export" match="export" use="."/>
 <xsl:template match="/">
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title><xsl:value-of select="doc/assembly/name"/></title>
-    <style type="text/css">
-        .body {
-            display: flex;
-        }
-        .title {
-        }
-        .index {
-            min-height: 100vh;
-            border-width: 0;
-        }
-        .info, .index {
-            width: 100%;
-            padding: 0 1em 0 1em;
-            border-top: 1px solid;
-        }
-        .info {
-            border-left: 1px solid;
-        }
-        .hidden {
-            display: none;
-        }
-        .inline {
-            display: flex;
-            align-items: center;
-        }
-        .param {
-            font-weight: bold;
-            font-style: italic;
-        }
-        .paraminfo {
-            font-weight: bold;
-            color: #336699;
-        }
-        code {
-            margin: 0;
-            padding: 0;
-            font-size: small;
-        }
-        body {
-            display: flex;
-            font-size: small;
-            flex-direction: column;
-            font-family: "Verdana", sans-serif;
-        }
-        h1,h2,h3,h4,th {
-            color: #4e4887;
-            margin: 0.5em 0.5em 0.5em 0em;
-        }
-        h1 { font-size: xx-large; }
-        h2 { font-size: x-large; }
-        h3 { font-size: large; }
-        h4 { font-size: medium; }
-
-        table {
-            border: medium none;
-            background-color: #ddeeff;
-        }
-        td, td>div>h4 {
-            margin: 2px;
-            padding: 2px;
-            text-align: left;
-            font-size: x-small;
-            border: medium none;
-        }
-    </style>
-    <script>
-        let displayed = [];
-        let stateObj = {};
-
-        function getSection(element) {
-            while(element.tagName != "SECTION") {
-                element = element.parentElement;
-            }
-            return element;
-        }
-
-        function showNode(node) {
-            // add it to the array and make it visible
-            if(displayed.push(node) == 1) {
-                node.className = "index"; // first one got no border on the left side and has a fixed height
-            } else {
-                node.className = "info";
-            }
-        }
-
-        function display(event, id) {
-            var dest = document.getElementById(id);
-
-            if(dest) { // set title to id
-                document.title = id;
-                // show element if not present
-                dest = getSection(dest);
-                // calculate index of nodes
-                var destidx = displayed.indexOf(dest);
-                var src = getSection(event.target);
-                var srcidx = displayed.indexOf(src) + 1;
-
-                if(destidx == -1) { // element isn't visible
-                    // get position of source section and remove all opened views after it
-                    while(displayed.length > srcidx) {
-                        displayed.pop().className = "hidden";
-                    }
-                    // move new element behind source
-                    src.parentNode.insertBefore(dest, src.nextSibling);
-                } else if(destidx > srcidx) { // element is visible but could be further away, so move it down
-                    while(displayed.length > srcidx) {
-                        displayed.pop().className = "hidden";
-                    }
-                } else { // element already shown
-                    return dest; // return dest for reuse
+    <html>
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <title><xsl:value-of select="doc/assembly/name"/></title>
+            <style type="text/css">
+                .body {
+                    display: flex;
                 }
-                showNode(dest); // make it visible
-                // change url to fit history
-                location.hash = '#' + id; // creates new entry
-                document.title = id; // sets title of entry
-                history.replaceState(stateObj, id, '?' + displayed.map(x => x.id).join('&#38;') + '#' + id);
-                // return added element
-                return dest;
-            }
-            console.log("id " + id + " not found!");
-            // return target for reuse
-            return event.target;
-        }
-
-        function loadParams(loc) {
-            if(loc) { // doesn't and shouldn't modify the url as it is given
-                var searchParams = new URLSearchParams(loc.search.slice(1));
-                var src = document.getElementById('index');
-                var hash = loc.hash.slice(1);
-                var dest;
-                // hide all, neccessary if called form popstate
-                while(displayed.length > 0) {
-                    displayed.pop().className = "hidden";
+                .index {
+                    min-height: 100vh;
+                    border-width: 0;
                 }
-                // add hash to keys
-                searchParams.set(hash, '');
-                // loop keys
-                for(id of searchParams.keys()) {
-                    dest = document.getElementById(id);
+                .info, .index {
+                    width: 100%;
+                    padding: 0 1em 0 1em;
+                    border-top: 1px solid;
+                }
+                .info {
+                    border-left: 1px solid;
+                }
+                .hidden {
+                    display: none;
+                }
+                .inline {
+                    display: flex;
+                    align-items: center;
+                }
+                .param {
+                    font-weight: bold;
+                    font-style: italic;
+                }
+                .paraminfo {
+                    font-weight: bold;
+                    color: #336699;
+                }
+                code {
+                    margin: 0;
+                    padding: 0;
+                    font-size: small;
+                }
+                body {
+                    display: flex;
+                    font-size: small;
+                    flex-direction: column;
+                    font-family: "Verdana", sans-serif;
+                }
+                h1,h2,h3,h4,th {
+                    color: #4e4887;
+                    margin: 0.5em 0.5em 0.5em 0em;
+                }
+                h1 { font-size: xx-large; }
+                h2 { font-size: x-large; }
+                h3 { font-size: large; }
+                h4 { font-size: medium; }
 
-                    if(dest) {
+                table {
+                    border: medium none;
+                    background-color: #ddeeff;
+                }
+                td, td>div>h4 {
+                    margin: 2px;
+                    padding: 2px;
+                    text-align: left;
+                    font-size: x-small;
+                    border: medium none;
+                }
+            </style>
+            <script>
+                let displayed = [];
+                let stateObj = {};
+
+                function getSection(element) {
+                    while(element.tagName != "SECTION") {
+                        element = element.parentElement;
+                    }
+                    return element;
+                }
+
+                function showNode(node) {
+                    // add it to the array and make it visible
+                    if(displayed.push(node) == 1) {
+                        node.className = "index"; // first one got no border on the left side and has a fixed height
+                    } else {
+                        node.className = "info";
+                    }
+                }
+
+                function display(event, id) {
+                    var dest = document.getElementById(id);
+
+                    if(dest) { // set title to id
+                        // show element if not present
                         dest = getSection(dest);
-                        showNode(dest);
+                        // calculate index of nodes
+                        var destidx = displayed.indexOf(dest);
+                        var src = getSection(event.target);
+                        var srcidx = displayed.indexOf(src) + 1;
 
-                        src.parentNode.insertBefore(dest, src.nextSibling);
-                        src = dest;
+                        if(destidx == -1) { // element isn't visible
+                            // get position of source section and remove all opened views after it
+                            while(displayed.length > srcidx) {
+                                displayed.pop().className = "hidden";
+                            }
+                            // move new element behind source
+                            src.parentNode.insertBefore(dest, src.nextSibling);
+                        } else if(destidx > srcidx) { // element is visible but could be further away, so move it down
+                            while(displayed.length > srcidx) {
+                                displayed.pop().className = "hidden";
+                            }
+                        } else { // element already shown
+                            return dest; // return dest for reuse
+                        }
+                        showNode(dest); // make it visible
+                        // change url to fit history
+                        location.hash = '#' + id; // creates new entry
+                        document.title = id.slice(2); // sets title of entry
+                        history.replaceState(stateObj, id, '?' + displayed.map(x => x.id).join('&#38;') + '#' + id);
+                        // return added element
+                        return dest;
+                    }
+                    console.log('id ' + id + ' not found!');
+                    // return target for reuse
+                    return event.target;
+                }
+
+                function loadParams(loc) {
+                    if(loc) { // doesn't and shouldn't modify the url as it is given
+                        var searchParams = new URLSearchParams(loc.search.slice(1));
+                        var src = document.getElementById('index');
+                        var hash = loc.hash.slice(1);
+                        var dest;
+                        // hide all, neccessary if called form popstate
+                        while(displayed.length > 0) {
+                            displayed.pop().className = 'hidden';
+                        }
+                        // add hash to keys
+                        searchParams.set(hash, '');
+                        // loop keys
+                        for(id of searchParams.keys()) {
+                            dest = document.getElementById(id);
+
+                            if(dest) {
+                                dest = getSection(dest);
+                                showNode(dest);
+
+                                src.parentNode.insertBefore(dest, src.nextSibling);
+                                src = dest;
+                            }
+                        }
+                        if(hash) {
+                            document.title = hash.slice(2);
+                        } else if(displayed.length > 0) {
+                            document.title = src.id.slice(2);
+                        } else {
+                            document.getElementsByClassName('summary')[0].className = 'summary';
+                        }
                     }
                 }
-                if(hash) {
-                    document.title = hash;
-                } else if(displayed.length > 0) {
-                    document.title = src.id;
-                } else {
-                    document.getElementsByClassName('summary')[0].className = '';
-                }
-            }
-        }
 
-        window.addEventListener('DOMContentLoaded', function() { loadParams(location) });
+                window.addEventListener('DOMContentLoaded', function() {
+                    loadParams(location);
+                    
+                    history.pushState(stateObj, document.title, document.location.toString());
+                });
 
-        window.addEventListener('popstate', function(e) {
-            if(e.state) { // set if we move backwards forwards in history
-                var obj = e.target;
+                window.addEventListener('popstate', function(e) {
+                    if(e.state) { // set if we move backwards forwards in history
+                        var obj = e.target;
 
-                if(obj) {
-                    loadParams(obj.location);
-                }
-            }
-        });
-    </script>
-</head>
-<body>
-    <section>
-        <h1><xsl:value-of select="doc/assembly/name"/></h1>
-        <section class="summary hidden">
-            <xsl:for-each select="doc/general">
-                <xsl:call-template name="summary"/>
-                <xsl:apply-templates select="*[not(name() = 'summary')]"/>
-            </xsl:for-each>
-        </section>
-    </section>
-    <section class="body">
-        <xsl:variable name="members" select="doc/members/member[not(@name='F:__file' or @name='F:__date' or @name='F:__time')]"/>
-        <section id="index" class="hidden">
-            <xsl:call-template name="indexSection">
-                <xsl:with-param name="name" select="'general'"/>
-                <xsl:with-param name="export" select="$members[export/. = '']"/>
-            </xsl:call-template>
-            <xsl:for-each select="$members/export/text()[generate-id() = generate-id(key('extra', .)[1])]">
-                <xsl:sort select="."/>
-                <xsl:variable name="export" select="."/>
-
-                <xsl:call-template name="indexSection">
-                    <xsl:with-param name="name" select="$export"/>
-                    <xsl:with-param name="export" select="$members[export/text() = $export]"/>
-                </xsl:call-template>
-            </xsl:for-each>
-            <!-- <xsl:call-template name="indexSection">
-                <xsl:with-param name="name" select="'misc'"/>
-                <xsl:with-param name="export" select="$members[not(export)]"/>
-            </xsl:call-template> -->
-        </section>
-        <xsl:apply-templates select="$members"/>
-    </section>
-</body>
-</html>
+                        if(obj) {
+                            loadParams(obj.location);
+                        }
+                    }
+                });
+            </script>
+        </head>
+        <body>
+            <section>
+                <h1><xsl:value-of select="doc/assembly/name"/></h1>
+                <section class="summary hidden">
+                    <xsl:for-each select="doc/general">
+                        <xsl:call-template name="summary"/>
+                        <xsl:apply-templates select="*[not(name() = 'summary')]"/>
+                    </xsl:for-each>
+                </section>
+            </section>
+            <section class="body">
+                <section id="index" class="hidden">
+                    <xsl:for-each select="//export[generate-id() = generate-id(key('export', .)[1])]">
+                        <xsl:sort select="."/>
+                        <xsl:call-template name="indexSection">
+                            <xsl:with-param name="name" select="."/>
+                            <xsl:with-param name="member" select="key('export', .)/parent::*"/>
+                        </xsl:call-template>
+                    </xsl:for-each>
+                </section>
+                <xsl:apply-templates select="doc/members/member"/>
+            </section>
+        </body>
+    </html>
 </xsl:template>
 
 <xsl:template match="general">
@@ -224,29 +214,34 @@
 
 <xsl:template name="indexSection">
     <xsl:param name="name"/>
-    <xsl:param name="export"/>
-
-    <xsl:if test="count($export) != 0">
-        <xsl:variable name="Name" select="concat(translate(substring($name,1,1),'abcdefghijklmnopqrstuvwxyz','ABCDEFGHIJKLMNOPQRSTUVWXYZ'),substring($name,2))"/>
+    <xsl:param name="member"/>
+    <xsl:if test="count($member) != 0">
         <h2>
-            <xsl:value-of select="$Name"/>
+            <xsl:choose>
+                <xsl:when test="$name != ''">
+                    <xsl:value-of select="concat(translate(substring($name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($name, 2))"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    General
+                </xsl:otherwise>
+            </xsl:choose>
         </h2>
         <ul>
             <xsl:call-template name="index">
                 <xsl:with-param name="name" select="'enumeration'"/>
-                <xsl:with-param name="export" select="$export[starts-with(@name,'T:')]"/>
+                <xsl:with-param name="member" select="$member[starts-with(@name,'T:')]"/>
             </xsl:call-template>
             <xsl:call-template name="index">
                 <xsl:with-param name="name" select="'constant'"/>
-                <xsl:with-param name="export" select="$export[starts-with(@name,'C:')]"/>
+                <xsl:with-param name="member" select="$member[starts-with(@name,'C:')]"/>
             </xsl:call-template>
             <xsl:call-template name="index">
                 <xsl:with-param name="name" select="'variable'"/>
-                <xsl:with-param name="export" select="$export[starts-with(@name,'F:')]"/>
+                <xsl:with-param name="member" select="$member[starts-with(@name,'F:')]"/>
             </xsl:call-template>
             <xsl:call-template name="index">
                 <xsl:with-param name="name" select="'function'"/>
-                <xsl:with-param name="export" select="$export[starts-with(@name,'M:')]"/>
+                <xsl:with-param name="member" select="$member[starts-with(@name,'M:')]"/>
             </xsl:call-template>
         </ul>
     </xsl:if>
@@ -254,19 +249,19 @@
 
 <xsl:template name="index">
     <xsl:param name="name"/>
-    <xsl:param name="export"/>
-    <xsl:if test="count($export) != 0">
-        <xsl:variable name="Name" select="concat(translate(substring($name,1,1),'ecvf','ECVF'),substring($name,2))"/>
+    <xsl:param name="member"/>
+    <xsl:if test="$member">
         <h3>
             <xsl:attribute name="class"><xsl:value-of select="$name"/></xsl:attribute>
-            <xsl:value-of select="$Name"/>s
+            <xsl:value-of select="concat(translate(substring($name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($name, 2))"/>
+            <xsl:if test="count($member) != 1">s</xsl:if>
         </h3>
         <ul>
-            <xsl:for-each select="$export">
-                <xsl:variable name="sub" select="substring(@name,3)"/>
+            <xsl:for-each select="$member">
                 <li>
                     <xsl:call-template name="ref">
-                        <xsl:with-param name="id" select="$sub"/>
+                        <xsl:with-param name="id" select="substring(@name, 3)"/>
+                        <xsl:with-param name="prefix" select="substring(@name, 1, 1)"/>
                     </xsl:call-template>
                 </li>
             </xsl:for-each>
@@ -275,14 +270,15 @@
 </xsl:template>
 
 <xsl:template match="member">
-    <xsl:variable name="sub" select="substring(@name,3)"/>
-
     <section class="hidden">
-        <xsl:attribute name="id"><xsl:value-of select="$sub"/></xsl:attribute>
-        <a>
-            <xsl:attribute name="name"><xsl:value-of select="$sub"/></xsl:attribute>
-            <h2><xsl:value-of select="$sub"/></h2>
-        </a>
+        <xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
+        <h2>
+            <a>
+                <xsl:attribute name="href">?<xsl:value-of select="@name"/>#<xsl:value-of select="@name"/></xsl:attribute>
+                <xsl:attribute name="target">_blank</xsl:attribute>
+                <xsl:value-of select="substring(@name, 3)"/>
+            </a>
+        </h2>
         <xsl:call-template name="summary"/>
         <xsl:call-template name="value"/>
         <xsl:call-template name="syntax"/>
@@ -330,22 +326,18 @@
 </xsl:template>
 
 <xsl:key name="param" match="param" use="@name"/>
-<xsl:variable name="uniqueParamNames" select="//param[generate-id() = generate-id(key('param', @name)[1])]"/>
-
+<xsl:variable name="uniqueParamName" select="//param[generate-id() = generate-id(key('param', @name)[1])]/@name"/>
 <xsl:template name="param">
     <xsl:if test="param">
         <xsl:variable name="param" select="param"/>
         <p>
             <table>
-                <xsl:for-each select="$uniqueParamNames"> 
-                    <xsl:variable name="name" select="@name"/>
-                    <xsl:variable name="data" select="$param[@name = $name]"/>
-                    <xsl:if test="count($data) != 0">
-                        <tr>
-                            <td class="param"><xsl:value-of select="$name"/></td>
-                            <td><xsl:apply-templates select="$data"/></td>
-                        </tr>
-                    </xsl:if>
+                <xsl:for-each select="$uniqueParamName[. = $param/@name]"> 
+                    <xsl:variable name="name" select="."/>
+                    <tr>
+                        <td class="param"><xsl:value-of select="$name"/></td>
+                        <td><xsl:apply-templates select="$param[@name = $name]"/></td>
+                    </tr>
                 </xsl:for-each>
             </table>
         </p>
@@ -353,12 +345,13 @@
 </xsl:template>
 
 <xsl:template match="paraminfo">
-    <xsl:param name="text" select="normalize-space(.)"/>
+    <xsl:variable name="text" select="normalize-space(.)"/>
     <span class="paraminfo">
         &lt;<xsl:choose>
             <xsl:when test="contains($text, ' ')">
                 <xsl:call-template name="ref">
                     <xsl:with-param name="id" select="normalize-space(substring-before($text, ' '))"/>
+                    <xsl:with-param name="prefix" select="'T'"/>
                 </xsl:call-template>
                 <xsl:value-of select="' '"/>
                 <xsl:value-of select="normalize-space(substring-after($text, ' '))"/>
@@ -366,6 +359,7 @@
             <xsl:otherwise>
                 <xsl:call-template name="ref">
                     <xsl:with-param name="id" select="$text"/>
+                    <xsl:with-param name="prefix" select="'T'"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>&gt;
@@ -376,7 +370,8 @@
     <div class="inline">
         <h4>Tag</h4>        
         <xsl:call-template name="ref">
-            <xsl:with-param name="id" select="@value"/>
+            <xsl:with-param name="id" select=" @value"/>
+            <xsl:with-param name="prefix" select="'T'"/>
         </xsl:call-template>
     </div>
 </xsl:template>
@@ -428,15 +423,9 @@
         <p>
             <table>
                 <xsl:for-each select="member">
-                    <xsl:variable name="sub" select="substring(@name,3)"/>
                     <tr>
-                        <xsl:attribute name="id"><xsl:value-of select="$sub"/></xsl:attribute>
-                        <td class="param">
-                            <a>
-                                <xsl:attribute name="name"><xsl:value-of select="$sub"/></xsl:attribute>
-                                <xsl:value-of select="$sub"/>
-                            </a>
-                        </td>
+                        <xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
+                        <td class="param"><xsl:value-of select="substring(@name, 3)"/></td>
                         <td><xsl:call-template name="value"/></td>
                         <td><xsl:apply-templates select="tagname"/></td>
                         <td><xsl:apply-templates select="size"/></td>
@@ -478,6 +467,7 @@
                 <li class="referrer">
                     <xsl:call-template name="ref">
                         <xsl:with-param name="id" select="@name"/>
+                        <xsl:with-param name="prefix" select="'M'"/>
                     </xsl:call-template>
                 </li>
             </xsl:for-each>
@@ -493,6 +483,7 @@
                 <li class="dependency">
                     <xsl:call-template name="ref">
                         <xsl:with-param name="id" select="@name"/>
+                        <xsl:with-param name="prefix" select="'TCFM'"/>
                     </xsl:call-template>
                 </li>
             </xsl:for-each>
@@ -550,6 +541,7 @@
                 <li>
                     <xsl:call-template name="ref">
                         <xsl:with-param name="id" select="@name"/>
+                        <xsl:with-param name="prefix" select="'M'"/>
                     </xsl:call-template>
                 </li>
             </xsl:for-each>
@@ -593,23 +585,31 @@
 <xsl:template match="ref">
     <xsl:call-template name="ref">
         <xsl:with-param name="id" select="@name"/>
+        <xsl:with-param name="prefix" select="'TCFM'"/>
     </xsl:call-template>
 </xsl:template>
 
+<xsl:key name="member" match="member" use="substring(@name, 2)"/>
 <xsl:template name="ref">
     <xsl:param name="id"/>
+    <xsl:param name="prefix"/>
     <xsl:if test="$id">
+        <xsl:variable name="data" select="key('member', concat(':', $id))"/>
+
         <xsl:choose>
-            <xsl:when test="//member[concat(':', $id) = substring(@name, 2)]">
-                <a>
-                    <xsl:attribute name="href">javascript:void(0)</xsl:attribute>
-                    <!-- <xsl:value-of select="$id"/> -->
-                    <xsl:attribute name="onclick">javascript:display(event, '<xsl:value-of select="$id"/>')</xsl:attribute>
-                    <xsl:value-of select="$id"/>
-                </a>
+            <xsl:when test="$data">
+                <xsl:for-each select="$data[contains($prefix, substring(@name, 1, 1))]">
+                    <a>
+                        <xsl:attribute name="href">javascript:void(0)</xsl:attribute>
+                        <xsl:attribute name="onclick">javascript:display(event, '<xsl:value-of select="@name"/>')</xsl:attribute>
+                        <xsl:value-of select="$id"/>
+                    </a>
+                    <xsl:if test="position() != last()">, </xsl:if>
+                </xsl:for-each>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$id"/>
+                <!-- <script>console.log("Unknown ref: '<xsl:value-of select="$id"/>'");</script> -->
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
