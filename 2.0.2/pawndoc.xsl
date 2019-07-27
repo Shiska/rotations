@@ -38,6 +38,9 @@
                     font-weight: bold;
                     color: #336699;
                 }
+                a {
+                    text-decoration: none;
+                }
                 code {
                     margin: 0;
                     padding: 0;
@@ -272,13 +275,11 @@
 <xsl:template match="member">
     <section class="hidden">
         <xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
-        <h2>
-            <a>
-                <xsl:attribute name="href">?<xsl:value-of select="@name"/>#<xsl:value-of select="@name"/></xsl:attribute>
-                <xsl:attribute name="target">_blank</xsl:attribute>
-                <xsl:value-of select="substring(@name, 3)"/>
-            </a>
-        </h2>
+        <a>
+            <xsl:attribute name="href">?<xsl:value-of select="@name"/>#<xsl:value-of select="@name"/></xsl:attribute>
+            <xsl:attribute name="target">_blank</xsl:attribute>
+            <h2><xsl:value-of select="substring(@name, 3)"/></h2>
+        </a>
         <xsl:call-template name="summary"/>
         <xsl:call-template name="value"/>
         <xsl:call-template name="syntax"/>
