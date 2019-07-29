@@ -194,7 +194,7 @@
             </section>
             <section class="body">
                 <section id="index" class="hidden">
-                    <xsl:for-each select="//export[generate-id() = generate-id(key('export', .)[1])]">
+                    <xsl:for-each select="//export[count(. | key('export', .)[1]) = 1]">
                         <xsl:sort select="."/>
                         <xsl:call-template name="indexSection">
                             <xsl:with-param name="name" select="."/>
@@ -326,19 +326,20 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:key name="param" match="param" use="@name"/>
-<xsl:variable name="uniqueParamName" select="//param[generate-id() = generate-id(key('param', @name)[1])]/@name"/>
 <xsl:template name="param">
     <xsl:if test="param">
         <xsl:variable name="param" select="param"/>
         <p>
             <table>
-                <xsl:for-each select="$uniqueParamName[. = $param/@name]"> 
-                    <xsl:variable name="name" select="."/>
-                    <tr>
-                        <td class="param"><xsl:value-of select="$name"/></td>
-                        <td><xsl:apply-templates select="$param[@name = $name]"/></td>
-                    </tr>
+                <xsl:for-each select="param">
+                    <xsl:variable name="name" select="@name"/>
+                    <xsl:variable name="data" select="$param[@name = $name]"/>
+                    <xsl:if test="count(. | $data[1]) = 1">
+                        <tr>
+                            <td class="param"><xsl:value-of select="$name"/></td>
+                            <td><xsl:apply-templates select="$data"/></td>
+                        </tr>
+                    </xsl:if>
                 </xsl:for-each>
             </table>
         </p>
