@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<?xml-stylesheet href="pawndoc.xsl" type="text/xsl"?>
+<?xml-stylesheet href="../pawndoc.xsl" type="text/xsl"?>
 <doc source="rotation.inc">
 	<assembly>
 		<name>rotation.inc</name>
@@ -171,7 +171,12 @@
 		</member>
 
 		<!-- variables -->
+		<member name="F:SAMP_INCLUDES_VERSION">
+			<attribute name="public"/>
+		</member>
 		<member name="F:__date">
+		</member>
+		<member name="F:__file">
 		</member>
 		<member name="F:__file">
 		</member>
@@ -1635,6 +1640,22 @@
 			</param>
 			<summary>This callback is called when an actor is streamed out by a player's client.</summary>   <seealso name="OnActorStreamIn"/> <seealso name="OnPlayerStreamOut"/> <remarks>This function was added in <b>SA-MP 0.3.7</b> and will not work in earlier versions!</remarks> <remarks>This callback can also be called by NPC.</remarks> <remarks>It is always called first in filterscripts.</remarks> <returns>This callback does not handle returns.</returns>
 		</member>
+		<member name="M:OnClientCheckResponse" syntax="OnClientCheckResponse(playerid, actionid, memaddr, retndata)">
+			<stacksize value="1"/>
+			<param name="playerid">
+				The ID of the player checked
+			</param>
+			<param name="actionid">
+				The type of check performed
+			</param>
+			<param name="memaddr">
+				The address requested
+			</param>
+			<param name="retndata">
+				The result of the check
+			</param>
+			<summary>This callback is called when a SendClientCheck request comletes</summary>     <seealso name="SendClientCheck"/>
+		</member>
 		<member name="M:OnDialogResponse" syntax="OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])">
 			<stacksize value="1"/>
 			<param name="playerid">
@@ -2241,6 +2262,19 @@
 				<b><c>0</c></b> if the password was incorrect or <b><c>1</c></b> if it was correct
 			</param>
 			<summary>This callback is called when someone attempts to log in to RCON in-game; successful or not.</summary>    <seealso name="OnRconCommand"/> <seealso name="IsPlayerAdmin"/> <seealso name="SendRconCommand"/> <remarks>This callback was added in <b>SA-MP 0.3a</b> and will not work in earlier versions!</remarks> <remarks>This callback is only called when /rcon login is used in-game. </remarks> <remarks>This callback is only called when the player is not yet logged in. When the player is logged in, <a href="#OnRconCommand">OnRconCommand</a> is called instead.</remarks> <returns> This callback does not handle returns.<p/> It is always called first in filterscripts. </returns>
+		</member>
+		<member name="M:OnScriptCash" syntax="OnScriptCash(playerid, amount, source)">
+			<stacksize value="1"/>
+			<param name="playerid">
+				The ID of the player who got cash from the game
+			</param>
+			<param name="amount">
+				The amount of cash given
+			</param>
+			<param name="source">
+				Where the money came from
+			</param>
+			<summary>This callback is called when a SendClientCheck request comletes</summary>    <remarks>Doesn't work</remarks>
 		</member>
 		<member name="M:OnTrailerUpdate" syntax="OnTrailerUpdate(playerid, vehicleid)">
 			<stacksize value="1"/>
@@ -2965,7 +2999,7 @@
 				<paraminfo>Float </paraminfo>
 				Second float
 			</param>
-			<summary>Adds two floats together. This function is redundant as the standard operator (+) does the same thing.</summary>   <seealso name="Floatsub"/> <seealso name="Floatmul"/> <seealso name="Floatdiv"/> <returns>The sum of the two given floats.</returns>
+			<summary>Adds two floats together. This function is redundant as the standard operator (+) does the same thing.</summary>   <seealso name="floatsub"/> <seealso name="floatmul"/> <seealso name="floatdiv"/> <returns>The sum of the two given floats.</returns>
 		</member>
 		<member name="M:floatcmp" syntax="floatcmp(oper1, oper2)">
 			<attribute name="native"/>
@@ -3011,7 +3045,7 @@
 				<paraminfo>anglemode </paraminfo>
 				The angle mode (see below) to use, depending on the value entered (optional=<b><c>radian</c></b>)
 			</param>
-			<summary>Get the cosine from a given angle. The input angle may be in radians, degrees or grades.</summary>   <seealso name="floatsin"/> <seealso name="floattan"/> <remarks>GTA/SA-MP use <b>degrees</b> for angles in most circumstances, for example <a href="#GetPlayerFacingAngle">GetPlayerFacingAngle</a>. Therefore, it is most likely you'll want to use the <b>degrees</b> angle mode, not radians. </remarks> <remarks>Also note that angles in GTA are counterclockwise; 270� is East and 90� is West. South is still 180� and North still 0�/360�. </remarks> <remarks> <b>Angle modes:</b><p/> <ul> <li>radian</li> <li>degrees</li> <li>grades </li> </ul> </remarks> <returns>The cosine of the value entered.</returns>
+			<summary>Get the cosine from a given angle. The input angle may be in radians, degrees or grades.</summary>   <seealso name="floatsin"/> <seealso name="floattan"/> <remarks>GTA/SA-MP use <b>degrees</b> for angles in most circumstances, for example <a href="#GetPlayerFacingAngle">GetPlayerFacingAngle</a>. Therefore, it is most likely you'll want to use the <b>degrees</b> angle mode, not radians. </remarks> <remarks>Also note that angles in GTA are counterclockwise; 270° is East and 90° is West. South is still 180° and North still 0°/360°. </remarks> <remarks> <b>Angle modes:</b><p/> <ul> <li>radian</li> <li>degrees</li> <li>grades </li> </ul> </remarks> <returns>The cosine of the value entered.</returns>
 		</member>
 		<member name="M:floatdiv" syntax="floatdiv(dividend, divisor)">
 			<tagname value="Float"/>
@@ -3040,7 +3074,7 @@
 				<paraminfo>Float </paraminfo>
 				Second Float, the first one gets multiplied with
 			</param>
-			<summary>Multiplies two floats with each other.</summary>   <seealso name="Floatadd"/> <seealso name="Floatsub"/> <seealso name="Floatdiv"/> <returns>The product of the two given floats.</returns>
+			<summary>Multiplies two floats with each other.</summary>   <seealso name="floatadd"/> <seealso name="floatsub"/> <seealso name="floatdiv"/> <returns>The product of the two given floats.</returns>
 		</member>
 		<member name="M:floatsin" syntax="floatsin(value, mode)">
 			<tagname value="Float"/>
@@ -3058,7 +3092,7 @@
 				<paraminfo>anglemode </paraminfo>
 				The angle mode (see below) to use, depending on the value entered (optional=<b><c>radian</c></b>)
 			</param>
-			<summary>Get the sine from a given angle. The input angle may be in radians, degrees or grades.</summary>   <seealso name="floattan"/> <seealso name="floatcos"/> <remarks>GTA/SA-MP use <b>degrees</b> for angles in most circumstances, for example <a href="#GetPlayerFacingAngle">GetPlayerFacingAngle</a>. Therefore, it is most likely you'll want to use the <b>degrees</b> angle mode, not radians. </remarks> <remarks>Also note that angles in GTA are counterclockwise; 270� is East and 90� is West. South is still 180� and North still 0�/360�. </remarks> <remarks> <b>Angle modes:</b><p/> <ul> <li>radian</li> <li>degrees</li> <li>grades </li> </ul> </remarks> <returns>The sine of the value entered.</returns>
+			<summary>Get the sine from a given angle. The input angle may be in radians, degrees or grades.</summary>   <seealso name="floattan"/> <seealso name="floatcos"/> <remarks>GTA/SA-MP use <b>degrees</b> for angles in most circumstances, for example <a href="#GetPlayerFacingAngle">GetPlayerFacingAngle</a>. Therefore, it is most likely you'll want to use the <b>degrees</b> angle mode, not radians. </remarks> <remarks>Also note that angles in GTA are counterclockwise; 270° is East and 90° is West. South is still 180° and North still 0°/360°. </remarks> <remarks> <b>Angle modes:</b><p/> <ul> <li>radian</li> <li>degrees</li> <li>grades </li> </ul> </remarks> <returns>The sine of the value entered.</returns>
 		</member>
 		<member name="M:floatsqroot" syntax="floatsqroot(value)">
 			<tagname value="Float"/>
@@ -3083,7 +3117,7 @@
 				<paraminfo>Float </paraminfo>
 				Second Float (gets subtracted from the first float.)
 			</param>
-			<summary>Subtracts one float from another one. Note that this function has no real use, as one can simply use the standard operator (-) instead.</summary>   <seealso name="Floatadd"/> <seealso name="Floatmul"/> <seealso name="Floatdiv"/> <returns>The difference of the two given floats.</returns>
+			<summary>Subtracts one float from another one. Note that this function has no real use, as one can simply use the standard operator (-) instead.</summary>   <seealso name="floatadd"/> <seealso name="floatmul"/> <seealso name="floatdiv"/> <returns>The difference of the two given floats.</returns>
 		</member>
 		<member name="M:strcat" syntax="strcat(dest[], source[], maxlength)">
 			<attribute name="native"/>

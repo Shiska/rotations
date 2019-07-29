@@ -2,6 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 <xsl:output method="html" version="5.0" encoding="UTF-8" omit-xml-declaration="yes"/>
 <xsl:key name="export" match="export" use="."/>
+<xsl:variable name="lowercase" select="'abcdefghijklmnopqrstuvwxyz'"/>
+<xsl:variable name="uppercase" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZ'"/>
 <xsl:template match="/">
     <html>
         <head>
@@ -121,7 +123,7 @@
                         showNode(dest); // make it visible
                         // change url to fit history
                         location.hash = '#' + id; // creates new entry
-                        document.title = id.slice(2); // sets title of entry
+                        document.title = id; // sets title of entry
                         history.replaceState(stateObj, id, '?' + displayed.map(x => x.id).join('&#38;') + '#' + id);
                         // return added element
                         return dest;
@@ -156,9 +158,9 @@
                             }
                         }
                         if(hash) {
-                            document.title = hash.slice(2);
+                            document.title = hash;
                         } else if(displayed.length > 0) {
-                            document.title = src.id.slice(2);
+                            document.title = src.id;
                         } else {
                             document.getElementsByClassName('summary')[0].className = 'summary';
                         }
@@ -222,7 +224,7 @@
         <h2>
             <xsl:choose>
                 <xsl:when test="$name != ''">
-                    <xsl:value-of select="concat(translate(substring($name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($name, 2))"/>
+                    <xsl:value-of select="concat(translate(substring($name, 1, 1), $lowercase, $uppercase), substring($name, 2))"/>
                 </xsl:when>
                 <xsl:otherwise>
                     General
@@ -256,7 +258,7 @@
     <xsl:if test="$member">
         <h3>
             <xsl:attribute name="class"><xsl:value-of select="$name"/></xsl:attribute>
-            <xsl:value-of select="concat(translate(substring($name, 1, 1), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), substring($name, 2))"/>
+            <xsl:value-of select="concat(translate(substring($name, 1, 1), $lowercase, $uppercase), substring($name, 2))"/>
             <xsl:if test="count($member) != 1">s</xsl:if>
         </h3>
         <ul>
@@ -274,11 +276,12 @@
 
 <xsl:template match="member">
     <section class="hidden">
-        <xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
+        <xsl:variable name="id" select="substring(@name, 3)"/>
+        <xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
         <a>
-            <xsl:attribute name="href">?<xsl:value-of select="@name"/>#<xsl:value-of select="@name"/></xsl:attribute>
+            <xsl:attribute name="href">?<xsl:value-of select="$id"/>#<xsl:value-of select="$id"/></xsl:attribute>
             <xsl:attribute name="target">_blank</xsl:attribute>
-            <h2><xsl:value-of select="substring(@name, 3)"/></h2>
+            <h2><xsl:value-of select="$id"/></h2>
         </a>
         <xsl:call-template name="summary"/>
         <xsl:call-template name="value"/>
@@ -426,8 +429,9 @@
             <table>
                 <xsl:for-each select="member">
                     <tr>
-                        <xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute>
-                        <td class="param"><xsl:value-of select="substring(@name, 3)"/></td>
+                        <xsl:variable name="id" select="substring(@name, 3)"/>
+                        <xsl:attribute name="id"><xsl:value-of select="$id"/></xsl:attribute>
+                        <td class="param"><xsl:value-of select="$id"/></td>
                         <td><xsl:call-template name="value"/></td>
                         <td><xsl:apply-templates select="tagname"/></td>
                         <td><xsl:apply-templates select="size"/></td>
@@ -597,17 +601,17 @@
     <xsl:param name="prefix"/>
     <xsl:if test="$id">
         <xsl:variable name="data" select="key('member', concat(':', $id))"/>
-
+        <!--
+            normally it isn't possible that two entities have the same name
+            but it is possible to reuse an predefined tag (Float, bool, ...)
+            so it could be possible that the tag Float and a user defind function Float appears
+        -->
         <xsl:choose>
-            <xsl:when test="$data">
-                <xsl:for-each select="$data[contains($prefix, substring(@name, 1, 1))]">
-                    <a>
-                        <xsl:attribute name="href">javascript:void(0)</xsl:attribute>
-                        <xsl:attribute name="onclick">javascript:display(event, '<xsl:value-of select="@name"/>')</xsl:attribute>
-                        <xsl:value-of select="$id"/>
-                    </a>
-                    <xsl:if test="position() != last()">, </xsl:if>
-                </xsl:for-each>
+            <xsl:when test="$data[contains($prefix, substring(@name, 1, 1))]"> <!-- check if is an allowed prefix, reason above -->
+                <a href="javascript:void(0)">
+                    <xsl:attribute name="onclick">javascript:display(event, '<xsl:value-of select="$id"/>')</xsl:attribute>
+                    <xsl:value-of select="$id"/>
+                </a>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$id"/>
