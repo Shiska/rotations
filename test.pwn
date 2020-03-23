@@ -1,5 +1,7 @@
 #define RUN_TESTS
 
+#include <console>
+
 #include <streamer>
 #include <YSI_Core\y_testing>
 

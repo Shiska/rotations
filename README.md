@@ -16,7 +16,8 @@ For all basic functions use: `#include <rotation>`
 For additional functions use: `#include <rotation_misc>`  
 And if you want the easy way use: `#include <rotation_extra>`  
 It applies the basic functions for players, objects and vehicles.  
-Note: Vehicle related function only work if occupied due to [GetVehicleRotationQuat](https://wiki.sa-mp.com/wiki/GetVehicleRotationQuat).
+Note: Vehicle related function only work if occupied due to [GetVehicleRotationQuat](https://wiki.sa-mp.com/wiki/GetVehicleRotationQuat).  
+Note: If you want to use the DynamicObject functions you need to include `rotation_extra` after `streamer`
 
 Check the reference for further information.
 
