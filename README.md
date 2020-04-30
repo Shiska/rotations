@@ -1,6 +1,6 @@
 # rotations
 
-[![sampctl](https://shields.southcla.ws/badge/sampctl-rotations-2f2f2f.svg?style=for-the-badge)](https://github.com/Shiska/rotations)
+[![sampctl](https://img.shields.io/badge/sampctl-rotations-2f2f2f.svg?style=for-the-badge)](https://github.com/Shiska/rotations)
 
 <!-- This include gives you the possibility to convert rotations -->
 
